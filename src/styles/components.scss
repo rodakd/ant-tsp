@@ -1,3 +1,127 @@
+@import 'variables.scss';
+
+.app-container {
+  height: 100%;
+  position: relative;
+}
+
 .control-panel {
-  color: red;
+  position: absolute;
+  top: 15px;
+  z-index: 100;
+  width: 100%;
+  pointer-events: none;
+  height: 100%;
+  overflow: hidden;
+
+  &__inner {
+    pointer-events: all;
+    display: flex;
+    column-gap: 10px;
+    width: fit-content;
+    background: #b4b4b4;
+    width: $panel-width;
+    padding: 0 10px;
+    height: $panel-height;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    box-shadow: $elevation-shadow;
+    align-items: center;
+    left: calc(50% - 208px);
+    position: absolute;
+    z-index: 2;
+  }
+
+  &__title {
+    font-weight: bold;
+    margin: 0;
+    font-size: 20px;
+    color: white;
+    text-shadow: $black-outline;
+    margin-right: 10px;
+  }
+
+  .panel-button {
+    $spacing: 15px;
+
+    &:nth-child(3) {
+      margin-right: $spacing;
+    }
+
+    &:last-child {
+      margin-left: $spacing;
+    }
+  }
+}
+
+.panel-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity ease-in-out 300ms;
+
+  &--disabled {
+    opacity: 30%;
+    pointer-events: none;
+  }
+
+  &:hover {
+    svg,
+    span {
+      opacity: 50%;
+    }
+  }
+}
+
+.settings {
+  padding: 10px;
+  pointer-events: all;
+  width: $panel-width;
+  left: calc(50% - 208px);
+  z-index: 1;
+  background: white;
+  box-shadow: $elevation-shadow;
+  position: absolute;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  transform: translateY(-100%);
+  transition: transform ease-in-out 300ms;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 25px;
+  row-gap: 10px;
+
+  &--open {
+    transform: translateY(calc(0px + $panel-height));
+  }
+
+  .param__input {
+    margin-left: auto;
+  }
+}
+
+.param {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+
+  &__title {
+    font-weight: lighter;
+  }
+
+  &__input {
+    &--number {
+      width: 75px;
+    }
+  }
+}
+
+.ant-input {
+  border-radius: 5px;
 }

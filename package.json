@@ -13,9 +13,17 @@
     "format": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
+    "@danmarshall/deckgl-typings": "^4.9.24",
+    "@deck.gl/core": "^8.8.0",
+    "@deck.gl/layers": "^8.8.0",
+    "@deck.gl/react": "^8.8.0",
+    "antd": "^4.21.4",
+    "classnames": "^2.3.1",
+    "mapbox-gl": "^2.9.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-icons": "^4.4.0"
+    "react-icons": "^4.4.0",
+    "react-map-gl": "^7.0.16"
   },
   "devDependencies": {
     "@types/react": "^18.0.9",
