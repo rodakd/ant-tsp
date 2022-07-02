@@ -2,7 +2,7 @@ import { IoMdRefresh } from 'react-icons/io';
 import { FaSquare } from 'react-icons/fa';
 import { PanelButton } from './buttons/PanelButton';
 import { Settings } from './Settings';
-import useAppState from '../AppContext';
+import { useAppState } from '../AppContext';
 import { SettingsButton } from './buttons/SettingsButton';
 import { StartPauseButton } from './buttons/StartPauseButton';
 import { MarkerModeButton } from './buttons/MarkerModeButton';

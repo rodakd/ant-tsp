@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import useAppState from '../AppContext';
+import { useAppState } from '../AppContext';
 import { Param } from './Param';
 
 export const Settings = () => {

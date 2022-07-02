@@ -1,13 +1,24 @@
 import { Runner } from '~/lib/Runner';
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { AppStatus, RunParams } from '~/types';
+import { MapProps } from 'react-map-gl';
+
+type ViewState = Partial<MapProps['viewState']>;
+
+const INITIAL_VIEWSTATE: ViewState = {
+  latitude: 52.3019155410081,
+  longitude: 19.145622827342095,
+  zoom: 5.431885792789866,
+};
 
 type IAppContext = {
   status: AppStatus;
 
+  viewState: ViewState;
+  setViewState: (viewState: ViewState) => void;
+
   settingsOpen: boolean;
   markerModeOn: boolean;
-
   setSettingsOpen: (open: boolean) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
 
@@ -31,6 +42,7 @@ type AppContextProviderProps = {
 };
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
+  const [viewState, setViewState] = useState<ViewState>(INITIAL_VIEWSTATE);
   const [status, setStatus] = useState<AppStatus>('idle');
 
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -43,20 +55,32 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const [percentOfAnts, setPercentOfAnts] = useState(80);
   const [iterations, setIterations] = useState(100);
 
+  const stopRun = () => {
+    if (status === 'idle') {
+      return;
+    }
+
+    setStatus('idle');
+    Runner.stopRun();
+  };
+
   const startRun = () => {
     if (status !== 'idle') {
       return;
     }
 
     setStatus('running');
-    Runner.startRun({
-      evaporation,
-      qParam,
-      alpha,
-      beta,
-      percentOfAnts,
-      iterations,
-    });
+    Runner.startRun(
+      {
+        evaporation,
+        qParam,
+        alpha,
+        beta,
+        percentOfAnts,
+        iterations,
+      },
+      stopRun
+    );
   };
 
   const pauseRun = () => {
@@ -77,59 +101,39 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     Runner.resumeRun();
   };
 
-  const stopRun = () => {
-    if (status === 'idle') {
-      return;
-    }
-
-    setStatus('idle');
-    Runner.stopRun();
-  };
-
-  const memoizedContext: IAppContext = useMemo(
-    () => ({
-      status,
-      settingsOpen,
-      evaporation,
-      qParam,
-      alpha,
-      beta,
-      percentOfAnts,
-      iterations,
-      markerModeOn,
-      setMarkerModeOn,
-      startRun,
-      pauseRun,
-      stopRun,
-      resumeRun,
-      setEvaporation,
-      setSettingsOpen,
-      setQParam,
-      setAlpha,
-      setBeta,
-      setPercentOfAnts,
-      setIterations,
-    }),
-    [
-      status,
-      markerModeOn,
-      settingsOpen,
-      evaporation,
-      qParam,
-      alpha,
-      beta,
-      percentOfAnts,
-      iterations,
-      startRun,
-      pauseRun,
-      stopRun,
-      resumeRun,
-    ]
+  return (
+    <AppContext.Provider
+      value={{
+        status,
+        viewState,
+        settingsOpen,
+        evaporation,
+        qParam,
+        alpha,
+        beta,
+        percentOfAnts,
+        iterations,
+        markerModeOn,
+        setViewState,
+        setMarkerModeOn,
+        startRun,
+        pauseRun,
+        stopRun,
+        resumeRun,
+        setEvaporation,
+        setSettingsOpen,
+        setQParam,
+        setAlpha,
+        setBeta,
+        setPercentOfAnts,
+        setIterations,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
   );
-
-  return <AppContext.Provider value={memoizedContext}>{children}</AppContext.Provider>;
 };
 
-export default function useAppState() {
+export const useAppState = () => {
   return useContext(AppContext);
-}
+};
