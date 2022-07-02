@@ -12,6 +12,8 @@ export const ControlPanel = () => {
     status,
     settingsOpen,
     markerModeOn,
+    markers,
+    resetMarkers,
     setMarkerModeOn,
     setSettingsOpen,
     startRun,
@@ -39,7 +41,12 @@ export const ControlPanel = () => {
         <MarkerModeButton markerModeOn={markerModeOn} setMarkerModeOn={setMarkerModeOn} />
         <PanelButton title='Preset 1' icon={<span>1</span>} />
         <PanelButton title='Preset 2' icon={<span>2</span>} />
-        <PanelButton title='Reset Markers' icon={<IoMdRefresh size={30} />} />
+        <PanelButton
+          disabled={markers.length == 0}
+          title='Reset Markers'
+          icon={<IoMdRefresh size={30} />}
+          onClick={resetMarkers}
+        />
         <SettingsButton settingsOpen={settingsOpen} onSetSettingsOpen={setSettingsOpen} />
       </div>
       <Settings />

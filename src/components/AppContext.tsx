@@ -1,9 +1,10 @@
 import { Runner } from '~/lib/Runner';
 import { createContext, useContext, useState } from 'react';
 import { AppStatus, RunParams } from '~/types';
-import { MapProps } from 'react-map-gl';
+import { MapLayerMouseEvent, MapProps } from 'react-map-gl';
 
 type ViewState = Partial<MapProps['viewState']>;
+type Marker = [number, number];
 
 const INITIAL_VIEWSTATE: ViewState = {
   latitude: 52.3019155410081,
@@ -21,6 +22,10 @@ type IAppContext = {
   markerModeOn: boolean;
   setSettingsOpen: (open: boolean) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
+
+  markers: Marker[];
+  addMarker: MapProps['onClick'];
+  resetMarkers: () => void;
 
   startRun: () => void;
   pauseRun: () => void;
@@ -43,6 +48,7 @@ type AppContextProviderProps = {
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const [viewState, setViewState] = useState<ViewState>(INITIAL_VIEWSTATE);
+  const [markers, setMarkers] = useState<Marker[]>([]);
   const [status, setStatus] = useState<AppStatus>('idle');
 
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -101,6 +107,15 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     Runner.resumeRun();
   };
 
+  const addMarker = ({ lngLat }: MapLayerMouseEvent) => {
+    const newMarker: Marker = [lngLat.lng, lngLat.lat];
+    setMarkers([...markers, newMarker]);
+  };
+
+  const resetMarkers = () => {
+    setMarkers([]);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -114,6 +129,9 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         percentOfAnts,
         iterations,
         markerModeOn,
+        markers,
+        addMarker,
+        resetMarkers,
         setViewState,
         setMarkerModeOn,
         startRun,

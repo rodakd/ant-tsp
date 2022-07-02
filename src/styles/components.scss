@@ -3,6 +3,16 @@
 .app-container {
   height: 100%;
   position: relative;
+
+  &--marker-mode {
+    .mapboxgl-canvas {
+      cursor: url(../assets/add-cursor.svg), auto !important;
+    }
+  }
+}
+
+#deckgl-wrapper {
+  pointer-events: none;
 }
 
 .control-panel {
