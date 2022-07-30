@@ -1,36 +1,25 @@
-import { Runner } from '~/lib/Runner';
+import * as t from '~/types';
+
 import { createContext, useContext, useState } from 'react';
-import { AppStatus, RunParams } from '~/types';
-import { MapLayerMouseEvent, MapProps } from 'react-map-gl';
-
-type ViewState = Partial<MapProps['viewState']>;
-type Marker = [number, number];
-
-const INITIAL_VIEWSTATE: ViewState = {
-  latitude: 52.3019155410081,
-  longitude: 19.145622827342095,
-  zoom: 5.431885792789866,
-};
+import { INITIAL_VIEWSTATE } from '~/constants';
 
 type IAppContext = {
-  status: AppStatus;
+  status: t.AppStatus;
+  startRun: () => void;
+  pauseRun: () => void;
+  resumeRun: () => void;
+  stopRun: () => void;
 
-  viewState: ViewState;
-  setViewState: (viewState: ViewState) => void;
+  viewState: t.ViewState;
+  setViewState: (viewState: t.ViewState) => void;
 
   settingsOpen: boolean;
   markerModeOn: boolean;
   setSettingsOpen: (open: boolean) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
 
-  markers: Marker[];
-  addMarker: MapProps['onClick'];
-  resetMarkers: () => void;
-
-  startRun: () => void;
-  pauseRun: () => void;
-  resumeRun: () => void;
-  stopRun: () => void;
+  markers: t.Marker[];
+  setMarkers: (markers: t.Marker[]) => void;
 
   setEvaporation: (evaporation: number) => void;
   setQParam: (qParam: number) => void;
@@ -38,18 +27,18 @@ type IAppContext = {
   setBeta: (beta: number) => void;
   setPercentOfAnts: (percentOfAnts: number) => void;
   setIterations: (iterations: number) => void;
-} & RunParams;
+} & t.RunParams;
 
-const AppContext = createContext({}) as unknown as React.Context<IAppContext>;
+const AppContext = createContext({} as IAppContext);
 
 type AppContextProviderProps = {
   children: JSX.Element;
 };
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
-  const [viewState, setViewState] = useState<ViewState>(INITIAL_VIEWSTATE);
-  const [markers, setMarkers] = useState<Marker[]>([]);
-  const [status, setStatus] = useState<AppStatus>('idle');
+  const [viewState, setViewState] = useState<t.ViewState>(INITIAL_VIEWSTATE);
+  const [markers, setMarkers] = useState<t.Marker[]>([]);
+  const [status, setStatus] = useState<t.AppStatus>('idle');
 
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [markerModeOn, setMarkerModeOn] = useState(false);
@@ -65,55 +54,30 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     if (status === 'idle') {
       return;
     }
-
     setStatus('idle');
-    Runner.stopRun();
   };
 
   const startRun = () => {
     if (status !== 'idle') {
       return;
     }
-
     setStatus('running');
-    Runner.startRun(
-      {
-        evaporation,
-        qParam,
-        alpha,
-        beta,
-        percentOfAnts,
-        iterations,
-      },
-      stopRun
-    );
+    setMarkerModeOn(false);
+    setSettingsOpen(false);
   };
 
   const pauseRun = () => {
     if (status !== 'running') {
       return;
     }
-
     setStatus('paused');
-    Runner.pauseRun();
   };
 
   const resumeRun = () => {
     if (status !== 'paused') {
       return;
     }
-
     setStatus('running');
-    Runner.resumeRun();
-  };
-
-  const addMarker = ({ lngLat }: MapLayerMouseEvent) => {
-    const newMarker: Marker = [lngLat.lng, lngLat.lat];
-    setMarkers([...markers, newMarker]);
-  };
-
-  const resetMarkers = () => {
-    setMarkers([]);
   };
 
   return (
@@ -130,8 +94,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         iterations,
         markerModeOn,
         markers,
-        addMarker,
-        resetMarkers,
+        setMarkers,
         setViewState,
         setMarkerModeOn,
         startRun,

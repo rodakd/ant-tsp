@@ -1,21 +1,25 @@
-import MapGL from 'react-map-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import DeckGL from '@deck.gl/react/typed';
-import { PathLayer, ScatterplotLayer } from '@deck.gl/layers/typed';
-import { useAppState } from './AppContext';
+import * as t from '~/types';
 
-// Doesn't have to be secret
-const TOKEN =
-  'pk.eyJ1Ijoicm9kYWtkIiwiYSI6ImNsNGJzZmt5cDBzMWszZG83MW1nNjUxZHIifQ.0XZS-LDfP7ikXWKE83tFqQ';
+import MapGL, { MapLayerMouseEvent } from 'react-map-gl';
+import DeckGL from '@deck.gl/react/typed';
+import { ScatterplotLayer } from '@deck.gl/layers/typed';
+import { useAppState } from './AppContext';
+import { MAPBOX_TOKEN } from '~/constants';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 export const Map = () => {
-  const { viewState, markerModeOn, markers, setViewState, addMarker } = useAppState();
+  const { viewState, markerModeOn, markers, setViewState, setMarkers } = useAppState();
+
+  const addMarker = ({ lngLat }: MapLayerMouseEvent) => {
+    const newMarker: t.Marker = [lngLat.lng, lngLat.lat];
+    setMarkers([...markers, newMarker]);
+  };
 
   return (
     <MapGL
       {...viewState}
       onMove={(e) => setViewState(e.viewState)}
-      mapboxAccessToken={TOKEN}
+      mapboxAccessToken={MAPBOX_TOKEN}
       mapStyle='mapbox://styles/mapbox/light-v10'
       onClick={markerModeOn ? addMarker : undefined}
     >
