@@ -10,6 +10,7 @@ import { StartPauseButton } from './buttons/StartPauseButton';
 import { MarkerModeButton } from './buttons/MarkerModeButton';
 import { AppStatus } from '~/types';
 import { PRESET_1, PRESET_2 } from '~/constants';
+import { Counter } from './Counter';
 
 export const ControlPanel = () => {
   const {
@@ -82,6 +83,7 @@ export const ControlPanel = () => {
         />
       </div>
       <Settings />
+      {(status === 'running' || status === 'paused') && <Counter />}
     </div>
   );
 };

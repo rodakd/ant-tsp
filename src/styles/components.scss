@@ -108,7 +108,7 @@
   column-gap: 25px;
   row-gap: 10px;
 
-  &--open {
+  &--visible {
     transform: translateY(calc(0px + $panel-height));
   }
 
@@ -158,4 +158,21 @@
     margin-left: 50px;
     margin-top: 20px;
   }
+}
+
+.counter {
+  pointer-events: all;
+  width: $panel-width;
+  left: calc(50% - 208px);
+  z-index: 2;
+  background: white;
+  box-shadow: $elevation-shadow;
+  position: absolute;
+  top: $panel-height;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 3px 10px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
 }

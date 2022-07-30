@@ -20,7 +20,7 @@ export const Settings = () => {
   } = useAppState();
 
   return (
-    <div className={cn('settings', { 'settings--open': settingsOpen })}>
+    <div className={cn('settings', { 'settings--visible': settingsOpen })}>
       <Param
         type='number'
         title='evaporation'

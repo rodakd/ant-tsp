@@ -10,16 +10,21 @@ type IAppContext = {
   resumeRun: () => void;
   stopRun: () => void;
 
+  iteration: number;
+  bestTour: number;
+  setIteration: (iteration: number) => void;
+  setBestTour: (tour: number) => void;
+
   viewState: t.ViewState;
   setViewState: (viewState: t.ViewState) => void;
 
   settingsOpen: boolean;
-  markerModeOn: boolean;
   setSettingsOpen: (open: boolean) => void;
-  setMarkerModeOn: (markerModeOn: boolean) => void;
 
   markers: t.Marker[];
+  markerModeOn: boolean;
   setMarkers: (markers: t.Marker[]) => void;
+  setMarkerModeOn: (markerModeOn: boolean) => void;
 
   setEvaporation: (evaporation: number) => void;
   setQParam: (qParam: number) => void;
@@ -36,9 +41,13 @@ type AppContextProviderProps = {
 };
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
+  const [status, setStatus] = useState<t.AppStatus>('idle');
+
+  const [iteration, setIteration] = useState(0);
+  const [bestTour, setBestTour] = useState(0);
+
   const [viewState, setViewState] = useState<t.ViewState>(INITIAL_VIEWSTATE);
   const [markers, setMarkers] = useState<t.Marker[]>([]);
-  const [status, setStatus] = useState<t.AppStatus>('idle');
 
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [markerModeOn, setMarkerModeOn] = useState(false);
@@ -94,6 +103,10 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         iterations,
         markerModeOn,
         markers,
+        iteration,
+        bestTour,
+        setIteration,
+        setBestTour,
         setMarkers,
         setViewState,
         setMarkerModeOn,
