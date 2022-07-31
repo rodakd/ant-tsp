@@ -4,35 +4,31 @@ import { cost } from '~/helpers';
 import { createWorker } from './createWorker';
 
 async function twoOpt(state: Readonly<t.WorkerState>) {
-  const path = [...state.markers];
-  path.push(path[0]);
+  const tour = [...state.markers];
+  tour.push(tour[0]);
+  state.updateBestTour(tour);
 
-  let best = cost(path);
+  let best = cost(tour);
   let swapped = true;
-
-  state.updateBestTour(path);
-
   while (swapped) {
     swapped = false;
-    for (let pt1 = 1; pt1 < path.length - 1; pt1++) {
-      for (let pt2 = pt1 + 1; pt2 < path.length - 1; pt2++) {
+    for (let i = 1; i < tour.length - 1; i++) {
+      for (let j = i + 1; j < tour.length - 1; j++) {
         state.updateIteration(state.iteration + 1);
 
-        const section = path.slice(pt1, pt2 + 1);
-
+        const section = tour.slice(i, j + 1);
         section.reverse();
 
-        path.splice(pt1, pt2 + 1 - pt1, ...section);
-
-        const newPath = path;
-        const newCost = cost(newPath);
+        tour.splice(i, j + 1 - i, ...section);
+        const newTour = tour;
+        const newCost = cost(newTour);
 
         state.updateCurrentTour([
-          ...path.slice(0, pt1),
-          ...path.slice(pt1 + 1, pt2),
-          ...path.slice(pt2 + 1),
-          ...[path[pt1 - 1], path[pt1], path[pt1 + 1]],
-          ...[path[pt2 - 1], path[pt2], path[pt2 + 1]],
+          ...tour.slice(0, i),
+          ...tour.slice(i + 1, j),
+          ...tour.slice(j + 1),
+          ...[tour[i - 1], tour[i], tour[i + 1]],
+          ...[tour[j - 1], tour[j], tour[j + 1]],
         ]);
 
         await state.sleep();
@@ -40,13 +36,13 @@ async function twoOpt(state: Readonly<t.WorkerState>) {
         if (newCost < best) {
           swapped = true;
           best = newCost;
-          state.updateBestTour(newPath);
+          state.updateBestTour(newTour);
         } else {
           section.reverse();
-          path.splice(pt1, pt2 + 1 - pt1, ...section);
+          tour.splice(i, j + 1 - i, ...section);
         }
 
-        state.updateCurrentTour(path);
+        state.updateCurrentTour(tour);
         await state.sleep();
       }
     }

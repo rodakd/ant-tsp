@@ -43,16 +43,14 @@ export const Map = ({ mapRef }: Props) => {
             data: markers.map((m) => ({ position: m })),
             radiusMinPixels: 7,
             radiusMaxPixels: 7,
-            getFillColor: () => {
-              return [0, 173, 255];
-            },
+            getFillColor: [0, 173, 255],
           }),
           new PathLayer({
             id: 'path-layer',
             data: [
               {
                 name: 'Current',
-                color: [180, 180, 180],
+                color: [180, 180, 180, 180],
                 path: currentTour,
               },
               {
