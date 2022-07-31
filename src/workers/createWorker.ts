@@ -1,7 +1,7 @@
 import * as t from '~/types';
 
-export const createWorker = <AlgoParams>(
-  algorithm: (workerState: t.WorkerState, params: AlgoParams) => t.WorkerResult
+export const createWorker = (
+  algorithm: (workerState: t.WorkerState, params: t.IntersectedWorkerParams) => t.WorkerResult
 ) => {
   const workerState: t.WorkerState = {
     paused: false,
@@ -13,12 +13,12 @@ export const createWorker = <AlgoParams>(
       return;
     }
 
-    const { type, payload } = event.data as t.WorkerAction<AlgoParams>;
+    const data = event.data as t.WorkerAction;
 
-    switch (type) {
+    switch (data.type) {
       case 'run':
         workerState.running = true;
-        postMessage({ result: await algorithm(workerState, payload) });
+        postMessage({ result: await algorithm(workerState, data.params) });
         break;
       case 'pause':
         workerState.paused = true;

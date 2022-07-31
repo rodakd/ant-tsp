@@ -1,7 +1,8 @@
-import { useAppState } from '../AppContext';
+import { useStore } from '~/store';
 
 export const Counter = () => {
-  const { iteration, bestTour } = useAppState();
+  const iteration = useStore((state) => state.iteration);
+  const bestTour = useStore((state) => state.bestTour);
 
   return (
     <div className='counter'>

@@ -47,13 +47,13 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
 };
 
 export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
-  const params: Record<string, unknown> = {};
+  const params = {} as t.IntersectedWorkerParams;
 
   for (const [paramName, paramConfig] of Object.entries(config.params)) {
-    params[paramName] = paramConfig.default;
+    if (paramConfig.default) {
+      params[paramName as keyof t.IntersectedWorkerParams] = paramConfig.default;
+    }
   }
 
   return params;
 };
-
-export { useWorker } from './useWorker';

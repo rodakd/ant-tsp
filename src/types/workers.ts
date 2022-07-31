@@ -1,4 +1,11 @@
 import { Marker } from './common';
+import { WorkerParams } from './params';
+
+export type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (
+  x: infer R
+) => any
+  ? R
+  : never;
 
 export type WorkerState = {
   paused: boolean;
@@ -10,11 +17,11 @@ export type WorkerResult = Promise<{
   cost: number;
 }>;
 
-export type WorkerAction<AlgoParams> =
-  | { type: 'run'; payload: AlgoParams }
-  | { type: 'stop'; payload?: never }
-  | { type: 'pause'; payload?: never }
-  | { type: 'resume'; payload?: never };
+export type WorkerAction =
+  | { type: 'run'; params: IntersectedWorkerParams }
+  | { type: 'stop' }
+  | { type: 'pause' }
+  | { type: 'resume' };
 
 export type WorkerConfig = {
   worker: new () => Worker;
@@ -25,11 +32,4 @@ export type ParamConfig = {
   label: string;
 } & { type: 'number'; step?: number; min?: number; max?: number; default?: number };
 
-export type ACOParams = {
-  evaporation: number;
-  qParam: number;
-  alpha: number;
-  beta: number;
-  percentOfAnts: number;
-  iterations: number;
-};
+export type IntersectedWorkerParams = UnionToIntersection<WorkerParams>;

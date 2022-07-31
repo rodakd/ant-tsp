@@ -1,19 +1,19 @@
+import * as t from '~/types';
+
 import cn from 'classnames';
-import { useAppState } from '~/components/AppContext';
 import { Param } from './Param';
 import { Select } from 'antd';
 import { AVAILABLE_WORKERS } from '~/workers';
+import { useStore } from '~/store';
 
 const Option = Select.Option;
 
 export const Settings = () => {
-  const {
-    settingsOpen,
-    selectedWorker,
-    params: paramsState,
-    setParams,
-    setSelectedWorker,
-  } = useAppState();
+  const settingsOpen = useStore((state) => state.settingsOpen);
+  const selectedWorker = useStore((state) => state.selectedWorker);
+  const paramsState = useStore((state) => state.params);
+  const setParams = useStore((state) => state.setParams);
+  const setSelectedWorker = useStore((state) => state.setSelectedWorker);
 
   function getWorkerOptions() {
     return Object.keys(AVAILABLE_WORKERS).map((workerName) => (
@@ -35,7 +35,7 @@ export const Settings = () => {
         key={name}
         title={p.label}
         type={p.type}
-        value={paramsState[name]}
+        value={paramsState[name as keyof t.WorkerParams]}
         min={p.min}
         max={p.max}
         step={p.step}

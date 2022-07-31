@@ -1,9 +1,8 @@
 import * as t from '~/types';
 
 import { IoMdRefresh } from 'react-icons/io';
-import { FaLongArrowAltRight, FaSquare } from 'react-icons/fa';
+import { FaSquare } from 'react-icons/fa';
 import { PanelButton } from './buttons/PanelButton';
-import { useAppState } from '../AppContext';
 import { SettingsButton } from './buttons/SettingsButton';
 import { StartPauseButton } from './buttons/StartPauseButton';
 import { MarkerModeButton } from './buttons/MarkerModeButton';
@@ -11,24 +10,26 @@ import { AppStatus } from '~/types';
 import { PRESET_1, PRESET_2 } from '~/constants';
 import { Counter } from './Counter';
 import { Settings } from './Settings';
+import { useStore } from '~/store';
+import { MutableRefObject } from 'react';
+import { MapRef } from 'react-map-gl';
 
-export const ControlPanel = () => {
-  const {
-    status,
-    settingsOpen,
-    markerModeOn,
-    markers,
-    mapRef,
-    setMarkerModeOn,
-    setSettingsOpen,
-    startRun,
-    pauseRun,
-    stopRun,
-    resumeRun,
-    setMarkers,
-  } = useAppState();
+type Props = {
+  mapRef: MutableRefObject<MapRef | null>;
+};
 
-  const disabledBtns = getDisabledButtons(status);
+export const ControlPanel = ({ mapRef }: Props) => {
+  const status = useStore((state) => state.status);
+  const settingsOpen = useStore((state) => state.settingsOpen);
+  const markers = useStore((state) => state.markers);
+  const markerModeOn = useStore((state) => state.markerModeOn);
+  const startRun = useStore((state) => state.startRun);
+  const stopRun = useStore((state) => state.stopRun);
+  const pauseRun = useStore((state) => state.pauseRun);
+  const resumeRun = useStore((state) => state.resumeRun);
+  const setSettingsOpen = useStore((state) => state.setSettingsOpen);
+  const setMarkers = useStore((state) => state.setMarkers);
+  const setMarkerModeOn = useStore((state) => state.setMarkerModeOn);
 
   const setPreset = (preset: t.Preset) => {
     setMarkers(preset.markers);
@@ -45,6 +46,8 @@ export const ControlPanel = () => {
       map.flyTo({ center: [longitude, latitude], zoom });
     }
   };
+
+  const disabledBtns = getDisabledButtons(status);
 
   return (
     <div className='control-panel'>

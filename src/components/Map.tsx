@@ -1,14 +1,23 @@
 import * as t from '~/types';
 
-import MapGL, { MapLayerMouseEvent } from 'react-map-gl';
+import MapGL, { MapLayerMouseEvent, MapRef } from 'react-map-gl';
 import DeckGL from '@deck.gl/react/typed';
 import { ScatterplotLayer } from '@deck.gl/layers/typed';
-import { useAppState } from './AppContext';
 import { MAPBOX_TOKEN } from '~/constants';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useStore } from '~/store';
+import { MutableRefObject } from 'react';
 
-export const Map = () => {
-  const { viewState, markerModeOn, markers, mapRef, setViewState, setMarkers } = useAppState();
+type Props = {
+  mapRef: MutableRefObject<MapRef | null>;
+};
+
+export const Map = ({ mapRef }: Props) => {
+  const viewState = useStore((state) => state.viewState);
+  const markerModeOn = useStore((state) => state.markerModeOn);
+  const markers = useStore((state) => state.markers);
+  const setViewState = useStore((state) => state.setViewState);
+  const setMarkers = useStore((state) => state.setMarkers);
 
   const addMarker = ({ lngLat }: MapLayerMouseEvent) => {
     const newMarker: t.Marker = [lngLat.lng, lngLat.lat];
