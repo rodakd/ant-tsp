@@ -2,7 +2,7 @@ import * as t from '~/types';
 
 import MapGL, { MapLayerMouseEvent, MapRef } from 'react-map-gl';
 import DeckGL from '@deck.gl/react/typed';
-import { ScatterplotLayer } from '@deck.gl/layers/typed';
+import { ScatterplotLayer, PathLayer } from '@deck.gl/layers/typed';
 import { MAPBOX_TOKEN } from '~/constants';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useStore } from '~/store';
@@ -16,6 +16,8 @@ export const Map = ({ mapRef }: Props) => {
   const viewState = useStore((state) => state.viewState);
   const markerModeOn = useStore((state) => state.markerModeOn);
   const markers = useStore((state) => state.markers);
+  const bestTour = useStore((state) => state.bestTour);
+  const currentTour = useStore((state) => state.currentTour);
   const setViewState = useStore((state) => state.setViewState);
   const setMarkers = useStore((state) => state.setMarkers);
 
@@ -44,6 +46,23 @@ export const Map = ({ mapRef }: Props) => {
             getFillColor: () => {
               return [0, 173, 255];
             },
+          }),
+          new PathLayer({
+            id: 'path-layer',
+            data: [
+              {
+                name: 'Best',
+                color: '#FF0000',
+                path: bestTour,
+              },
+              {
+                name: 'Current',
+                color: '#000000',
+                path: currentTour,
+              },
+            ],
+            widthMinPixels: 4,
+            widthMaxPixels: 8,
           }),
         ]}
       />
