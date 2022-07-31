@@ -1,19 +1,10 @@
 import * as t from '~/types';
 import { createWorker } from './createWorker';
 
-async function nearestNeighbor(state: t.WorkerState) {
-  let iteration = 0;
-
+async function nearestNeighbor(state: Readonly<t.WorkerState>) {
   while (state.running) {
-    await new Promise((res) => {
-      setTimeout(() => res(true), 100);
-    });
-
-    if (state.paused) {
-      continue;
-    }
-
-    state.updateIteration(++iteration);
+    state.updateIteration(state.iteration + 1);
+    await state.sleep();
   }
 }
 

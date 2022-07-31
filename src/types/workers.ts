@@ -7,22 +7,30 @@ export type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) ext
   ? R
   : never;
 
-export type WorkerState = {
+export type WorkerState<T = object> = {
   paused: boolean;
   running: boolean;
+  markers: Marker[];
+  bestTour: Marker[] | null;
+  currentTour: Marker[] | null;
+  iteration: number;
+  params: T;
   updateIteration: (iteration: number) => void;
-  updateBestTour: (bestTour: number) => void;
+  updateBestTour: (bestTour: Marker[]) => void;
+  updateCurrentTour: (currentTour: Marker[]) => void;
+  sleep: () => Promise<void>;
 };
 
 export type ToWorkerAction =
-  | { type: 'run'; params: IntersectedWorkerParams }
+  | { type: 'run'; params: IntersectedWorkerParams; markers: Marker[] }
   | { type: 'stop' }
   | { type: 'pause' }
   | { type: 'resume' };
 
 export type FromWorkerAction =
   | { type: 'updateIteration'; iteration: number }
-  | { type: 'updateBestTour'; bestTour: number };
+  | { type: 'updateBestTour'; bestTour: Marker[] }
+  | { type: 'updateCurrentTour'; currentTour: Marker[] };
 
 export type WorkerConfig = {
   worker: new () => Worker;

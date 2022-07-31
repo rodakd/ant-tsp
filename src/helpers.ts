@@ -29,7 +29,11 @@ export const distance = (markerA: t.Marker, markerB: t.Marker) => {
   return dist * 60 * 1.1515 * 1.609344;
 };
 
-export const cost = (path: t.Marker[]) => {
+export const cost = (path: t.Marker[] | null) => {
+  if (!path?.length) {
+    return 0;
+  }
+
   return path
     .slice(0, -1)
     .map((point, idx) => distance(point, path[idx + 1]))

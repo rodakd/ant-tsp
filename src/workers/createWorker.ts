@@ -1,15 +1,42 @@
 import * as t from '~/types';
 
-export const createWorker = (
-  algorithm: (workerState: t.WorkerState, params: t.IntersectedWorkerParams) => void
+export const createWorker = <T extends object>(
+  algorithm: (workerState: t.WorkerState<T>, params: t.IntersectedWorkerParams) => Promise<void>
 ) => {
   const appDispatch = (action: t.FromWorkerAction) => postMessage(action);
 
-  const workerState: t.WorkerState = {
+  const state: t.WorkerState<T> = {
     paused: false,
     running: false,
-    updateBestTour: (bestTour) => appDispatch({ type: 'updateBestTour', bestTour }),
-    updateIteration: (iteration) => appDispatch({ type: 'updateIteration', iteration }),
+    bestTour: null,
+    currentTour: null,
+    iteration: 0,
+    markers: [],
+    params: {} as T,
+
+    updateBestTour: function (bestTour) {
+      this.bestTour = bestTour;
+      appDispatch({ type: 'updateBestTour', bestTour });
+    },
+
+    updateIteration: function (iteration) {
+      this.iteration = iteration;
+      appDispatch({ type: 'updateIteration', iteration });
+    },
+
+    updateCurrentTour: function (currentTour) {
+      this.currentTour = currentTour;
+      appDispatch({ type: 'updateCurrentTour', currentTour });
+    },
+
+    sleep: async function () {
+      while (this.paused && this.running) {
+        await new Promise((res) => {
+          setTimeout(res, 300);
+        });
+      }
+      await new Promise((res) => setTimeout(res, 100));
+    },
   };
 
   onmessage = async (event) => {
@@ -21,18 +48,24 @@ export const createWorker = (
 
     switch (action.type) {
       case 'run':
-        workerState.running = true;
-        workerState.paused = false;
-        await algorithm(workerState, action.params);
+        state.running = true;
+        state.paused = false;
+        state.markers = action.markers;
+        state.params = action.params as T;
+        state.iteration = 0;
+        state.bestTour = null;
+        state.currentTour = null;
+        await algorithm(state, action.params);
         break;
       case 'pause':
-        workerState.paused = true;
+        state.paused = true;
         break;
       case 'stop':
-        workerState.running = false;
+        state.running = false;
+        state.paused = false;
         break;
       case 'resume':
-        workerState.paused = false;
+        state.paused = false;
         break;
     }
   };

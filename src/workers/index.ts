@@ -38,12 +38,6 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
         min: 1,
         max: 100,
       },
-      iterations: {
-        label: 'iterations',
-        type: 'number',
-        default: 100,
-        min: 1,
-      },
     },
   },
 

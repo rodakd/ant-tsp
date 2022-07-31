@@ -3,10 +3,11 @@ import { WorkerParams } from './params';
 import { FromWorkerAction, IntersectedWorkerParams, ToWorkerAction } from './workers';
 
 export type Store = {
-  bestTour: number;
   status: AppStatus;
   iteration: number;
   markers: Marker[];
+  bestTour: Marker[] | null;
+  currentTour: Marker[] | null;
   params: IntersectedWorkerParams;
   viewState: ViewState;
   worker: Worker | null;
@@ -18,7 +19,7 @@ export type Store = {
   pauseRun: () => void;
   resumeRun: () => void;
   handleWorkerAction: (event: FromWorkerAction) => void;
-  setBestTour: (tour: number) => void;
+  setBestTour: (bestTour: Marker[]) => void;
   setMarkers: (markers: Marker[]) => void;
   setSettingsOpen: (open: boolean) => void;
   setIteration: (iteration: number) => void;

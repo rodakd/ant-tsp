@@ -5,7 +5,8 @@ import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from '
 
 export const useStore = create<t.Store>((set, get) => ({
   markers: PRESET_1.markers,
-  bestTour: 0,
+  bestTour: null,
+  currentTour: null,
   iteration: 0,
   status: 'idle',
   settingsOpen: false,
@@ -23,7 +24,7 @@ export const useStore = create<t.Store>((set, get) => ({
     }
 
     set({ status: 'running', markerModeOn: false, settingsOpen: false });
-    workerDispatch({ type: 'run', params });
+    workerDispatch({ type: 'run', params, markers });
   },
 
   stopRun() {
@@ -33,7 +34,7 @@ export const useStore = create<t.Store>((set, get) => ({
       return;
     }
 
-    set({ status: 'idle', iteration: 0, bestTour: 0 });
+    set({ status: 'idle', iteration: 0, bestTour: null, currentTour: null });
     workerDispatch({ type: 'stop' });
   },
 
@@ -81,6 +82,8 @@ export const useStore = create<t.Store>((set, get) => ({
         return set({ iteration: action.iteration });
       case 'updateBestTour':
         return set({ bestTour: action.bestTour });
+      case 'updateCurrentTour':
+        return set({ currentTour: action.currentTour });
     }
   },
 

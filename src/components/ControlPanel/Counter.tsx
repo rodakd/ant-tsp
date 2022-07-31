@@ -1,8 +1,9 @@
+import { cost } from '~/helpers';
 import { useStore } from '~/store';
 
 export const Counter = () => {
   const iteration = useStore((state) => state.iteration);
-  const bestTour = useStore((state) => state.bestTour);
+  const bestTour = useStore((state) => cost(state.bestTour));
 
   return (
     <div className='counter'>

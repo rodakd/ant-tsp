@@ -4,7 +4,6 @@ export type ACOParams = {
   alpha: number;
   beta: number;
   percentOfAnts: number;
-  iterations: number;
 };
 
 export type WorkerParams = ACOParams;
