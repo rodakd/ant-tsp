@@ -29,8 +29,8 @@ export const Map = () => {
           new ScatterplotLayer({
             id: 'scatterplot',
             data: markers.map((m) => ({ position: m })),
-            radiusMinPixels: 9,
-            radiusMaxPixels: 9,
+            radiusMinPixels: 7,
+            radiusMaxPixels: 7,
             getFillColor: () => {
               return [0, 173, 255];
             },
