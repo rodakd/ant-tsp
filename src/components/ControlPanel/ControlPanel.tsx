@@ -1,7 +1,7 @@
 import * as t from '~/types';
 
 import { IoMdRefresh } from 'react-icons/io';
-import { FaSquare } from 'react-icons/fa';
+import { FaLongArrowAltRight, FaSquare } from 'react-icons/fa';
 import { PanelButton } from './buttons/PanelButton';
 import { useAppState } from '../AppContext';
 import { SettingsButton } from './buttons/SettingsButton';
@@ -18,6 +18,7 @@ export const ControlPanel = () => {
     settingsOpen,
     markerModeOn,
     markers,
+    mapRef,
     setMarkerModeOn,
     setSettingsOpen,
     startRun,
@@ -25,14 +26,24 @@ export const ControlPanel = () => {
     stopRun,
     resumeRun,
     setMarkers,
-    setViewState,
   } = useAppState();
 
   const disabledBtns = getDisabledButtons(status);
 
   const setPreset = (preset: t.Preset) => {
-    setViewState(preset.viewState);
     setMarkers(preset.markers);
+
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    const { longitude, latitude, zoom } = preset.viewState;
+
+    if (longitude && latitude && zoom) {
+      map.flyTo({ center: [longitude, latitude], zoom });
+    }
   };
 
   return (

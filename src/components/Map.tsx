@@ -8,7 +8,7 @@ import { MAPBOX_TOKEN } from '~/constants';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export const Map = () => {
-  const { viewState, markerModeOn, markers, setViewState, setMarkers } = useAppState();
+  const { viewState, markerModeOn, markers, mapRef, setViewState, setMarkers } = useAppState();
 
   const addMarker = ({ lngLat }: MapLayerMouseEvent) => {
     const newMarker: t.Marker = [lngLat.lng, lngLat.lat];
@@ -18,6 +18,7 @@ export const Map = () => {
   return (
     <MapGL
       {...viewState}
+      ref={mapRef}
       onMove={(e) => setViewState(e.viewState)}
       mapboxAccessToken={MAPBOX_TOKEN}
       mapStyle='mapbox://styles/mapbox/light-v10'

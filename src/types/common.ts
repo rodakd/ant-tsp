@@ -7,7 +7,7 @@ export type Marker = [number, number];
 export type ViewState = Partial<MapProps['viewState']>;
 
 export type Preset = {
-  viewState: ViewState;
+  viewState: NonNullable<ViewState>;
   markers: Marker[];
 };
 

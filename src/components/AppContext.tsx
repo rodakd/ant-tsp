@@ -1,10 +1,14 @@
 import * as t from '~/types';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, MutableRefObject, useContext, useRef, useState } from 'react';
 import { INITIAL_VIEWSTATE } from '~/constants';
 import { AVAILABLE_WORKERS, getWorkerDefaultParams, useWorker } from '~/workers';
 
+import { MapRef } from 'react-map-gl';
+
 type IAppContext = {
+  mapRef: MutableRefObject<MapRef | null>;
+
   status: t.AppStatus;
   startRun: () => void;
   pauseRun: () => void;
@@ -110,6 +114,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     workerDispatch({ type: 'resume' });
   };
 
+  const mapRef = useRef<MapRef | null>(null);
+
   return (
     <AppContext.Provider
       value={{
@@ -122,6 +128,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         iteration,
         bestTour,
         selectedWorker,
+        mapRef,
         setSelectedWorker,
         setParams,
         setIteration,
