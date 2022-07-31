@@ -115,6 +115,10 @@
   .param__input {
     margin-left: auto;
   }
+
+  .ant-select {
+    grid-column: 1 / -1;
+  }
 }
 
 .param {

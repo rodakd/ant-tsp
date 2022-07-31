@@ -1,70 +1,57 @@
 import cn from 'classnames';
-import { useAppState } from '../AppContext';
+import { useAppState } from '~/components/AppContext';
 import { Param } from './Param';
+import { Select } from 'antd';
+import { AVAILABLE_WORKERS } from '~/workers';
+
+const Option = Select.Option;
 
 export const Settings = () => {
   const {
     settingsOpen,
-    evaporation,
-    qParam,
-    alpha,
-    beta,
-    percentOfAnts,
-    iterations,
-    setEvaporation,
-    setQParam,
-    setAlpha,
-    setBeta,
-    setIterations,
-    setPercentOfAnts,
+    selectedWorker,
+    params: paramsState,
+    setParams,
+    setSelectedWorker,
   } = useAppState();
+
+  function getWorkerOptions() {
+    return Object.keys(AVAILABLE_WORKERS).map((workerName) => (
+      <Option key={workerName} value={workerName}>
+        {workerName}
+      </Option>
+    ));
+  }
+
+  function getWorkerParams() {
+    const workerConfig = AVAILABLE_WORKERS[selectedWorker];
+
+    if (!workerConfig?.params) {
+      return console.error('Invalid worker config for', selectedWorker);
+    }
+
+    return Object.entries(workerConfig.params).map(([name, p]) => (
+      <Param
+        key={name}
+        title={p.label}
+        type={p.type}
+        value={paramsState[name]}
+        min={p.min}
+        max={p.max}
+        step={p.step}
+        onChange={(value) => setParams({ [name]: value })}
+      />
+    ));
+  }
 
   return (
     <div className={cn('settings', { 'settings--visible': settingsOpen })}>
-      <Param
-        type='number'
-        title='evaporation'
-        value={evaporation}
-        onChange={(e) => setEvaporation(Number(e.currentTarget.value))}
-        step={0.1}
-      />
-      <Param
-        type='number'
-        title='Q'
-        value={qParam}
-        onChange={(e) => setQParam(Number(e.currentTarget.value))}
-      />
-      <Param
-        type='number'
-        title='alpha'
-        value={alpha}
-        onChange={(e) => setAlpha(Number(e.currentTarget.value))}
-        min={0}
-      />
-      <Param
-        type='number'
-        title='beta'
-        value={beta}
-        onChange={(e) => setBeta(Number(e.currentTarget.value))}
-        min={0}
-      />
-      <Param
-        type='number'
-        title='% of ants'
-        value={percentOfAnts}
-        onChange={(e) => {
-          setPercentOfAnts(Number(e.currentTarget.value));
-        }}
-        min={1}
-        max={100}
-      />
-      <Param
-        type='number'
-        title='iterations'
-        value={iterations}
-        onChange={(e) => setIterations(Number(e.currentTarget.value))}
-        min={1}
-      />
+      <>
+        <Select value={selectedWorker} onSelect={setSelectedWorker}>
+          {getWorkerOptions()}
+        </Select>
+        {getWorkerParams()}
+      </>
     </div>
   );
 };

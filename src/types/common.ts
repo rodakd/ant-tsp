@@ -1,14 +1,5 @@
 import { MapProps } from 'react-map-gl';
 
-export type RunParams = {
-  evaporation: number;
-  qParam: number;
-  alpha: number;
-  beta: number;
-  percentOfAnts: number;
-  iterations: number;
-};
-
 export type AppStatus = 'running' | 'paused' | 'idle';
 
 export type Marker = [number, number];
@@ -19,3 +10,5 @@ export type Preset = {
   viewState: ViewState;
   markers: Marker[];
 };
+
+export type ParamsState = Record<string, any>;

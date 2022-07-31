@@ -2,6 +2,7 @@ import * as t from '~/types';
 
 import { createContext, useContext, useState } from 'react';
 import { INITIAL_VIEWSTATE } from '~/constants';
+import { AVAILABLE_WORKERS, getWorkerDefaultParams, useWorker } from '~/workers';
 
 type IAppContext = {
   status: t.AppStatus;
@@ -26,13 +27,12 @@ type IAppContext = {
   setMarkers: (markers: t.Marker[]) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
 
-  setEvaporation: (evaporation: number) => void;
-  setQParam: (qParam: number) => void;
-  setAlpha: (alpha: number) => void;
-  setBeta: (beta: number) => void;
-  setPercentOfAnts: (percentOfAnts: number) => void;
-  setIterations: (iterations: number) => void;
-} & t.RunParams;
+  params: t.ParamsState;
+  setParams: (newParams: t.ParamsState) => void;
+
+  selectedWorker: string;
+  setSelectedWorker: (workerName: string) => void;
+};
 
 const AppContext = createContext({} as IAppContext);
 
@@ -52,41 +52,62 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [markerModeOn, setMarkerModeOn] = useState(false);
 
-  const [evaporation, setEvaporation] = useState(0.7);
-  const [qParam, setQParam] = useState(100);
-  const [alpha, setAlpha] = useState(1);
-  const [beta, setBeta] = useState(5);
-  const [percentOfAnts, setPercentOfAnts] = useState(80);
-  const [iterations, setIterations] = useState(100);
-
-  const stopRun = () => {
-    if (status === 'idle') {
-      return;
-    }
-    setStatus('idle');
+  const [params, _setParams] = useState<t.ParamsState>(
+    getWorkerDefaultParams(AVAILABLE_WORKERS['Ant Colony Optimization'])
+  );
+  const setParams = (newParams: t.ParamsState) => {
+    _setParams((params) => ({ ...params, ...newParams }));
   };
+
+  const [selectedWorker, _setSelectedWorker] = useState('Ant Colony Optimization');
+  const setSelectedWorker = (workerName: string) => {
+    const workerConfig = AVAILABLE_WORKERS[workerName];
+    const defaultParams = getWorkerDefaultParams(workerConfig);
+    _setParams(defaultParams);
+    _setSelectedWorker(workerName);
+  };
+
+  const workerDispatch = useWorker(selectedWorker);
 
   const startRun = () => {
     if (status !== 'idle') {
       return;
     }
+
     setStatus('running');
     setMarkerModeOn(false);
     setSettingsOpen(false);
+    workerDispatch({
+      type: 'run',
+      payload: params,
+    });
+  };
+
+  const stopRun = () => {
+    if (status === 'idle') {
+      return;
+    }
+
+    setStatus('idle');
+    workerDispatch({ type: 'stop' });
   };
 
   const pauseRun = () => {
     if (status !== 'running') {
       return;
     }
+
     setStatus('paused');
+    workerDispatch({ type: 'pause' });
   };
 
   const resumeRun = () => {
     if (status !== 'paused') {
       return;
     }
+
     setStatus('running');
+    workerDispatch({ type: 'resume' });
   };
 
   return (
@@ -95,16 +116,14 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         status,
         viewState,
         settingsOpen,
-        evaporation,
-        qParam,
-        alpha,
-        beta,
-        percentOfAnts,
-        iterations,
+        params,
         markerModeOn,
         markers,
         iteration,
         bestTour,
+        selectedWorker,
+        setSelectedWorker,
+        setParams,
         setIteration,
         setBestTour,
         setMarkers,
@@ -114,13 +133,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         pauseRun,
         stopRun,
         resumeRun,
-        setEvaporation,
         setSettingsOpen,
-        setQParam,
-        setAlpha,
-        setBeta,
-        setPercentOfAnts,
-        setIterations,
       }}
     >
       {children}
