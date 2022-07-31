@@ -27,7 +27,7 @@ export const Settings = () => {
     const workerConfig = AVAILABLE_WORKERS[selectedWorker];
 
     if (!workerConfig?.params) {
-      return console.error('Invalid worker config for', selectedWorker);
+      return;
     }
 
     return Object.entries(workerConfig.params).map(([name, p]) => (
