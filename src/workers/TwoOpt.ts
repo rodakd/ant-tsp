@@ -1,7 +1,7 @@
 import * as t from '~/types';
 import { createWorker } from './createWorker';
 
-async function nearestNeighbor(state: t.WorkerState): t.WorkerResult {
+async function twoOpt(state: t.WorkerState): t.WorkerResult {
   // eslint-disable-next-line no-constant-condition
   while (true) {
     if (!state.running) {
@@ -15,4 +15,4 @@ async function nearestNeighbor(state: t.WorkerState): t.WorkerResult {
   }
 }
 
-createWorker(nearestNeighbor);
+createWorker(twoOpt);

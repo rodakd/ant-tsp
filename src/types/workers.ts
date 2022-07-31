@@ -25,11 +25,11 @@ export type WorkerAction =
 
 export type WorkerConfig = {
   worker: new () => Worker;
-  params: Record<string, ParamConfig>;
+  params?: Record<string, ParamConfig>;
 };
 
 export type ParamConfig = {
   label: string;
-} & { type: 'number'; step?: number; min?: number; max?: number; default?: number };
+} & { type: 'number'; default: number; step?: number; min?: number; max?: number };
 
 export type IntersectedWorkerParams = UnionToIntersection<WorkerParams>;

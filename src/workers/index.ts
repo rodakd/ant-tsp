@@ -1,5 +1,7 @@
 import * as t from '~/types';
 import ACOWorker from './AntColonyOptimization?worker';
+import NearestNeighborWorker from './NearestNeighbor?worker';
+import TwoOpt from './TwoOpt?worker';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Ant Colony Optimization': {
@@ -44,13 +46,21 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
       },
     },
   },
+
+  'Nearest Neighbor': {
+    worker: NearestNeighborWorker,
+  },
+
+  '2-opt': {
+    worker: TwoOpt,
+  },
 };
 
 export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   const params = {} as t.IntersectedWorkerParams;
 
-  for (const [paramName, paramConfig] of Object.entries(config.params)) {
-    if (paramConfig.default) {
+  if (config.params) {
+    for (const [paramName, paramConfig] of Object.entries(config.params)) {
       params[paramName as keyof t.IntersectedWorkerParams] = paramConfig.default;
     }
   }

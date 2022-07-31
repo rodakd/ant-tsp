@@ -7,8 +7,4 @@ export type ACOParams = {
   iterations: number;
 };
 
-export type NearestNeighborParams = {
-  dupa: number;
-};
-
-export type WorkerParams = ACOParams | NearestNeighborParams;
+export type WorkerParams = ACOParams;
