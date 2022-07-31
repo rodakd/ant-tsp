@@ -51,18 +51,19 @@ export const Map = ({ mapRef }: Props) => {
             id: 'path-layer',
             data: [
               {
-                name: 'Best',
-                color: '#FF0000',
-                path: bestTour,
-              },
-              {
                 name: 'Current',
-                color: '#000000',
+                color: [180, 180, 180],
                 path: currentTour,
               },
+              {
+                name: 'Best',
+                color: [24, 178, 188],
+                path: bestTour,
+              },
             ],
-            widthMinPixels: 4,
-            widthMaxPixels: 8,
+            getColor: (d) => d.color,
+            widthMinPixels: 3,
+            widthMaxPixels: 9,
           }),
         ]}
       />
