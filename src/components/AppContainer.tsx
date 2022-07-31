@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { MapRef } from 'react-map-gl';
 import { useStore } from '~/store';
 import { ControlPanel } from './ControlPanel/ControlPanel';
@@ -9,6 +9,14 @@ import { PausedOverlay } from './PausedOverlay';
 export const AppContainer = () => {
   const status = useStore((state) => state.status);
   const markerModeOn = useStore((state) => state.markerModeOn);
+  const worker = useStore((state) => state.worker);
+  const handleWorkerAction = useStore((state) => state.handleWorkerAction);
+
+  useEffect(() => {
+    if (worker) {
+      worker.onmessage = (evt) => handleWorkerAction(evt.data);
+    }
+  }, [worker]);
 
   const mapRef = useRef<MapRef>(null);
 

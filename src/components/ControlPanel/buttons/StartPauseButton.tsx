@@ -5,17 +5,19 @@ import { PanelButton } from './PanelButton';
 
 type Props = {
   status: AppStatus;
+  disabled: boolean;
   onStart: () => void;
   onPause: () => void;
   onResume: () => void;
 };
 
-export const StartPauseButton = ({ status, onStart, onPause, onResume }: Props) => {
+export const StartPauseButton = ({ status, disabled, onStart, onPause, onResume }: Props) => {
   switch (status) {
     case 'idle':
       return (
         <PanelButton
           title='Start'
+          disabled={disabled}
           icon={<IoCaretForwardCircleOutline size={20} />}
           onClick={onStart}
         />

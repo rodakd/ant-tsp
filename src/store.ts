@@ -1,24 +1,24 @@
 import * as t from '~/types';
 import create from 'zustand';
-import { INITIAL_VIEWSTATE } from './constants';
-import { AVAILABLE_WORKERS, getWorkerDefaultParams } from './workers';
+import { PRESET_1 } from './constants';
+import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from './workers';
 
 export const useStore = create<t.Store>((set, get) => ({
-  markers: [],
+  markers: PRESET_1.markers,
   bestTour: 0,
   iteration: 0,
-  worker: null,
   status: 'idle',
   settingsOpen: false,
   markerModeOn: false,
-  viewState: INITIAL_VIEWSTATE,
-  selectedWorker: 'Ant Colony Optimization',
-  params: getWorkerDefaultParams(AVAILABLE_WORKERS['Ant Colony Optimization']),
+  viewState: PRESET_1.viewState,
+  selectedWorker: DEFAULT_WORKER_NAME,
+  worker: new AVAILABLE_WORKERS[DEFAULT_WORKER_NAME].worker(),
+  params: getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]),
 
   startRun() {
-    const { status, params, workerDispatch } = get();
+    const { status, params, markers, workerDispatch } = get();
 
-    if (status !== 'idle') {
+    if (status !== 'idle' || markers.length === 0) {
       return;
     }
 
@@ -33,7 +33,7 @@ export const useStore = create<t.Store>((set, get) => ({
       return;
     }
 
-    set({ status: 'idle' });
+    set({ status: 'idle', iteration: 0, bestTour: 0 });
     workerDispatch({ type: 'stop' });
   },
 
@@ -68,12 +68,27 @@ export const useStore = create<t.Store>((set, get) => ({
     set({ selectedWorker, params, worker });
   },
 
+  workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
+  handleWorkerAction: (action) => {
+    const { status } = get();
+
+    if (status === 'idle') {
+      return;
+    }
+
+    switch (action.type) {
+      case 'updateIteration':
+        return set({ iteration: action.iteration });
+      case 'updateBestTour':
+        return set({ bestTour: action.bestTour });
+    }
+  },
+
   setMarkers: (markers) => set({ markers }),
   setBestTour: (bestTour) => set({ bestTour }),
   setViewState: (viewState) => set({ viewState }),
   setIteration: (iteration) => set({ iteration }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
-  workerDispatch: (action: t.WorkerAction) => get().worker?.postMessage(action),
   setParams: (params) => set((state) => ({ params: { ...state.params, ...params } })),
 }));

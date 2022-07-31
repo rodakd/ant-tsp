@@ -1,17 +1,19 @@
 import * as t from '~/types';
 import { createWorker } from './createWorker';
 
-async function aco(state: t.WorkerState, params: t.ACOParams): t.WorkerResult {
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    if (!state.running) {
-      return { path: [], cost: 0 };
+async function aco(state: t.WorkerState, params: t.ACOParams) {
+  let iteration = 0;
+
+  while (state.running) {
+    await new Promise((res) => {
+      setTimeout(() => res(true), 100);
+    });
+
+    if (state.paused) {
+      continue;
     }
 
-    console.log(state);
-    await new Promise((res) => {
-      setTimeout(() => res(true), 1000);
-    });
+    state.updateIteration(++iteration);
   }
 }
 

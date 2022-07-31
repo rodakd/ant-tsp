@@ -4,14 +4,12 @@ import * as t from '~/types';
 export const MAPBOX_TOKEN =
   'pk.eyJ1Ijoicm9kYWtkIiwiYSI6ImNsNGJzZmt5cDBzMWszZG83MW1nNjUxZHIifQ.0XZS-LDfP7ikXWKE83tFqQ';
 
-export const INITIAL_VIEWSTATE: t.ViewState = {
-  latitude: 52.3019155410081,
-  longitude: 19.145622827342095,
-  zoom: 5.431885792789866,
-};
-
 export const PRESET_1: t.Preset = {
-  viewState: INITIAL_VIEWSTATE,
+  viewState: {
+    latitude: 52.3019155410081,
+    longitude: 19.145622827342095,
+    zoom: 5.431885792789866,
+  },
   markers: [
     [14.539789034827947, 53.40170929413944],
     [16.93050692925766, 52.37810623502682],

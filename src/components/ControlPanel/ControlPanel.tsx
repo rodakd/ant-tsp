@@ -58,6 +58,7 @@ export const ControlPanel = ({ mapRef }: Props) => {
           onStart={startRun}
           onPause={pauseRun}
           onResume={resumeRun}
+          disabled={markers.length === 0}
         />
         <PanelButton
           title='Stop'

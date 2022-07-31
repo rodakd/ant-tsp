@@ -56,6 +56,8 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   },
 };
 
+export const DEFAULT_WORKER_NAME = 'Ant Colony Optimization';
+
 export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   const params = {} as t.IntersectedWorkerParams;
 

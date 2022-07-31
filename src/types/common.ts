@@ -1,6 +1,6 @@
 import { MapProps } from 'react-map-gl';
 import { WorkerParams } from './params';
-import { IntersectedWorkerParams, WorkerAction } from './workers';
+import { FromWorkerAction, IntersectedWorkerParams, ToWorkerAction } from './workers';
 
 export type Store = {
   bestTour: number;
@@ -17,13 +17,14 @@ export type Store = {
   startRun: () => void;
   pauseRun: () => void;
   resumeRun: () => void;
+  handleWorkerAction: (event: FromWorkerAction) => void;
   setBestTour: (tour: number) => void;
   setMarkers: (markers: Marker[]) => void;
   setSettingsOpen: (open: boolean) => void;
   setIteration: (iteration: number) => void;
   setParams: (newParams: Partial<WorkerParams>) => void;
   setViewState: (viewState: ViewState) => void;
-  workerDispatch: (action: WorkerAction) => void;
+  workerDispatch: (action: ToWorkerAction) => void;
   setSelectedWorker: (workerName: string) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
 };
