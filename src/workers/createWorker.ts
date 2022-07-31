@@ -1,3 +1,4 @@
+import { ITERATION_DELAY_MS } from '~/constants';
 import * as t from '~/types';
 
 export const createWorker = <T extends object>(
@@ -32,10 +33,10 @@ export const createWorker = <T extends object>(
     sleep: async function () {
       while (this.paused && this.running) {
         await new Promise((res) => {
-          setTimeout(res, 300);
+          setTimeout(res, 200);
         });
       }
-      await new Promise((res) => setTimeout(res, 100));
+      await new Promise((res) => setTimeout(res, ITERATION_DELAY_MS));
     },
   };
 

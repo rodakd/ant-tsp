@@ -43,3 +43,5 @@ export const PRESET_2: t.Preset = {
     [114.27406173592539, 22.082369313824344],
   ],
 };
+
+export const ITERATION_DELAY_MS = 100;
