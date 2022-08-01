@@ -1,4 +1,4 @@
-import { ITERATION_DELAY_MS } from '~/constants';
+import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '~/constants';
 import * as t from '~/types';
 
 export const createWorker = <T extends object>(
@@ -14,6 +14,7 @@ export const createWorker = <T extends object>(
     iteration: 0,
     markers: [],
     params: {} as T,
+    speedPercent: DEFAULT_SPEED_PERCENT,
 
     updateBestTour: function (bestTour) {
       this.bestTour = bestTour;
@@ -36,7 +37,12 @@ export const createWorker = <T extends object>(
           setTimeout(res, 200);
         });
       }
-      await new Promise((res) => setTimeout(res, ITERATION_DELAY_MS));
+
+      const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
+
+      if (delay > 0) {
+        await new Promise((res) => setTimeout(res, delay));
+      }
     },
   };
 
@@ -56,6 +62,7 @@ export const createWorker = <T extends object>(
         state.iteration = 0;
         state.bestTour = null;
         state.currentTour = null;
+        state.speedPercent = action.speedPercent;
         await algorithm(state, action.params);
         break;
       case 'pause':
@@ -68,6 +75,8 @@ export const createWorker = <T extends object>(
       case 'resume':
         state.paused = false;
         break;
+      case 'changeSpeed':
+        state.speedPercent = action.speedPercent;
     }
   };
 };

@@ -1,30 +1,31 @@
 import * as t from '~/types';
 import create from 'zustand';
-import { PRESET_1 } from './constants';
+import { DEFAULT_SPEED_PERCENT, PRESET_1 } from './constants';
 import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from './workers';
 
 export const useStore = create<t.Store>((set, get) => ({
-  markers: PRESET_1.markers,
-  bestTour: null,
-  currentTour: null,
   iteration: 0,
   status: 'idle',
+  bestTour: null,
+  currentTour: null,
   settingsOpen: false,
   markerModeOn: false,
+  markers: PRESET_1.markers,
   viewState: PRESET_1.viewState,
+  speedPercent: DEFAULT_SPEED_PERCENT,
   selectedWorker: DEFAULT_WORKER_NAME,
   worker: new AVAILABLE_WORKERS[DEFAULT_WORKER_NAME].worker(),
   params: getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]),
 
   startRun() {
-    const { status, params, markers, workerDispatch } = get();
+    const { status, params, markers, speedPercent, workerDispatch } = get();
 
     if (status !== 'idle' || markers.length === 0) {
       return;
     }
 
     set({ status: 'running', markerModeOn: false, settingsOpen: false });
-    workerDispatch({ type: 'run', params, markers });
+    workerDispatch({ type: 'run', params, markers, speedPercent });
   },
 
   stopRun() {
@@ -67,6 +68,11 @@ export const useStore = create<t.Store>((set, get) => ({
 
     get().worker?.terminate();
     set({ selectedWorker, params, worker });
+  },
+
+  setSpeed: (speedPercent) => {
+    set({ speedPercent });
+    get().workerDispatch({ type: 'changeSpeed', speedPercent });
   },
 
   workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),

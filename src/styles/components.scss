@@ -3,6 +3,7 @@
 .app-container {
   height: 100%;
   position: relative;
+  overflow: hidden;
 
   &--marker-mode {
     .mapboxgl-canvas {
@@ -175,8 +176,24 @@
   top: $panel-height;
   font-weight: 800;
   font-size: 12px;
-  padding: 3px 10px;
-  justify-content: space-between;
-  align-items: center;
+  padding: 5px 10px 9px;
   display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+
+  &__inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.speed-slider {
+  width: 100%;
+  padding: 0px 7px;
+
+  .ant-slider {
+    margin: 0;
+  }
 }

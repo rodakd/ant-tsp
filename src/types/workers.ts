@@ -13,6 +13,7 @@ export type WorkerState<T = object> = {
   markers: Marker[];
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
+  speedPercent: number;
   iteration: number;
   params: T;
   updateIteration: (iteration: number) => void;
@@ -22,10 +23,11 @@ export type WorkerState<T = object> = {
 };
 
 export type ToWorkerAction =
-  | { type: 'run'; params: IntersectedWorkerParams; markers: Marker[] }
+  | { type: 'run'; params: IntersectedWorkerParams; markers: Marker[]; speedPercent: number }
   | { type: 'stop' }
   | { type: 'pause' }
-  | { type: 'resume' };
+  | { type: 'resume' }
+  | { type: 'changeSpeed'; speedPercent: number };
 
 export type FromWorkerAction =
   | { type: 'updateIteration'; iteration: number }

@@ -44,4 +44,6 @@ export const PRESET_2: t.Preset = {
   ],
 };
 
-export const ITERATION_DELAY_MS = 100;
+export const BASE_DELAY_MS = 500;
+
+export const DEFAULT_SPEED_PERCENT = 60;

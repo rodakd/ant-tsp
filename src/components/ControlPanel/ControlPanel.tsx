@@ -13,6 +13,7 @@ import { Settings } from './Settings';
 import { useStore } from '~/store';
 import { MutableRefObject } from 'react';
 import { MapRef } from 'react-map-gl';
+import { SpeedSlider } from './SpeedSlider';
 
 type Props = {
   mapRef: MutableRefObject<MapRef | null>;
@@ -48,6 +49,7 @@ export const ControlPanel = ({ mapRef }: Props) => {
   };
 
   const disabledBtns = getDisabledButtons(status);
+  const runningOrPaused = status === 'running' || status === 'paused';
 
   return (
     <div className='control-panel'>
@@ -98,7 +100,11 @@ export const ControlPanel = ({ mapRef }: Props) => {
         />
       </div>
       <Settings />
-      {(status === 'running' || status === 'paused') && <Counter />}
+      {runningOrPaused && (
+        <>
+          <Counter />
+        </>
+      )}
     </div>
   );
 };
