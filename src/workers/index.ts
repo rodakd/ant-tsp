@@ -50,7 +50,7 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   },
 };
 
-export const DEFAULT_WORKER_NAME = '2-opt';
+export const DEFAULT_WORKER_NAME: keyof typeof AVAILABLE_WORKERS = '2-opt';
 
 export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   const params = {} as t.IntersectedWorkerParams;

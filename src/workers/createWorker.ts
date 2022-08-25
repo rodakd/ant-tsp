@@ -40,9 +40,14 @@ export const createWorker = <T extends object>(
 
       const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
 
-      if (delay > 0) {
-        await new Promise((res) => setTimeout(res, delay));
+      if (delay === 0) {
+        if (state.iteration % 100 === 0) {
+          await new Promise((res) => requestAnimationFrame(res));
+        }
+        return;
       }
+
+      await new Promise((res) => setTimeout(res, delay));
     },
   };
 
