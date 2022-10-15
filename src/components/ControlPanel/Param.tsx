@@ -1,9 +1,9 @@
 import { Input } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import { CodeEditor } from '../CodeEditor';
 
 type Props = {
   title: string;
-  type: 'number' | 'textarea';
+  type: 'number' | 'code';
 } & any;
 
 export const Param = ({ title, type, onChange, ...props }: Props) => {
@@ -17,10 +17,8 @@ export const Param = ({ title, type, onChange, ...props }: Props) => {
             {...props}
           />
         );
-      case 'textarea':
-        return (
-          <TextArea onChange={(e) => onChange(e.currentTarget.value)} autoSize={true} {...props} />
-        );
+      case 'code':
+        return <CodeEditor onChange={onChange} {...props} />;
     }
   };
 

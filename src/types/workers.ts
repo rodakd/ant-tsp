@@ -13,6 +13,7 @@ export interface WorkerInterface<T = object> {
   updateBestTour: (bestTour: Marker[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
   sleep: () => Promise<void>;
+  log: (toLog: any) => void;
 }
 
 export type ToWorkerAction =
@@ -25,7 +26,8 @@ export type ToWorkerAction =
 export type FromWorkerAction =
   | { type: 'updateIteration'; iteration: number }
   | { type: 'updateBestTour'; bestTour: Marker[] }
-  | { type: 'updateCurrentTour'; currentTour: Marker[] };
+  | { type: 'updateCurrentTour'; currentTour: Marker[] }
+  | { type: 'log'; toLog: any };
 
 export type WorkerConfig = {
   worker: new () => Worker;
@@ -36,5 +38,5 @@ export type ParamConfig = {
   label: string;
 } & (
   | { type: 'number'; default: number; step?: number; min?: number; max?: number }
-  | { type: 'textarea'; default: string }
+  | { type: 'code'; default: string }
 );

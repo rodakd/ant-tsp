@@ -49,6 +49,10 @@ export const createWorker = <T extends object>(
 
       await new Promise((res) => setTimeout(res, delay));
     },
+
+    log: function (toLog: any) {
+      appDispatch({ type: 'log', toLog: JSON.stringify(toLog) });
+    },
   };
 
   onmessage = async (event) => {

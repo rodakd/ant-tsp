@@ -90,6 +90,8 @@ export const useStore = create<t.Store>((set, get) => ({
         return set({ bestTour: action.bestTour });
       case 'updateCurrentTour':
         return set({ currentTour: action.currentTour });
+      case 'log':
+        return console.log(action.toLog);
     }
   },
 

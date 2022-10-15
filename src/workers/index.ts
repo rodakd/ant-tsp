@@ -55,8 +55,8 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     params: {
       code: {
         label: 'code',
-        type: 'textarea',
-        default: 'console.log("hello world")',
+        type: 'code',
+        default: 'app.log("Hello World")',
       },
     },
   },
