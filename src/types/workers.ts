@@ -7,7 +7,7 @@ export type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) ext
   ? R
   : never;
 
-export type WorkerState<T = object> = {
+export interface WorkerInterface<T = object> {
   paused: boolean;
   running: boolean;
   markers: Marker[];
@@ -20,7 +20,7 @@ export type WorkerState<T = object> = {
   updateBestTour: (bestTour: Marker[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
   sleep: () => Promise<void>;
-};
+}
 
 export type ToWorkerAction =
   | { type: 'run'; params: IntersectedWorkerParams; markers: Marker[]; speedPercent: number }

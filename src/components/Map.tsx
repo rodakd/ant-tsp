@@ -4,9 +4,10 @@ import MapGL, { MapLayerMouseEvent, MapRef } from 'react-map-gl';
 import DeckGL from '@deck.gl/react/typed';
 import { ScatterplotLayer, PathLayer } from '@deck.gl/layers/typed';
 import { MAPBOX_TOKEN } from '~/constants';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import { useStore } from '~/store';
 import { MutableRefObject } from 'react';
+
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 type Props = {
   mapRef: MutableRefObject<MapRef | null>;

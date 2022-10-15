@@ -2,11 +2,14 @@ import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '~/constants';
 import * as t from '~/types';
 
 export const createWorker = <T extends object>(
-  algorithm: (workerState: t.WorkerState<T>, params: t.IntersectedWorkerParams) => Promise<void>
+  algorithm: (
+    workerInterface: t.WorkerInterface<T>,
+    params: t.IntersectedWorkerParams
+  ) => Promise<void>
 ) => {
   const appDispatch = (action: t.FromWorkerAction) => postMessage(action);
 
-  const state: t.WorkerState<T> = {
+  const workerInterface: t.WorkerInterface<T> = {
     paused: false,
     running: false,
     bestTour: null,
@@ -41,7 +44,7 @@ export const createWorker = <T extends object>(
       const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
 
       if (delay === 0) {
-        if (state.iteration % 100 === 0) {
+        if (workerInterface.iteration % 100 === 0) {
           await new Promise((res) => requestAnimationFrame(res));
         }
         return;
@@ -60,28 +63,28 @@ export const createWorker = <T extends object>(
 
     switch (action.type) {
       case 'run':
-        state.running = true;
-        state.paused = false;
-        state.markers = action.markers;
-        state.params = action.params as T;
-        state.iteration = 0;
-        state.bestTour = null;
-        state.currentTour = null;
-        state.speedPercent = action.speedPercent;
-        await algorithm(state, action.params);
+        workerInterface.running = true;
+        workerInterface.paused = false;
+        workerInterface.markers = action.markers;
+        workerInterface.params = action.params as T;
+        workerInterface.iteration = 0;
+        workerInterface.bestTour = null;
+        workerInterface.currentTour = null;
+        workerInterface.speedPercent = action.speedPercent;
+        await algorithm(workerInterface, action.params);
         break;
       case 'pause':
-        state.paused = true;
+        workerInterface.paused = true;
         break;
       case 'stop':
-        state.running = false;
-        state.paused = false;
+        workerInterface.running = false;
+        workerInterface.paused = false;
         break;
       case 'resume':
-        state.paused = false;
+        workerInterface.paused = false;
         break;
       case 'changeSpeed':
-        state.speedPercent = action.speedPercent;
+        workerInterface.speedPercent = action.speedPercent;
     }
   };
 };
