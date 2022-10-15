@@ -1,6 +1,5 @@
 import * as t from '~/types';
 
-import { cost } from '~/helpers';
 import { createWorker } from './createWorker';
 
 async function twoOpt(app: Readonly<t.WorkerInterface>) {
@@ -8,7 +7,7 @@ async function twoOpt(app: Readonly<t.WorkerInterface>) {
   tour.push(tour[0]);
   app.updateBestTour(tour);
 
-  let best = cost(tour);
+  let best = app.calculateCost(tour);
   let swapped = true;
   while (swapped) {
     swapped = false;
@@ -21,7 +20,7 @@ async function twoOpt(app: Readonly<t.WorkerInterface>) {
 
         tour.splice(i, j + 1 - i, ...section);
         const newTour = tour;
-        const newCost = cost(newTour);
+        const newCost = app.calculateCost(newTour);
 
         app.updateCurrentTour([
           ...tour.slice(0, i),

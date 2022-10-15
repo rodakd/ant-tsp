@@ -3,6 +3,7 @@ import ACOWorker from './AntColonyOptimization?worker';
 import NearestNeighborWorker from './NearestNeighbor?worker';
 import TwoOpt from './TwoOpt?worker';
 import Custom from './Custom?worker';
+import { DEFAULT_CUSTOM_CODE } from '~/constants';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Ant Colony Optimization': {
@@ -50,13 +51,13 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     worker: TwoOpt,
   },
 
-  Custom: {
+  'Your Code': {
     worker: Custom,
     params: {
       code: {
         label: 'code',
         type: 'code',
-        default: 'app.log("Hello World")',
+        default: DEFAULT_CUSTOM_CODE,
       },
     },
   },

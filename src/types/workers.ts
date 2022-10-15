@@ -14,6 +14,7 @@ export interface WorkerInterface<T = object> {
   updateCurrentTour: (currentTour: Marker[]) => void;
   sleep: () => Promise<void>;
   log: (toLog: any) => void;
+  calculateCost: (tour: Marker[] | null) => void;
 }
 
 export type ToWorkerAction =

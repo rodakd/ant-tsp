@@ -1,4 +1,5 @@
 import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '~/constants';
+import { cost } from '~/helpers';
 import * as t from '~/types';
 
 export const createWorker = <T extends object>(
@@ -52,6 +53,10 @@ export const createWorker = <T extends object>(
 
     log: function (toLog: any) {
       appDispatch({ type: 'log', toLog: JSON.stringify(toLog) });
+    },
+
+    calculateCost: function (path: t.Marker[] | null) {
+      return cost(path);
     },
   };
 
