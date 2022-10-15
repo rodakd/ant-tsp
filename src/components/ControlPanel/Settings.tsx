@@ -30,7 +30,7 @@ export const Settings = () => {
       return;
     }
 
-    return Object.entries(workerConfig.params).map(([name, p]) => (
+    return Object.entries(workerConfig.params).map(([name, p]: any) => (
       <Param
         key={name}
         title={p.label}
@@ -39,7 +39,7 @@ export const Settings = () => {
         min={p.min}
         max={p.max}
         step={p.step}
-        onChange={(value) => setParams({ [name]: value })}
+        onChange={(value: any) => setParams({ [name]: value })}
       />
     ));
   }

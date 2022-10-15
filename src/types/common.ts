@@ -1,6 +1,6 @@
 import { MapProps } from 'react-map-gl';
 import { WorkerParams } from './params';
-import { FromWorkerAction, IntersectedWorkerParams, ToWorkerAction } from './workers';
+import { FromWorkerAction, ToWorkerAction } from './workers';
 
 export type Store = {
   status: AppStatus;
@@ -14,7 +14,7 @@ export type Store = {
   selectedWorker: string;
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
-  params: IntersectedWorkerParams;
+  params: any;
   stopRun: () => void;
   startRun: () => void;
   pauseRun: () => void;

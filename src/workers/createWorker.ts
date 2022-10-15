@@ -2,10 +2,7 @@ import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '~/constants';
 import * as t from '~/types';
 
 export const createWorker = <T extends object>(
-  algorithm: (
-    workerInterface: t.WorkerInterface<T>,
-    params: t.IntersectedWorkerParams
-  ) => Promise<void>
+  algorithm: (workerInterface: t.WorkerInterface<T>, params: any) => Promise<void>
 ) => {
   const appDispatch = (action: t.FromWorkerAction) => postMessage(action);
 

@@ -1,11 +1,4 @@
 import { Marker } from './common';
-import { WorkerParams } from './params';
-
-export type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (
-  x: infer R
-) => any
-  ? R
-  : never;
 
 export interface WorkerInterface<T = object> {
   paused: boolean;
@@ -23,7 +16,7 @@ export interface WorkerInterface<T = object> {
 }
 
 export type ToWorkerAction =
-  | { type: 'run'; params: IntersectedWorkerParams; markers: Marker[]; speedPercent: number }
+  | { type: 'run'; params: any; markers: Marker[]; speedPercent: number }
   | { type: 'stop' }
   | { type: 'pause' }
   | { type: 'resume' }
@@ -41,6 +34,7 @@ export type WorkerConfig = {
 
 export type ParamConfig = {
   label: string;
-} & { type: 'number'; default: number; step?: number; min?: number; max?: number };
-
-export type IntersectedWorkerParams = UnionToIntersection<WorkerParams>;
+} & (
+  | { type: 'number'; default: number; step?: number; min?: number; max?: number }
+  | { type: 'textfield'; default: string }
+);

@@ -6,4 +6,8 @@ export type ACOParams = {
   percentOfAnts: number;
 };
 
-export type WorkerParams = ACOParams;
+export type CustomParams = {
+  code: string;
+};
+
+export type WorkerParams = ACOParams | CustomParams;

@@ -2,7 +2,10 @@ import { Input, InputProps } from 'antd';
 
 type Props = InputProps & {
   title: string;
-} & { type: 'number'; onChange: (value: number) => void };
+} & (
+    | { type: 'number'; onChange: (value: number) => void }
+    | { type: 'textfield'; onChange: (value: string) => void }
+  );
 
 export const Param = ({ title, type, onChange, ...inputProps }: Props) => {
   const renderInputForType = () => {
