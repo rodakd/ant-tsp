@@ -46,12 +46,10 @@ export const Settings = () => {
 
   return (
     <div className={cn('settings', { 'settings--visible': settingsOpen })}>
-      <>
-        <Select value={selectedWorker} onSelect={setSelectedWorker}>
-          {getWorkerOptions()}
-        </Select>
-        {getWorkerParams()}
-      </>
+      <Select value={selectedWorker} onSelect={setSelectedWorker}>
+        {getWorkerOptions()}
+      </Select>
+      {getWorkerParams()}
     </div>
   );
 };

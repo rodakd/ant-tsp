@@ -2,6 +2,7 @@ import cn from 'classnames';
 import { useEffect, useRef } from 'react';
 import { MapRef } from 'react-map-gl';
 import { useStore } from '~/store';
+import { Chart } from './Chart';
 import { ControlPanel } from './ControlPanel/ControlPanel';
 import { Map } from './Map';
 import { PausedOverlay } from './PausedOverlay';
@@ -25,6 +26,7 @@ export const AppContainer = () => {
       {status === 'paused' && <PausedOverlay />}
       <ControlPanel mapRef={mapRef} />
       <Map mapRef={mapRef} />
+      <Chart />
     </div>
   );
 };
