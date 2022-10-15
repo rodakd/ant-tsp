@@ -1,29 +1,31 @@
-import { Input, InputProps } from 'antd';
+import { Input } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 
-type Props = InputProps & {
+type Props = {
   title: string;
-} & (
-    | { type: 'number'; onChange: (value: number) => void }
-    | { type: 'textfield'; onChange: (value: string) => void }
-  );
+  type: 'number' | 'textarea';
+} & any;
 
-export const Param = ({ title, type, onChange, ...inputProps }: Props) => {
+export const Param = ({ title, type, onChange, ...props }: Props) => {
   const renderInputForType = () => {
     switch (type) {
       case 'number':
         return (
           <Input
-            className='param__input param__input--number'
             type='number'
             onChange={(e) => onChange(Number(e.currentTarget.value))}
-            {...inputProps}
+            {...props}
           />
+        );
+      case 'textarea':
+        return (
+          <TextArea onChange={(e) => onChange(e.currentTarget.value)} autoSize={true} {...props} />
         );
     }
   };
 
   return (
-    <div className='param'>
+    <div className={`param param--${type}`}>
       <span className='param__title'>{title}</span>
       {renderInputForType()}
     </div>

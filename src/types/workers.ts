@@ -36,5 +36,5 @@ export type ParamConfig = {
   label: string;
 } & (
   | { type: 'number'; default: number; step?: number; min?: number; max?: number }
-  | { type: 'textfield'; default: string }
+  | { type: 'textarea'; default: string }
 );
