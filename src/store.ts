@@ -2,11 +2,13 @@ import * as t from '~/types';
 import create from 'zustand';
 import { DEFAULT_SPEED_PERCENT, PRESET_1 } from './constants';
 import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from './workers';
+import { cost } from './helpers';
 
 export const useStore = create<t.Store>((set, get) => ({
   iteration: 0,
   status: 'idle',
   bestTour: null,
+  bestToursHistory: [],
   currentTour: null,
   settingsOpen: false,
   markerModeOn: false,
@@ -24,7 +26,7 @@ export const useStore = create<t.Store>((set, get) => ({
       return;
     }
 
-    set({ status: 'running', markerModeOn: false, settingsOpen: false });
+    set({ status: 'running', markerModeOn: false, settingsOpen: false, bestToursHistory: [] });
     workerDispatch({ type: 'run', params, markers, speedPercent });
   },
 
@@ -86,19 +88,24 @@ export const useStore = create<t.Store>((set, get) => ({
     switch (action.type) {
       case 'updateIteration':
         return set({ iteration: action.iteration });
-      case 'updateBestTour':
-        return set({ bestTour: action.bestTour });
+      case 'updateBestTour': {
+        const { bestToursHistory, iteration } = get();
+        return set({
+          bestTour: action.bestTour,
+          bestToursHistory: bestToursHistory.concat({
+            cost: cost(action.bestTour).toFixed(2),
+            iteration,
+          }),
+        });
+      }
       case 'updateCurrentTour':
         return set({ currentTour: action.currentTour });
       case 'log':
         return console.log(action.toLog);
     }
   },
-
   setMarkers: (markers) => set({ markers }),
-  setBestTour: (bestTour) => set({ bestTour }),
   setViewState: (viewState) => set({ viewState }),
-  setIteration: (iteration) => set({ iteration }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
   setParams: (params) => set((state) => ({ params: { ...state.params, ...params } })),

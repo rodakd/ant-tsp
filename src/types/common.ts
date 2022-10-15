@@ -13,6 +13,7 @@ export type Store = {
   settingsOpen: boolean;
   selectedWorker: string;
   bestTour: Marker[] | null;
+  bestToursHistory: TourHistory[];
   currentTour: Marker[] | null;
   params: any;
   stopRun: () => void;
@@ -22,8 +23,6 @@ export type Store = {
   setMarkers: (markers: Marker[]) => void;
   setSettingsOpen: (open: boolean) => void;
   setSpeed: (speedPercent: number) => void;
-  setBestTour: (bestTour: Marker[]) => void;
-  setIteration: (iteration: number) => void;
   setViewState: (viewState: ViewState) => void;
   setSelectedWorker: (workerName: string) => void;
   workerDispatch: (action: ToWorkerAction) => void;
@@ -41,4 +40,9 @@ export type ViewState = Partial<MapProps['viewState']>;
 export type Preset = {
   viewState: NonNullable<ViewState>;
   markers: Marker[];
+};
+
+export type TourHistory = {
+  cost: string;
+  iteration: number;
 };
