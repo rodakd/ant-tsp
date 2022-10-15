@@ -1,6 +1,8 @@
 import * as t from '~/types';
 
+import _ from 'lodash';
 import cn from 'classnames';
+
 import { Param } from './Param';
 import { Select } from 'antd';
 import { AVAILABLE_WORKERS } from '~/workers';
@@ -30,18 +32,19 @@ export const Settings = () => {
       return;
     }
 
-    return Object.entries(workerConfig.params).map(([name, p]: any) => (
-      <Param
-        key={name}
-        title={p.label}
-        type={p.type}
-        value={paramsState[name as keyof t.WorkerParams]}
-        min={p.min}
-        max={p.max}
-        step={p.step}
-        onChange={(value: any) => setParams({ [name]: value })}
-      />
-    ));
+    return Object.entries(workerConfig.params).map(([name, p]: any) => {
+      const restProps = _.omit(p, ['label']);
+
+      return (
+        <Param
+          key={name}
+          title={p.label}
+          value={paramsState[name as keyof t.WorkerParams]}
+          onChange={(value: any) => setParams({ [name]: value })}
+          {...restProps}
+        />
+      );
+    });
   }
 
   return (
