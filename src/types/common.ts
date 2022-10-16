@@ -3,6 +3,7 @@ import { WorkerParams } from './params';
 import { FromWorkerAction, ToWorkerAction } from './workers';
 
 export type Store = {
+  params: any;
   status: AppStatus;
   iteration: number;
   markers: Marker[];
@@ -13,9 +14,9 @@ export type Store = {
   settingsOpen: boolean;
   selectedWorker: string;
   bestTour: Marker[] | null;
-  bestToursHistory: HistoryEntry[];
   currentTour: Marker[] | null;
-  params: any;
+  runSummary: RunSummary | null;
+  bestToursHistory: HistoryEntry[];
   stopRun: () => void;
   startRun: () => void;
   pauseRun: () => void;
@@ -32,10 +33,13 @@ export type Store = {
 };
 
 export type AppStatus = 'running' | 'paused' | 'idle';
-
 export type Marker = [number, number];
-
 export type ViewState = Partial<MapProps['viewState']>;
+
+export type RunSummary = {
+  bestCost: number;
+  iterations: number;
+};
 
 export type Preset = {
   viewState: NonNullable<ViewState>;

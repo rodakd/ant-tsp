@@ -60,8 +60,6 @@ export const createWorker = <T extends object>(
     },
 
     finish: function () {
-      this.running = false;
-      this.paused = false;
       appDispatch({ type: 'finish' });
     },
   };

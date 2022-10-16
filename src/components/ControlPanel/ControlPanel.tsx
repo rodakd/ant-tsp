@@ -14,6 +14,7 @@ import { Settings } from './Settings';
 import { useStore } from '~/store';
 import { MutableRefObject } from 'react';
 import { MapRef } from 'react-map-gl';
+import { Summary } from './Summary';
 
 type Props = {
   mapRef: MutableRefObject<MapRef | null>;
@@ -25,6 +26,7 @@ export const ControlPanel = ({ mapRef }: Props) => {
   const markers = useStore((state) => state.markers);
   const markerModeOn = useStore((state) => state.markerModeOn);
   const selectedWorker = useStore((state) => state.selectedWorker);
+  const runSummary = useStore((state) => state.runSummary);
   const startRun = useStore((state) => state.startRun);
   const stopRun = useStore((state) => state.stopRun);
   const pauseRun = useStore((state) => state.pauseRun);
@@ -50,7 +52,6 @@ export const ControlPanel = ({ mapRef }: Props) => {
   };
 
   const disabledBtns = getDisabledButtons(status);
-  const runningOrPaused = status === 'running' || status === 'paused';
 
   return (
     <div
@@ -105,11 +106,8 @@ export const ControlPanel = ({ mapRef }: Props) => {
         />
       </div>
       <Settings />
-      {runningOrPaused && (
-        <>
-          <Counter />
-        </>
-      )}
+      {(status === 'running' || status === 'paused') && <Counter />}
+      {runSummary && <Summary summary={runSummary} />}
     </div>
   );
 };
