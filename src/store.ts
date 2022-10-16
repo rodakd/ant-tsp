@@ -93,7 +93,7 @@ export const useStore = create<t.Store>((set, get) => ({
         return set({
           bestTour: action.bestTour,
           bestToursHistory: bestToursHistory.concat({
-            cost: cost(action.bestTour).toFixed(2),
+            cost: Number(cost(action.bestTour).toFixed(2)),
             iteration,
           }),
         });

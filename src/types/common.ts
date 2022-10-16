@@ -13,7 +13,7 @@ export type Store = {
   settingsOpen: boolean;
   selectedWorker: string;
   bestTour: Marker[] | null;
-  bestToursHistory: TourHistory[];
+  bestToursHistory: HistoryEntry[];
   currentTour: Marker[] | null;
   params: any;
   stopRun: () => void;
@@ -42,7 +42,7 @@ export type Preset = {
   markers: Marker[];
 };
 
-export type TourHistory = {
-  cost: string;
+export type HistoryEntry = {
+  cost: number;
   iteration: number;
 };

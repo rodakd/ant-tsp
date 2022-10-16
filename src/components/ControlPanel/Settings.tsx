@@ -47,12 +47,19 @@ export const Settings = () => {
     });
   }
 
+  const params = getWorkerParams();
+
   return (
-    <div className={cn('settings', { 'settings--visible': settingsOpen })}>
+    <div
+      className={cn('settings', {
+        'settings--visible': settingsOpen,
+        'settings--empty': _.isEmpty(params),
+      })}
+    >
       <Select value={selectedWorker} onSelect={setSelectedWorker}>
         {getWorkerOptions()}
       </Select>
-      {getWorkerParams()}
+      {params}
     </div>
   );
 };

@@ -1,0 +1,16 @@
+@import 'variables.scss';
+
+.ant {
+  &-select-selector,
+  &-select-dropdown,
+  &-btn,
+  &-modal-content,
+  &-modal-header {
+    border-radius: 5px !important;
+  }
+
+  &-btn-primary {
+    background: $primary-color;
+    border-color: $primary-color;
+  }
+}
