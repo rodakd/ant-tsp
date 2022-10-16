@@ -15,7 +15,6 @@ export type Store = {
   selectedWorker: string;
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
-  runSummary: RunSummary | null;
   bestToursHistory: HistoryEntry[];
   stopRun: () => void;
   startRun: () => void;
@@ -35,11 +34,6 @@ export type Store = {
 export type AppStatus = 'running' | 'paused' | 'idle';
 export type Marker = [number, number];
 export type ViewState = Partial<MapProps['viewState']>;
-
-export type RunSummary = {
-  bestCost: number;
-  iterations: number;
-};
 
 export type Preset = {
   viewState: NonNullable<ViewState>;

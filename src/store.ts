@@ -18,7 +18,6 @@ export const useStore = create<t.Store>((set, get) => ({
   selectedWorker: DEFAULT_WORKER_NAME,
   worker: new AVAILABLE_WORKERS[DEFAULT_WORKER_NAME].worker(),
   params: getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]),
-  runSummary: null,
 
   startRun() {
     const { status, params, markers, speedPercent, workerDispatch } = get();
@@ -32,7 +31,7 @@ export const useStore = create<t.Store>((set, get) => ({
       markerModeOn: false,
       settingsOpen: false,
       bestToursHistory: [],
-      runSummary: null,
+      iteration: 0,
       bestTour: null,
     });
 
@@ -40,7 +39,7 @@ export const useStore = create<t.Store>((set, get) => ({
   },
 
   stopRun() {
-    const { status, iteration, bestTour, workerDispatch } = get();
+    const { status, workerDispatch } = get();
 
     if (status === 'idle') {
       return;
@@ -48,9 +47,7 @@ export const useStore = create<t.Store>((set, get) => ({
 
     set({
       status: 'idle',
-      iteration: 0,
       currentTour: null,
-      runSummary: { bestCost: cost(bestTour), iterations: iteration },
     });
 
     workerDispatch({ type: 'stop' });
@@ -121,7 +118,7 @@ export const useStore = create<t.Store>((set, get) => ({
         return get().stopRun();
     }
   },
-  setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [], runSummary: null }),
+  setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [] }),
   setViewState: (viewState) => set({ viewState }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),

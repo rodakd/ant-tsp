@@ -67,7 +67,6 @@
   &--big {
     .control-panel__inner,
     .settings,
-    .summary,
     .counter {
       width: $big-panel-width;
       left: calc(50% - ($big-panel-width / 2));
@@ -229,25 +228,6 @@
   }
 }
 
-.summary {
-  pointer-events: all;
-  width: $panel-width;
-  left: calc(50% - ($panel-width / 2));
-  z-index: 1;
-  background: white;
-  box-shadow: $elevation-shadow;
-  position: absolute;
-  top: $panel-height;
-  font-weight: 800;
-  font-size: 12px;
-  padding: 8px 10px 9px;
-  display: flex;
-  justify-content: space-between;
-  row-gap: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
 .speed-slider {
   width: 100%;
   padding: 0px;
@@ -265,6 +245,7 @@
   padding: 25px 25px 20px 0px;
   background: white;
   box-shadow: $elevation-shadow;
+  z-index: 50;
 }
 
 .export-btn {

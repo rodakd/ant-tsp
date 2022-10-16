@@ -41,6 +41,8 @@ export const createWorker = <T extends object>(
 
       const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
 
+      appDispatch({ type: 'log', toLog: delay });
+
       if (delay === 0) {
         if (workerInterface.iteration % 100 === 0) {
           await new Promise((res) => requestAnimationFrame(res));
