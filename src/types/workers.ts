@@ -15,6 +15,7 @@ export interface WorkerInterface<T = object> {
   sleep: () => Promise<void>;
   log: (toLog: any) => void;
   calculateCost: (tour: Marker[] | null) => void;
+  finish: () => void;
 }
 
 export type ToWorkerAction =
@@ -28,7 +29,8 @@ export type FromWorkerAction =
   | { type: 'updateIteration'; iteration: number }
   | { type: 'updateBestTour'; bestTour: Marker[] }
   | { type: 'updateCurrentTour'; currentTour: Marker[] }
-  | { type: 'log'; toLog: any };
+  | { type: 'log'; toLog: any }
+  | { type: 'finish' };
 
 export type WorkerConfig = {
   worker: new () => Worker;

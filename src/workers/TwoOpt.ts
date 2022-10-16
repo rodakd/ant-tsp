@@ -46,6 +46,8 @@ async function twoOpt(app: Readonly<t.WorkerInterface>) {
       }
     }
   }
+
+  app.finish();
 }
 
 createWorker(twoOpt);

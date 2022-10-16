@@ -13,4 +13,8 @@
     background: $primary-color;
     border-color: $primary-color;
   }
+
+  &-slide-up-leave {
+    animation-duration: 0s !important;
+  }
 }

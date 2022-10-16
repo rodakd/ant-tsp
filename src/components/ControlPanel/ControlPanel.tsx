@@ -1,4 +1,5 @@
 import * as t from '~/types';
+import cn from 'classnames';
 
 import { IoMdRefresh } from 'react-icons/io';
 import { FaSquare } from 'react-icons/fa';
@@ -23,6 +24,7 @@ export const ControlPanel = ({ mapRef }: Props) => {
   const settingsOpen = useStore((state) => state.settingsOpen);
   const markers = useStore((state) => state.markers);
   const markerModeOn = useStore((state) => state.markerModeOn);
+  const selectedWorker = useStore((state) => state.selectedWorker);
   const startRun = useStore((state) => state.startRun);
   const stopRun = useStore((state) => state.stopRun);
   const pauseRun = useStore((state) => state.pauseRun);
@@ -51,7 +53,11 @@ export const ControlPanel = ({ mapRef }: Props) => {
   const runningOrPaused = status === 'running' || status === 'paused';
 
   return (
-    <div className='control-panel'>
+    <div
+      className={cn('control-panel', {
+        'control-panel--big': selectedWorker === 'Your JavaScript',
+      })}
+    >
       <div className='control-panel__inner'>
         <h1 className='control-panel__title'>Ant-TSP</h1>
         <StartPauseButton

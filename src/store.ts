@@ -102,6 +102,8 @@ export const useStore = create<t.Store>((set, get) => ({
         return set({ currentTour: action.currentTour });
       case 'log':
         return console.log(action.toLog);
+      case 'finish':
+        return set({ status: 'idle', iteration: 0, bestTour: null, currentTour: null });
     }
   },
   setMarkers: (markers) => set({ markers }),

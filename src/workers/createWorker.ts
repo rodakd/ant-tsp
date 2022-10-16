@@ -58,6 +58,12 @@ export const createWorker = <T extends object>(
     calculateCost: function (path: t.Marker[] | null) {
       return cost(path);
     },
+
+    finish: function () {
+      this.running = false;
+      this.paused = false;
+      appDispatch({ type: 'finish' });
+    },
   };
 
   onmessage = async (event) => {

@@ -45,9 +45,7 @@ export const PRESET_2: t.Preset = {
 };
 
 export const BASE_DELAY_MS = 500;
-
 export const DEFAULT_SPEED_PERCENT = 60;
-
 export const DEFAULT_CUSTOM_CODE = `// This is the code for 2-Opt algorithm
 
 const tour = [...app.markers];
@@ -93,4 +91,7 @@ while (swapped) {
     }
   }
 }
+
+app.log('Found best tour of cost: ' + best);
+app.finish();
 `;
