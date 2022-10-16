@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '~/constants';
 import { cost } from '~/helpers';
 import * as t from '~/types';
@@ -52,7 +53,10 @@ export const createWorker = <T extends object>(
     },
 
     log: function (toLog: any) {
-      appDispatch({ type: 'log', toLog: JSON.stringify(toLog) });
+      if (_.isPlainObject(toLog)) {
+        toLog = JSON.stringify(toLog, null, '\t');
+      }
+      appDispatch({ type: 'log', toLog });
     },
 
     calculateCost: function (path: t.Marker[] | null) {
