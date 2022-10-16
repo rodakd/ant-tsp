@@ -51,7 +51,7 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     worker: TwoOpt,
   },
 
-  'Your Code': {
+  'Your JavaScript': {
     worker: Custom,
     params: {
       code: {
