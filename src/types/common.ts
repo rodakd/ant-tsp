@@ -1,5 +1,4 @@
 import { MapProps } from 'react-map-gl';
-import { WorkerParams } from './params';
 import { FromWorkerAction, ToWorkerAction } from './workers';
 
 export type Store = {
@@ -27,12 +26,16 @@ export type Store = {
   setSelectedWorker: (workerName: string) => void;
   workerDispatch: (action: ToWorkerAction) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
-  setParams: (newParams: Partial<WorkerParams>) => void;
+  setParams: (newParams: any) => void;
   handleWorkerAction: (event: FromWorkerAction) => void;
 };
 
 export type AppStatus = 'running' | 'paused' | 'idle';
-export type Marker = [number, number];
+
+export type Longitude = number;
+export type Latitude = number;
+export type Marker = [Longitude, Latitude];
+
 export type ViewState = Partial<MapProps['viewState']>;
 
 export type Preset = {

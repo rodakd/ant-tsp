@@ -1,12 +1,18 @@
 import * as t from '~/types';
-import { CustomParams } from '~/types';
 import { createWorker } from './createWorker';
 
-async function custom(app: Readonly<t.WorkerInterface<CustomParams>>) {
+async function custom(app: Readonly<t.WorkerInterface>) {
   const gt = globalThis as any;
   gt['app'] = app;
-  await Object.getPrototypeOf(async function () {}).constructor(app.params.code)();
-  delete gt['app'];
+
+  try {
+    await Object.getPrototypeOf(async function () {}).constructor(app.params.code)();
+  } catch (err) {
+    app.error();
+    throw err;
+  } finally {
+    delete gt['app'];
+  }
 }
 
 createWorker(custom);

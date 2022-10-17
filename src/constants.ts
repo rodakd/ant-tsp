@@ -93,6 +93,6 @@ while (swapped) {
   }
 }
 
-app.log('Finished with cost: ' + best);
-app.finish();
+app.log('Ended with cost: ' + best);
+app.end();
 `;

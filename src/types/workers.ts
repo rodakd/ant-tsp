@@ -1,6 +1,6 @@
 import { Marker } from './common';
 
-export interface WorkerInterface<T = object> {
+export interface WorkerInterface {
   paused: boolean;
   running: boolean;
   markers: Marker[];
@@ -8,14 +8,15 @@ export interface WorkerInterface<T = object> {
   currentTour: Marker[] | null;
   speedPercent: number;
   iteration: number;
-  params: T;
+  params: any;
   updateIteration: (iteration: number) => void;
   updateBestTour: (bestTour: Marker[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
   sleep: () => Promise<void>;
   log: (toLog: any) => void;
-  calculateCost: (tour: Marker[] | null) => void;
-  finish: () => void;
+  calculateCost: (tour: Marker[] | null) => number;
+  error: (text?: string) => void;
+  end: () => void;
 }
 
 export type ToWorkerAction =
@@ -30,7 +31,8 @@ export type FromWorkerAction =
   | { type: 'updateBestTour'; bestTour: Marker[] }
   | { type: 'updateCurrentTour'; currentTour: Marker[] }
   | { type: 'log'; toLog: any }
-  | { type: 'finish' };
+  | { type: 'error'; text?: string }
+  | { type: 'end' };
 
 export type WorkerConfig = {
   worker: new () => Worker;

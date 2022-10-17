@@ -3,19 +3,19 @@ import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '~/constants';
 import { cost } from '~/helpers';
 import * as t from '~/types';
 
-export const createWorker = <T extends object>(
-  algorithm: (workerInterface: t.WorkerInterface<T>, params: any) => Promise<void>
+export const createWorker = (
+  algorithm: (workerInterface: t.WorkerInterface, params: any) => Promise<void>
 ) => {
   const appDispatch = (action: t.FromWorkerAction) => postMessage(action);
 
-  const workerInterface: t.WorkerInterface<T> = {
+  const workerInterface: t.WorkerInterface = {
     paused: false,
     running: false,
     bestTour: null,
     currentTour: null,
     iteration: 0,
     markers: [],
-    params: {} as T,
+    params: {},
     speedPercent: DEFAULT_SPEED_PERCENT,
 
     updateBestTour: function (bestTour) {
@@ -59,12 +59,16 @@ export const createWorker = <T extends object>(
       appDispatch({ type: 'log', toLog });
     },
 
+    error: function (text?: string) {
+      appDispatch({ type: 'error', text });
+    },
+
     calculateCost: function (path: t.Marker[] | null) {
       return cost(path);
     },
 
-    finish: function () {
-      appDispatch({ type: 'finish' });
+    end: function () {
+      appDispatch({ type: 'end' });
     },
   };
 
@@ -80,7 +84,7 @@ export const createWorker = <T extends object>(
         workerInterface.running = true;
         workerInterface.paused = false;
         workerInterface.markers = action.markers;
-        workerInterface.params = action.params as T;
+        workerInterface.params = action.params;
         workerInterface.iteration = 0;
         workerInterface.bestTour = null;
         workerInterface.currentTour = null;

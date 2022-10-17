@@ -3,6 +3,7 @@ import create from 'zustand';
 import { DEFAULT_SPEED_PERCENT, PRESET_1 } from './constants';
 import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from './workers';
 import { cost } from './helpers';
+import { notification } from 'antd';
 
 export const useStore = create<t.Store>((set, get) => ({
   iteration: 0,
@@ -91,7 +92,7 @@ export const useStore = create<t.Store>((set, get) => ({
 
   workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   handleWorkerAction: (action) => {
-    const { status } = get();
+    const { status, bestToursHistory, iteration, stopRun } = get();
 
     if (status === 'idle') {
       return;
@@ -101,7 +102,6 @@ export const useStore = create<t.Store>((set, get) => ({
       case 'updateIteration':
         return set({ iteration: action.iteration });
       case 'updateBestTour': {
-        const { bestToursHistory, iteration } = get();
         return set({
           bestTour: action.bestTour,
           bestToursHistory: bestToursHistory.concat({
@@ -114,8 +114,14 @@ export const useStore = create<t.Store>((set, get) => ({
         return set({ currentTour: action.currentTour });
       case 'log':
         return console.log(action.toLog);
-      case 'finish':
-        return get().stopRun();
+      case 'error':
+        notification.error({
+          message: 'An error occurred',
+          description: action.text || 'Please check the console',
+        });
+        return stopRun();
+      case 'end':
+        return stopRun();
     }
   },
   setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [] }),

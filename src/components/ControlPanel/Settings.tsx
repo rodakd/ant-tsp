@@ -1,5 +1,3 @@
-import * as t from '~/types';
-
 import _ from 'lodash';
 import cn from 'classnames';
 
@@ -39,7 +37,7 @@ export const Settings = () => {
         <Param
           key={name}
           title={p.label}
-          value={paramsState[name as keyof t.WorkerParams]}
+          value={paramsState[name]}
           onChange={(value: any) => setParams({ [name]: value })}
           {...restProps}
         />

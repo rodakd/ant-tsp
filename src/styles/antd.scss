@@ -5,7 +5,8 @@
   &-select-dropdown,
   &-btn,
   &-modal-content,
-  &-modal-header {
+  &-modal-header,
+  &-notification-notice {
     border-radius: 5px !important;
   }
 
@@ -16,5 +17,9 @@
 
   &-slide-up-leave {
     animation-duration: 0s !important;
+  }
+
+  &-notification-notice-description {
+    font-size: 13px !important;
   }
 }
