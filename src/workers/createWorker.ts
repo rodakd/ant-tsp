@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '~/constants';
-import { cost } from '~/helpers';
-import * as t from '~/types';
+import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '../constants';
+import { cost } from '../helpers';
+import * as t from '../types';
 
 export const createWorker = (
   algorithm: (workerInterface: t.WorkerInterface, params: any) => Promise<void>
