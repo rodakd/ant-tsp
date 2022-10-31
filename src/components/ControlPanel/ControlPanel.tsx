@@ -14,6 +14,9 @@ import { Settings } from './Settings';
 import { useStore } from '~/store';
 import { MutableRefObject } from 'react';
 import { MapRef } from 'react-map-gl';
+import { ImUpload3 } from 'react-icons/im';
+import { uploadFile, parseStringToMarkers } from '~/helpers';
+import { notification } from 'antd';
 
 type Props = {
   mapRef: MutableRefObject<MapRef | null>;
@@ -46,6 +49,20 @@ export const ControlPanel = ({ mapRef }: Props) => {
 
     if (longitude && latitude && zoom) {
       map.flyTo({ center: [longitude, latitude], zoom });
+    }
+  };
+
+  const importMarkers = async () => {
+    const str = await uploadFile();
+    if (!str) {
+      return;
+    }
+
+    try {
+      const markers = parseStringToMarkers(str);
+      setMarkers(markers);
+    } catch (err) {
+      notification.error({ message: 'An error occurred', description: "Couldn't parse the file" });
     }
   };
 
@@ -92,6 +109,12 @@ export const ControlPanel = ({ mapRef }: Props) => {
           onClick={() => setPreset(PRESET_2)}
         />
         <PanelButton
+          title='Import file'
+          icon={<ImUpload3 />}
+          disabled={disabledBtns.import}
+          onClick={importMarkers}
+        />
+        <PanelButton
           disabled={markers.length == 0 || disabledBtns.resetMarkers}
           title='Reset Markers'
           icon={<IoMdRefresh size={30} />}
@@ -116,6 +139,7 @@ type DisabledButtons = {
   preset2?: boolean;
   resetMarkers?: boolean;
   settings?: boolean;
+  import?: boolean;
 };
 
 function getDisabledButtons(status: AppStatus): DisabledButtons {
@@ -132,6 +156,7 @@ function getDisabledButtons(status: AppStatus): DisabledButtons {
         preset2: true,
         resetMarkers: true,
         settings: true,
+        import: true,
       };
   }
 }

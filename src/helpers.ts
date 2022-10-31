@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as t from '~/types';
 
 // haversine great circle distance
@@ -38,4 +39,39 @@ export const cost = (path: t.Marker[] | null) => {
     .slice(0, -1)
     .map((point, idx) => distance(point, path[idx + 1]))
     .reduce((a, b) => a + b, 0);
+};
+
+export const uploadFile = () => {
+  return new Promise<string | null>((res) => {
+    const el = document.createElement('input');
+    el.type = 'file';
+    el.accept = '.txt';
+    el.addEventListener('change', () => {
+      if (!el.files?.[0]) {
+        return res(null);
+      }
+
+      const fr = new FileReader();
+      fr.onload = function () {
+        const str = fr.result?.toString();
+
+        if (!str) {
+          return res(null);
+        }
+
+        return res(str);
+      };
+      fr.readAsText(el.files[0]);
+    });
+    el.click();
+  });
+};
+
+export const parseStringToMarkers = (text: string) => {
+  const rows = text.split(/\r\n|\r|\n/);
+  const markers = rows.map<t.Marker>((row) => {
+    const [lng, lat] = row.split(' ');
+    return [Number(lng), Number(lat)];
+  });
+  return markers;
 };
