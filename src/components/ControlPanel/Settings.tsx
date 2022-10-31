@@ -55,14 +55,12 @@ export const Settings = () => {
         'settings--visible': settingsOpen,
       })}
     >
-      <div className='settings__top'>
-        <Checkbox checked={performanceMode} onChange={(e) => setPerformanceMode(e.target.checked)}>
-          Performance Mode
-        </Checkbox>
-        <Checkbox checked={hideChart} onChange={(e) => setHideChart(e.target.checked)}>
-          Hide Chart
-        </Checkbox>
-      </div>
+      <Checkbox checked={performanceMode} onChange={(e) => setPerformanceMode(e.target.checked)}>
+        Performance Mode
+      </Checkbox>
+      <Checkbox checked={hideChart} onChange={(e) => setHideChart(e.target.checked)}>
+        Hide Chart
+      </Checkbox>
       <Select value={selectedWorker} onSelect={setSelectedWorker}>
         {getWorkerOptions()}
       </Select>

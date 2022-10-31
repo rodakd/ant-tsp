@@ -118,12 +118,6 @@
     transform: translateY(calc(0px + $panel-height));
   }
 
-  &__top {
-    display: flex;
-    justify-content: space-between;
-    grid-column: 1/-1;
-  }
-
   .param__input {
     margin-left: auto;
   }
