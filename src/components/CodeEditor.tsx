@@ -1,5 +1,5 @@
 import Prism from 'prismjs';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Slate, Editable, withReact, RenderLeafProps } from 'slate-react';
 import { Text, createEditor, NodeEntry, Node } from 'slate';
 import { withHistory } from 'slate-history';

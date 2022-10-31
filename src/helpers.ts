@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import * as t from '~/types';
 
 // haversine great circle distance
