@@ -7,9 +7,10 @@ import { notification } from 'antd';
 
 export const useStore = create<t.Store>((set, get) => ({
   iteration: 0,
+  currentRun: 1,
   status: 'idle',
   bestTour: null,
-  hideChart: true,
+  hideChart: false,
   bestToursHistory: [],
   currentTour: null,
   settingsOpen: false,
@@ -21,9 +22,13 @@ export const useStore = create<t.Store>((set, get) => ({
   selectedWorker: DEFAULT_WORKER_NAME,
   worker: null,
   performanceMode: false,
+  multiRunMode: false,
+  iterationsLimitMode: false,
+  multiRunLimit: 10,
+  iterationsLimit: 100,
   params: getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]),
 
-  startRun() {
+  startRun(currentRun?: number) {
     const { status, params, markers, speedPercent, selectedWorker, worker, performanceMode } =
       get();
 
@@ -41,6 +46,7 @@ export const useStore = create<t.Store>((set, get) => ({
       datasetsOpen: false,
       bestToursHistory: [],
       iteration: 0,
+      currentRun: currentRun || 1,
       bestTour: null,
       worker: freshWorker,
     });
@@ -49,7 +55,7 @@ export const useStore = create<t.Store>((set, get) => ({
   },
 
   stopRun() {
-    const { status, worker } = get();
+    const { status, worker, multiRunMode, currentRun, multiRunLimit, startRun } = get();
 
     if (status === 'idle') {
       return;
@@ -61,6 +67,13 @@ export const useStore = create<t.Store>((set, get) => ({
     });
 
     worker?.terminate();
+
+    console.log(multiRunMode, currentRun, multiRunLimit);
+    if (multiRunMode) {
+      if (currentRun < multiRunLimit) {
+        return startRun(currentRun + 1);
+      }
+    }
   },
 
   pauseRun() {
@@ -133,6 +146,10 @@ export const useStore = create<t.Store>((set, get) => ({
         return stopRun();
     }
   },
+  setIterationsLimitMode: (iterationsLimitMode) => set({ iterationsLimitMode }),
+  setMultiRunMode: (multiRunMode) => set({ multiRunMode }),
+  setIterationsLimit: (iterationsLimit) => set({ iterationsLimit }),
+  setMultiRunLimit: (multiRunLimit) => set({ multiRunLimit }),
   setHideChart: (hideChart) => set({ hideChart }),
   setPerformanceMode: (performanceMode) => set({ performanceMode }),
   setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [] }),

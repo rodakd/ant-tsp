@@ -64,7 +64,7 @@ export const ControlPanel = () => {
         <h1 className='control-panel__title'>Ant-TSP</h1>
         <StartPauseButton
           status={status}
-          onStart={startRun}
+          onStart={() => startRun()}
           onPause={pauseRun}
           onResume={resumeRun}
           disabled={markers.length === 0 || disabledBtns.startPause}

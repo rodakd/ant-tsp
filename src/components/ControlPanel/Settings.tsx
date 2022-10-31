@@ -13,8 +13,18 @@ export const Settings = () => {
   const selectedWorker = useStore((state) => state.selectedWorker);
   const paramsState = useStore((state) => state.params);
   const performanceMode = useStore((state) => state.performanceMode);
+  const iterationsLimitMode = useStore((state) => state.iterationsLimitMode);
+  const iterationsLimit = useStore((state) => state.iterationsLimit);
+  const multiRunMode = useStore((state) => state.multiRunMode);
+  const multiRunLimit = useStore((state) => state.multiRunLimit);
   const hideChart = useStore((state) => state.hideChart);
+
   const setHideChart = useStore((state) => state.setHideChart);
+  const setMultiRunMode = useStore((state) => state.setMultiRunMode);
+  const setIterationsLimitMode = useStore((state) => state.setIterationsLimitMode);
+  const setMultiRunLimit = useStore((state) => state.setMultiRunLimit);
+  const setIterationsLimit = useStore((state) => state.setIterationsLimit);
+
   const setPerformanceMode = useStore((state) => state.setPerformanceMode);
   const setParams = useStore((state) => state.setParams);
   const setSelectedWorker = useStore((state) => state.setSelectedWorker);
@@ -61,6 +71,37 @@ export const Settings = () => {
       <Checkbox checked={hideChart} onChange={(e) => setHideChart(e.target.checked)}>
         Hide Chart
       </Checkbox>
+      <Checkbox checked={multiRunMode} onChange={(e) => setMultiRunMode(e.target.checked)}>
+        Multi-Run Mode
+      </Checkbox>
+      <Checkbox
+        checked={iterationsLimitMode}
+        onChange={(e) => setIterationsLimitMode(e.target.checked)}
+      >
+        Limit Iterations
+      </Checkbox>
+      {multiRunMode ? (
+        <Param
+          title='runs'
+          value={multiRunLimit}
+          onChange={(value: any) => {
+            setMultiRunLimit(value || 2);
+          }}
+          type='number'
+          min={2}
+        />
+      ) : iterationsLimitMode ? (
+        <div></div>
+      ) : null}
+      {iterationsLimitMode && (
+        <Param
+          title='iterations'
+          value={iterationsLimit}
+          onChange={(value: any) => setIterationsLimit(value || 1)}
+          type='number'
+          min={1}
+        />
+      )}
       <Select value={selectedWorker} onSelect={setSelectedWorker}>
         {getWorkerOptions()}
       </Select>

@@ -22,4 +22,8 @@
   &-notification-notice-description {
     font-size: 13px !important;
   }
+
+  &-checkbox-wrapper + &-checkbox-wrapper {
+    margin-left: 0;
+  }
 }
