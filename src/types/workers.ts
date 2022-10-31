@@ -9,6 +9,7 @@ export interface WorkerInterface {
   speedPercent: number;
   iteration: number;
   params: any;
+  performanceMode: boolean;
   updateIteration: (iteration: number) => void;
   updateBestTour: (bestTour: Marker[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
@@ -20,7 +21,7 @@ export interface WorkerInterface {
 }
 
 export type ToWorkerAction =
-  | { type: 'run'; params: any; markers: Marker[]; speedPercent: number }
+  | { type: 'run'; params: any; markers: Marker[]; speedPercent: number; performanceMode: boolean }
   | { type: 'pause' }
   | { type: 'resume' }
   | { type: 'changeSpeed'; speedPercent: number };

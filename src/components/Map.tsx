@@ -18,7 +18,10 @@ export const Map = ({ mapRef }: Props) => {
   const markerModeOn = useStore((state) => state.markerModeOn);
   const markers = useStore((state) => state.markers);
   const bestTour = useStore((state) => state.bestTour);
+  const status = useStore((state) => state.status);
   const currentTour = useStore((state) => state.currentTour);
+  const performanceMode = useStore((state) => state.performanceMode);
+
   const setViewState = useStore((state) => state.setViewState);
   const setMarkers = useStore((state) => state.setMarkers);
 
@@ -27,7 +30,7 @@ export const Map = ({ mapRef }: Props) => {
     setMarkers([...markers, newMarker]);
   };
 
-  console.log(viewState);
+  const drawPath = !performanceMode || status !== 'running';
 
   return (
     <MapGL
@@ -48,24 +51,25 @@ export const Map = ({ mapRef }: Props) => {
             radiusMaxPixels: 7,
             getFillColor: [0, 173, 255],
           }),
-          new PathLayer({
-            id: 'path-layer',
-            data: [
-              {
-                name: 'Current',
-                color: [180, 180, 180, 180],
-                path: currentTour,
-              },
-              {
-                name: 'Best',
-                color: [24, 178, 188],
-                path: bestTour,
-              },
-            ],
-            getColor: (d) => d.color,
-            widthMinPixels: 3,
-            widthMaxPixels: 9,
-          }),
+          drawPath &&
+            new PathLayer({
+              id: 'path-layer',
+              data: [
+                {
+                  name: 'Current',
+                  color: [180, 180, 180, 180],
+                  path: currentTour,
+                },
+                {
+                  name: 'Best',
+                  color: [24, 178, 188],
+                  path: bestTour,
+                },
+              ],
+              getColor: (d) => d.color,
+              widthMinPixels: 3,
+              widthMaxPixels: 9,
+            }),
         ]}
       />
     </MapGL>

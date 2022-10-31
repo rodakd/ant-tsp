@@ -2,7 +2,7 @@ import _ from 'lodash';
 import cn from 'classnames';
 
 import { Param } from './Param';
-import { Select } from 'antd';
+import { Checkbox, Select } from 'antd';
 import { AVAILABLE_WORKERS } from '~/workers';
 import { useStore } from '~/store';
 
@@ -12,6 +12,10 @@ export const Settings = () => {
   const settingsOpen = useStore((state) => state.settingsOpen);
   const selectedWorker = useStore((state) => state.selectedWorker);
   const paramsState = useStore((state) => state.params);
+  const performanceMode = useStore((state) => state.performanceMode);
+  const hideChart = useStore((state) => state.hideChart);
+  const setHideChart = useStore((state) => state.setHideChart);
+  const setPerformanceMode = useStore((state) => state.setPerformanceMode);
   const setParams = useStore((state) => state.setParams);
   const setSelectedWorker = useStore((state) => state.setSelectedWorker);
 
@@ -45,19 +49,24 @@ export const Settings = () => {
     });
   }
 
-  const params = getWorkerParams();
-
   return (
     <div
       className={cn('settings', {
         'settings--visible': settingsOpen,
-        'settings--empty': _.isEmpty(params),
       })}
     >
+      <div className='settings__top'>
+        <Checkbox checked={performanceMode} onChange={(e) => setPerformanceMode(e.target.checked)}>
+          Performance Mode
+        </Checkbox>
+        <Checkbox checked={hideChart} onChange={(e) => setHideChart(e.target.checked)}>
+          Hide Chart
+        </Checkbox>
+      </div>
       <Select value={selectedWorker} onSelect={setSelectedWorker}>
         {getWorkerOptions()}
       </Select>
-      {params}
+      {getWorkerParams()}
     </div>
   );
 };

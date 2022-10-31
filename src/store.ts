@@ -9,6 +9,7 @@ export const useStore = create<t.Store>((set, get) => ({
   iteration: 0,
   status: 'idle',
   bestTour: null,
+  hideChart: true,
   bestToursHistory: [],
   currentTour: null,
   settingsOpen: false,
@@ -19,10 +20,12 @@ export const useStore = create<t.Store>((set, get) => ({
   speedPercent: DEFAULT_SPEED_PERCENT,
   selectedWorker: DEFAULT_WORKER_NAME,
   worker: null,
+  performanceMode: false,
   params: getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]),
 
   startRun() {
-    const { status, params, markers, speedPercent, selectedWorker, worker } = get();
+    const { status, params, markers, speedPercent, selectedWorker, worker, performanceMode } =
+      get();
 
     if (status !== 'idle' || markers.length === 0) {
       return;
@@ -42,7 +45,7 @@ export const useStore = create<t.Store>((set, get) => ({
       worker: freshWorker,
     });
 
-    freshWorker.postMessage({ type: 'run', params, markers, speedPercent });
+    freshWorker.postMessage({ type: 'run', params, markers, speedPercent, performanceMode });
   },
 
   stopRun() {
@@ -130,6 +133,8 @@ export const useStore = create<t.Store>((set, get) => ({
         return stopRun();
     }
   },
+  setHideChart: (hideChart) => set({ hideChart }),
+  setPerformanceMode: (performanceMode) => set({ performanceMode }),
   setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [] }),
   setViewState: (viewState) => set({ viewState }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),

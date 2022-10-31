@@ -5,6 +5,7 @@ import { SpeedSlider } from './SpeedSlider';
 export const Counter = () => {
   const iteration = useStore((state) => state.iteration);
   const bestCost = useStore((state) => cost(state.bestTour));
+  const performanceMode = useStore((state) => state.performanceMode);
 
   if (!bestCost) {
     return null;
@@ -16,7 +17,7 @@ export const Counter = () => {
         <span className='counter__iteration'>Iterations: {iteration}</span>
         <span className='counter__best-tour'>{bestCost.toFixed(2)} km</span>
       </div>
-      <SpeedSlider />
+      {!performanceMode && <SpeedSlider />}
     </div>
   );
 };

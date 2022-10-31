@@ -6,6 +6,7 @@ export type Store = {
   status: AppStatus;
   iteration: number;
   markers: Marker[];
+  hideChart: boolean;
   speedPercent: number;
   viewState: ViewState;
   worker: Worker | null;
@@ -13,6 +14,7 @@ export type Store = {
   settingsOpen: boolean;
   datasetsOpen: boolean;
   selectedWorker: string;
+  performanceMode: boolean;
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
   bestToursHistory: HistoryEntry[];
@@ -20,16 +22,18 @@ export type Store = {
   startRun: () => void;
   pauseRun: () => void;
   resumeRun: () => void;
+  setParams: (newParams: any) => void;
   setMarkers: (markers: Marker[]) => void;
   setSettingsOpen: (open: boolean) => void;
   setDatasetsOpen: (open: boolean) => void;
   setSpeed: (speedPercent: number) => void;
+  setHideChart: (hideChart: boolean) => void;
   setViewState: (viewState: ViewState) => void;
   setSelectedWorker: (workerName: string) => void;
   workerDispatch: (action: ToWorkerAction) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
-  setParams: (newParams: any) => void;
   handleWorkerAction: (event: FromWorkerAction) => void;
+  setPerformanceMode: (performanceMode: boolean) => void;
 };
 
 export type AppStatus = 'running' | 'paused' | 'idle';

@@ -17,6 +17,7 @@ export const createWorker = (
     markers: [],
     params: {},
     speedPercent: DEFAULT_SPEED_PERCENT,
+    performanceMode: false,
 
     updateBestTour: function (bestTour) {
       this.bestTour = bestTour;
@@ -34,6 +35,10 @@ export const createWorker = (
     },
 
     sleep: async function () {
+      if (this.performanceMode) {
+        return;
+      }
+
       while (this.paused && this.running) {
         await new Promise((res) => {
           setTimeout(res, 200);
@@ -41,14 +46,6 @@ export const createWorker = (
       }
 
       const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
-
-      if (delay === 0) {
-        if (workerInterface.iteration % 100 === 0) {
-          await new Promise((res) => requestAnimationFrame(res));
-        }
-        return;
-      }
-
       await new Promise((res) => setTimeout(res, delay));
     },
 
@@ -89,6 +86,7 @@ export const createWorker = (
         workerInterface.bestTour = null;
         workerInterface.currentTour = null;
         workerInterface.speedPercent = action.speedPercent;
+        workerInterface.performanceMode = action.performanceMode;
         await algorithm(workerInterface, action.params);
         break;
       case 'pause':

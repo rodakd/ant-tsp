@@ -5,7 +5,7 @@ import { PanelButton } from './PanelButton';
 
 type Props = {
   status: AppStatus;
-  disabled: boolean;
+  disabled?: boolean;
   onStart: () => void;
   onPause: () => void;
   onResume: () => void;
@@ -23,12 +23,20 @@ export const StartPauseButton = ({ status, disabled, onStart, onPause, onResume 
         />
       );
     case 'running':
-      return <PanelButton title='Pause' icon={<IoMdPause size={15} />} onClick={onPause} />;
+      return (
+        <PanelButton
+          title='Pause'
+          icon={<IoMdPause size={15} />}
+          onClick={onPause}
+          disabled={disabled}
+        />
+      );
     case 'paused':
       return (
         <PanelButton
           title='Resume'
           icon={<IoCaretForwardCircleOutline size={20} />}
+          disabled={disabled}
           onClick={onResume}
         />
       );

@@ -118,8 +118,10 @@
     transform: translateY(calc(0px + $panel-height));
   }
 
-  &--empty {
-    row-gap: 0;
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    grid-column: 1/-1;
   }
 
   .param__input {

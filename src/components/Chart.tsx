@@ -4,8 +4,11 @@ import { Export } from './Export';
 
 export const Chart = () => {
   const bestToursHistory = useStore((state) => state.bestToursHistory);
+  const performanceMode = useStore((state) => state.performanceMode);
+  const status = useStore((state) => state.status);
+  const hideChart = useStore((state) => state.hideChart);
 
-  if (bestToursHistory.length === 0) {
+  if ((performanceMode && status === 'running') || bestToursHistory.length === 0 || hideChart) {
     return null;
   }
 

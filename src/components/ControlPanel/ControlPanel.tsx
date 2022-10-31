@@ -6,10 +6,18 @@ import { PanelButton } from './buttons/PanelButton';
 import { SettingsButton } from './buttons/SettingsButton';
 import { StartPauseButton } from './buttons/StartPauseButton';
 import { MarkerModeButton } from './buttons/MarkerModeButton';
-import { AppStatus } from '~/types';
 import { Counter } from './Counter';
 import { Settings } from './Settings';
 import { useStore } from '~/store';
+
+type DisabledButtons = {
+  startPause?: boolean;
+  stop?: boolean;
+  markerMode?: boolean;
+  resetMarkers?: boolean;
+  settings?: boolean;
+  import?: boolean;
+};
 
 export const ControlPanel = () => {
   const status = useStore((state) => state.status);
@@ -17,6 +25,7 @@ export const ControlPanel = () => {
   const markers = useStore((state) => state.markers);
   const markerModeOn = useStore((state) => state.markerModeOn);
   const selectedWorker = useStore((state) => state.selectedWorker);
+  const performanceMode = useStore((state) => state.performanceMode);
   const startRun = useStore((state) => state.startRun);
   const stopRun = useStore((state) => state.stopRun);
   const pauseRun = useStore((state) => state.pauseRun);
@@ -25,7 +34,25 @@ export const ControlPanel = () => {
   const setMarkers = useStore((state) => state.setMarkers);
   const setMarkerModeOn = useStore((state) => state.setMarkerModeOn);
 
-  const disabledBtns = getDisabledButtons(status);
+  function getDisabledButtons(): DisabledButtons {
+    switch (status) {
+      case 'idle':
+        return {
+          stop: true,
+        };
+      case 'paused':
+      case 'running':
+        return {
+          startPause: performanceMode,
+          markerMode: true,
+          resetMarkers: true,
+          settings: true,
+          import: true,
+        };
+    }
+  }
+
+  const disabledBtns = getDisabledButtons();
 
   return (
     <div
@@ -40,7 +67,7 @@ export const ControlPanel = () => {
           onStart={startRun}
           onPause={pauseRun}
           onResume={resumeRun}
-          disabled={markers.length === 0}
+          disabled={markers.length === 0 || disabledBtns.startPause}
         />
         <PanelButton
           title='Stop'
@@ -70,28 +97,3 @@ export const ControlPanel = () => {
     </div>
   );
 };
-
-type DisabledButtons = {
-  stop?: boolean;
-  markerMode?: boolean;
-  resetMarkers?: boolean;
-  settings?: boolean;
-  import?: boolean;
-};
-
-function getDisabledButtons(status: AppStatus): DisabledButtons {
-  switch (status) {
-    case 'idle':
-      return {
-        stop: true,
-      };
-    case 'paused':
-    case 'running':
-      return {
-        markerMode: true,
-        resetMarkers: true,
-        settings: true,
-        import: true,
-      };
-  }
-}
