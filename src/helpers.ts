@@ -68,7 +68,7 @@ export const uploadFile = () => {
 };
 
 export const parseStringToMarkers = (text: string) => {
-  const rows = text.split(/\r\n|\r|\n/);
+  const rows = text.split(/\r\n|\r|\n/).filter((t) => !!t);
   const markers = rows.map<t.Marker>((row) => {
     const [lng, lat] = row.split(' ');
     return [Number(lng), Number(lat)];
