@@ -27,6 +27,8 @@ export const Map = ({ mapRef }: Props) => {
     setMarkers([...markers, newMarker]);
   };
 
+  console.log(viewState);
+
   return (
     <MapGL
       {...viewState}

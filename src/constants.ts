@@ -1,51 +1,89 @@
-import * as t from '~/types';
+import { All } from './datasets/All';
+import { Capitals } from './datasets/Capitals';
+import { PolandAll } from './datasets/PolandAll';
+import { PolandTop10 } from './datasets/PolandTop10';
+import { PolandTop50 } from './datasets/PolandTop50';
+import { Ukraine } from './datasets/Ukraine';
+import { UnitedStates } from './datasets/UnitedStates';
+import { WorldTop1000 } from './datasets/WorldTop1000';
+import { Dataset, ViewState } from './types';
 
 // Doesn't have to be secret
 export const MAPBOX_TOKEN =
   'pk.eyJ1Ijoicm9kYWtkIiwiYSI6ImNsNGJzZmt5cDBzMWszZG83MW1nNjUxZHIifQ.0XZS-LDfP7ikXWKE83tFqQ';
 
-export const PRESET_1: t.Preset = {
-  viewState: {
-    latitude: 52.3019155410081,
-    longitude: 19.145622827342095,
-    zoom: 5.431885792789866,
-  },
-  markers: [
-    [14.539789034827947, 53.40170929413944],
-    [16.93050692925766, 52.37810623502682],
-    [17.992045955013793, 53.0953453679779],
-    [21.000717101404575, 52.19731861471388],
-    [19.93096283692651, 50.03638006235522],
-    [23.161452565037024, 53.095659221543116],
-    [17.031281451436655, 51.080470797550674],
-    [19.019454327040478, 50.22542418940154],
-    [19.10835867396557, 50.75972724648943],
-    [22.572303035130744, 51.20759330066909],
-    [20.48244515804015, 53.74277838875716],
-  ],
-};
-
-export const PRESET_2: t.Preset = {
-  viewState: {
-    longitude: 11.883399991290958,
-    latitude: 24.183034769166625,
-    zoom: 1.171945176612675,
-  },
-  markers: [
-    [-73.94406841946886, 40.87682458524361],
-    [-3.680839417470338, 40.26766287218223],
-    [12.50699405950428, 41.74659792073635],
-    [8.69826247151579, 50.048706704424404],
-    [21.05628410614787, 52.1632603539862],
-    [-8.10666062163682, 12.462298263038889],
-    [-43.12173931446392, -23.051435584190187],
-    [-80.17155545542686, 25.663763097292488],
-    [114.27406173592539, 22.082369313824344],
-  ],
-};
-
 export const BASE_DELAY_MS = 500;
 export const DEFAULT_SPEED_PERCENT = 60;
+
+export const POLAND_VIEWSTATE = {
+  latitude: 52.3019155410081,
+  longitude: 19.145622827342095,
+  zoom: 5.431885792789866,
+};
+
+export const WORLD_VIEWSTATE = {
+  latitude: 34.87322478158413,
+  longitude: -30.854692483216354,
+  zoom: 1.1125846432617081,
+};
+
+export const UKRAINE_VIEWSTATE = {
+  latitude: 49.1455826364799,
+  longitude: 30.50946939955952,
+  zoom: 5.431885792789866,
+};
+
+export const US_VIEWSTATE = {
+  latitude: 43.90254185874704,
+  longitude: -124.02563542435257,
+  zoom: 3.0375660647805325,
+};
+
+export const DATASETS: Dataset[] = [
+  {
+    name: `Poland Top (10)`,
+    markers: PolandTop10,
+    viewState: POLAND_VIEWSTATE,
+  },
+  {
+    name: `Poland Top (50)`,
+    markers: PolandTop50,
+    viewState: POLAND_VIEWSTATE,
+  },
+  {
+    name: `Capitals (${Capitals.length})`,
+    markers: Capitals,
+    viewState: WORLD_VIEWSTATE,
+  },
+  {
+    name: `Poland (${PolandAll.length})`,
+    markers: PolandAll,
+    viewState: POLAND_VIEWSTATE,
+  },
+  {
+    name: `Ukraine (${Ukraine.length})`,
+    markers: Ukraine,
+    viewState: UKRAINE_VIEWSTATE,
+  },
+  {
+    name: `World Top (${WorldTop1000.length})`,
+    markers: WorldTop1000,
+    viewState: WORLD_VIEWSTATE,
+  },
+  {
+    name: `United States (${UnitedStates.length})`,
+    markers: UnitedStates,
+    viewState: US_VIEWSTATE,
+  },
+  {
+    name: `World (${All.length})`,
+    markers: All,
+    viewState: WORLD_VIEWSTATE,
+  },
+];
+
+export const DEFAULT_DATASET = DATASETS[0];
+
 export const DEFAULT_CUSTOM_CODE = `// The following is the code for 2-Opt algorithm
 
 const tour = [...app.markers];

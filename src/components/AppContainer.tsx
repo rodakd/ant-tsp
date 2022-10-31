@@ -4,6 +4,7 @@ import { MapRef } from 'react-map-gl';
 import { useStore } from '~/store';
 import { Chart } from './Chart';
 import { ControlPanel } from './ControlPanel/ControlPanel';
+import { DatasetsPanel } from './DatasetsPanel';
 import { Map } from './Map';
 import { PausedOverlay } from './PausedOverlay';
 
@@ -24,9 +25,10 @@ export const AppContainer = () => {
   return (
     <div className={cn('app-container', { 'app-container--marker-mode': markerModeOn })}>
       {status === 'paused' && <PausedOverlay />}
-      <ControlPanel mapRef={mapRef} />
+      <ControlPanel />
       <Map mapRef={mapRef} />
       <Chart />
+      <DatasetsPanel mapRef={mapRef} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import * as t from '~/types';
 import create from 'zustand';
-import { DEFAULT_SPEED_PERCENT, PRESET_1 } from './constants';
+import { DEFAULT_DATASET, DEFAULT_SPEED_PERCENT } from './constants';
 import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from './workers';
 import { cost } from './helpers';
 import { notification } from 'antd';
@@ -12,9 +12,10 @@ export const useStore = create<t.Store>((set, get) => ({
   bestToursHistory: [],
   currentTour: null,
   settingsOpen: false,
+  datasetsOpen: true,
   markerModeOn: false,
-  markers: PRESET_1.markers,
-  viewState: PRESET_1.viewState,
+  markers: DEFAULT_DATASET.markers,
+  viewState: DEFAULT_DATASET.viewState,
   speedPercent: DEFAULT_SPEED_PERCENT,
   selectedWorker: DEFAULT_WORKER_NAME,
   worker: null,
@@ -34,6 +35,7 @@ export const useStore = create<t.Store>((set, get) => ({
       status: 'running',
       markerModeOn: false,
       settingsOpen: false,
+      datasetsOpen: false,
       bestToursHistory: [],
       iteration: 0,
       bestTour: null,
@@ -132,5 +134,6 @@ export const useStore = create<t.Store>((set, get) => ({
   setViewState: (viewState) => set({ viewState }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
+  setDatasetsOpen: (datasetsOpen) => set({ datasetsOpen }),
   setParams: (params) => set((state) => ({ params: { ...state.params, ...params } })),
 }));

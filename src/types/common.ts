@@ -11,6 +11,7 @@ export type Store = {
   worker: Worker | null;
   markerModeOn: boolean;
   settingsOpen: boolean;
+  datasetsOpen: boolean;
   selectedWorker: string;
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
@@ -21,6 +22,7 @@ export type Store = {
   resumeRun: () => void;
   setMarkers: (markers: Marker[]) => void;
   setSettingsOpen: (open: boolean) => void;
+  setDatasetsOpen: (open: boolean) => void;
   setSpeed: (speedPercent: number) => void;
   setViewState: (viewState: ViewState) => void;
   setSelectedWorker: (workerName: string) => void;
@@ -38,7 +40,8 @@ export type Marker = [Longitude, Latitude];
 
 export type ViewState = Partial<MapProps['viewState']>;
 
-export type Preset = {
+export type Dataset = {
+  name: string;
   viewState: NonNullable<ViewState>;
   markers: Marker[];
 };
