@@ -85,7 +85,7 @@ export const Settings = () => {
           title='runs'
           value={multiRunLimit}
           onChange={(value: any) => {
-            setMultiRunLimit(value || 2);
+            setMultiRunLimit(value);
           }}
           type='number'
           min={2}
@@ -97,7 +97,7 @@ export const Settings = () => {
         <Param
           title='iterations'
           value={iterationsLimit}
-          onChange={(value: any) => setIterationsLimit(value || 1)}
+          onChange={(value: any) => setIterationsLimit(value)}
           type='number'
           min={1}
         />

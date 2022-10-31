@@ -114,7 +114,8 @@ export const useStore = create<t.Store>((set, get) => ({
 
   workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   handleWorkerAction: (action) => {
-    const { status, bestToursHistory, iteration, stopRun } = get();
+    const { status, bestToursHistory, iteration, iterationsLimitMode, iterationsLimit, stopRun } =
+      get();
 
     if (status === 'idle') {
       return;
@@ -122,7 +123,11 @@ export const useStore = create<t.Store>((set, get) => ({
 
     switch (action.type) {
       case 'updateIteration':
-        return set({ iteration: action.iteration });
+        set({ iteration: action.iteration });
+        if (iterationsLimitMode && action.iteration >= iterationsLimit) {
+          return stopRun();
+        }
+        return;
       case 'updateBestTour': {
         return set({
           bestTour: action.bestTour,
