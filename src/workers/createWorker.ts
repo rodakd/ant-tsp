@@ -94,10 +94,6 @@ export const createWorker = (
       case 'pause':
         workerInterface.paused = true;
         break;
-      case 'stop':
-        workerInterface.running = false;
-        workerInterface.paused = false;
-        break;
       case 'resume':
         workerInterface.paused = false;
         break;

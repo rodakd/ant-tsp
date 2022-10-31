@@ -21,7 +21,6 @@ export interface WorkerInterface {
 
 export type ToWorkerAction =
   | { type: 'run'; params: any; markers: Marker[]; speedPercent: number }
-  | { type: 'stop' }
   | { type: 'pause' }
   | { type: 'resume' }
   | { type: 'changeSpeed'; speedPercent: number };
