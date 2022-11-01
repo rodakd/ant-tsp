@@ -64,11 +64,24 @@ export const useStore = create<t.Store>((set, get) => ({
       worker: freshWorker,
     });
 
+    if (!currentRun) {
+      set({ multiRunSummary: DEFAULT_MULTI_RUN_SUMMARY });
+    }
+
     freshWorker.postMessage({ type: 'run', params, markers, speedPercent, performanceMode });
   },
 
   stopRun(manual?: boolean) {
-    const { status, worker, multiRunMode, currentRun, multiRunLimit, startRun } = get();
+    const {
+      status,
+      worker,
+      multiRunMode,
+      currentRun,
+      multiRunLimit,
+      bestToursHistory,
+      multiRunSummary,
+      startRun,
+    } = get();
 
     if (status === 'idle') {
       return;
@@ -82,9 +95,21 @@ export const useStore = create<t.Store>((set, get) => ({
     worker?.terminate();
 
     if (multiRunMode && !manual) {
+      const newHistories = [...multiRunSummary.bestToursHistories];
+      newHistories.push([...bestToursHistory]);
+
+      const newSummary = {
+        ...multiRunSummary,
+        bestToursHistories: newHistories,
+      };
+
+      set({ multiRunSummary: newSummary });
+
       if (currentRun < multiRunLimit) {
         return startRun(currentRun + 1);
       }
+
+      return set({ multiRunSummaryOpen: true });
     }
   },
 
@@ -164,6 +189,8 @@ export const useStore = create<t.Store>((set, get) => ({
   },
 
   workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
+
+  setMultiRunSummaryOpen: (multiRunSummaryOpen) => set({ multiRunSummaryOpen }),
   setIterationsLimitMode: (iterationsLimitMode) => set({ iterationsLimitMode }),
   setMultiRunMode: (multiRunMode) => set({ multiRunMode }),
   setIterationsLimit: (iterationsLimit) => set({ iterationsLimit }),

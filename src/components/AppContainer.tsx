@@ -2,10 +2,11 @@ import cn from 'classnames';
 import { useEffect, useRef } from 'react';
 import { MapRef } from 'react-map-gl';
 import { useStore } from '~/store';
-import { Chart } from './Chart';
+import { CurrentRunChart } from './Chart/CurrentRunChart';
 import { ControlPanel } from './ControlPanel/ControlPanel';
 import { DatasetsPanel } from './DatasetsPanel';
 import { Map } from './Map';
+import { MultiRunSummary } from './MultiRunSummary';
 import { PausedOverlay } from './PausedOverlay';
 
 export const AppContainer = () => {
@@ -27,8 +28,9 @@ export const AppContainer = () => {
       {status === 'paused' && <PausedOverlay />}
       <ControlPanel />
       <Map mapRef={mapRef} />
-      <Chart />
+      <CurrentRunChart />
       <DatasetsPanel mapRef={mapRef} />
+      <MultiRunSummary />
     </div>
   );
 };

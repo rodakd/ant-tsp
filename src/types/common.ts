@@ -24,7 +24,7 @@ export type Store = {
   iterationsLimitMode: boolean;
   multiRunSummaryOpen: boolean;
   bestToursHistory: HistoryEntry[];
-  multiRunSummary: MultiRunSummary | null;
+  multiRunSummary: MultiRunSummary;
 
   pauseRun: () => void;
   resumeRun: () => void;
@@ -45,6 +45,7 @@ export type Store = {
   setIterationsLimit: (iterationsLimit: number) => void;
   handleWorkerAction: (event: FromWorkerAction) => void;
   setPerformanceMode: (performanceMode: boolean) => void;
+  setMultiRunSummaryOpen: (multiRunSummaryOpen: boolean) => void;
   setIterationsLimitMode: (iterationsLimitModel: boolean) => void;
 };
 
