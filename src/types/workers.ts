@@ -1,4 +1,4 @@
-import { Marker } from './common';
+import type { Marker } from './common';
 
 export interface WorkerInterface {
   paused: boolean;
@@ -10,6 +10,7 @@ export interface WorkerInterface {
   iteration: number;
   params: any;
   performanceMode: boolean;
+  iterationsLimit: number | null;
   updateIteration: (iteration: number) => void;
   updateBestTour: (bestTour: Marker[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
@@ -21,7 +22,14 @@ export interface WorkerInterface {
 }
 
 export type ToWorkerAction =
-  | { type: 'run'; params: any; markers: Marker[]; speedPercent: number; performanceMode: boolean }
+  | {
+      type: 'run';
+      params: any;
+      markers: Marker[];
+      speedPercent: number;
+      performanceMode: boolean;
+      iterationsLimit: number | null;
+    }
   | { type: 'stop' }
   | { type: 'pause' }
   | { type: 'resume' }
@@ -36,6 +44,7 @@ export type FromWorkerAction =
   | { type: 'end' };
 
 export type WorkerConfig = {
+  workerClass: new () => Worker;
   worker: Worker;
   params?: Record<string, ParamConfig>;
 };

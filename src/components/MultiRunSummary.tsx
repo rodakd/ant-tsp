@@ -13,7 +13,7 @@ export const MultiRunSummary = () => {
 
   const getAverageCost = () => {
     const sum = bestToursHistories.reduce((acc, history) => {
-      return acc + history[history.length - 1].cost;
+      return acc + history[history.length - 1]?.cost;
     }, 0);
     return sum / bestToursHistories.length;
   };
@@ -34,7 +34,7 @@ export const MultiRunSummary = () => {
           return (
             <div key={idx} className='multi-run-summary__item'>
               <h5 className='multi-run-summary__item-title'>
-                Run: {idx + 1}, Cost: {history[history.length - 1].cost.toFixed(2)} km
+                Run: {idx + 1}, Cost: {history[history.length - 1]?.cost.toFixed(2)} km
               </h5>
               <Chart bestToursHistory={history} />
             </div>

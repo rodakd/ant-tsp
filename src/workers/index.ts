@@ -7,6 +7,7 @@ import { DEFAULT_CUSTOM_CODE } from '~/constants';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Ant Colony Optimization': {
+    workerClass: ACOWorker,
     worker: new ACOWorker(),
     params: {
       evaporation: {
@@ -44,14 +45,17 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   },
 
   'Nearest Neighbor': {
+    workerClass: NearestNeighborWorker,
     worker: new NearestNeighborWorker(),
   },
 
   '2-opt': {
+    workerClass: TwoOpt,
     worker: new TwoOpt(),
   },
 
   'Your JavaScript': {
+    workerClass: Custom,
     worker: new Custom(),
     params: {
       code: {

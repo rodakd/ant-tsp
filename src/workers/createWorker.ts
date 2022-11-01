@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '../constants';
 import { cost } from '../helpers';
 import * as t from '../types';
@@ -6,74 +5,10 @@ import * as t from '../types';
 export const createWorker = (
   algorithm: (workerInterface: t.WorkerInterface, params: any) => Promise<void>
 ) => {
-  const appDispatch = (action: t.FromWorkerAction) => postMessage(action);
-
-  const workerInterface: t.WorkerInterface = {
-    paused: false,
-    running: false,
-    bestTour: null,
-    currentTour: null,
-    iteration: 0,
-    markers: [],
-    params: {},
-    speedPercent: DEFAULT_SPEED_PERCENT,
-    performanceMode: false,
-
-    updateBestTour: function (bestTour) {
-      this.bestTour = bestTour;
-      appDispatch({ type: 'updateBestTour', bestTour });
-    },
-
-    updateIteration: function (iteration) {
-      this.iteration = iteration;
-      appDispatch({ type: 'updateIteration', iteration });
-    },
-
-    updateCurrentTour: function (currentTour) {
-      this.currentTour = currentTour;
-      appDispatch({ type: 'updateCurrentTour', currentTour });
-    },
-
-    sleep: async function () {
-      if (!this.running) {
-        throw 'Stop';
-      }
-
-      if (this.performanceMode) {
-        return;
-      }
-
-      while (this.paused && this.running) {
-        await new Promise((res) => {
-          setTimeout(res, 200);
-        });
-      }
-
-      const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
-      await new Promise((res) => setTimeout(res, delay));
-    },
-
-    log: function (toLog: any) {
-      if (_.isPlainObject(toLog)) {
-        toLog = JSON.stringify(toLog, null, '\t');
-      }
-      appDispatch({ type: 'log', toLog });
-    },
-
-    error: function (text?: string) {
-      appDispatch({ type: 'error', text });
-    },
-
-    calculateCost: function (path: t.Marker[] | null) {
-      return cost(path);
-    },
-
-    end: function () {
-      appDispatch({ type: 'end' });
-    },
-  };
+  let wi: t.WorkerInterface = new WorkerInstance();
 
   onmessage = async (event) => {
+    postMessage({ type: 'log', toLog: 'lol' });
     if (!event?.data?.type) {
       return;
     }
@@ -82,30 +17,103 @@ export const createWorker = (
 
     switch (action.type) {
       case 'run':
-        workerInterface.running = true;
-        workerInterface.paused = false;
-        workerInterface.markers = action.markers;
-        workerInterface.params = action.params;
-        workerInterface.iteration = 0;
-        workerInterface.bestTour = null;
-        workerInterface.currentTour = null;
-        workerInterface.speedPercent = action.speedPercent;
-        workerInterface.performanceMode = action.performanceMode;
+        wi = new WorkerInstance();
 
-        await algorithm(workerInterface, action.params).catch(() => null);
+        wi.params = action.params;
+        wi.markers = action.markers;
+        wi.speedPercent = action.speedPercent;
+        wi.performanceMode = action.performanceMode;
+        wi.iterationsLimit = action.iterationsLimit;
+
+        algorithm(wi, action.params).catch(() => null);
 
         break;
       case 'stop':
-        workerInterface.running = false;
+        wi.running = false;
         break;
       case 'pause':
-        workerInterface.paused = true;
+        wi.paused = true;
         break;
       case 'resume':
-        workerInterface.paused = false;
+        wi.paused = false;
         break;
       case 'changeSpeed':
-        workerInterface.speedPercent = action.speedPercent;
+        wi.speedPercent = action.speedPercent;
     }
   };
 };
+
+class WorkerInstance implements t.WorkerInterface {
+  paused = false;
+  running = true;
+  bestTour: t.Marker[] | null = null;
+  currentTour: t.Marker[] | null = null;
+  iteration = 0;
+  markers = [];
+  params = {};
+  speedPercent = DEFAULT_SPEED_PERCENT;
+  performanceMode = false;
+  iterationsLimit: number | null = null;
+
+  updateBestTour(bestTour: t.Marker[]) {
+    this.bestTour = bestTour;
+    this.appDispatch({ type: 'updateBestTour', bestTour });
+  }
+
+  updateIteration(iteration: number) {
+    this.iteration = iteration;
+    if (this.iterationsLimit && this.iteration > this.iterationsLimit) {
+      return this.end();
+    }
+    this.appDispatch({ type: 'updateIteration', iteration });
+  }
+
+  updateCurrentTour(currentTour: t.Marker[]) {
+    this.currentTour = currentTour;
+    this.appDispatch({ type: 'updateCurrentTour', currentTour });
+  }
+
+  async sleep() {
+    return new Promise<void>((res) => {
+      if (!this.running) {
+        throw 'Stopped';
+      }
+
+      if (this.performanceMode) {
+        return res();
+      }
+
+      while (this.paused && this.running) {
+        return setTimeout(res, 200);
+      }
+
+      const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
+      return setTimeout(res, delay);
+    });
+  }
+
+  log(toLog: any) {
+    this.appDispatch({ type: 'log', toLog: JSON.stringify(toLog) });
+  }
+
+  error(text?: string) {
+    this.appDispatch({ type: 'error', text });
+  }
+
+  calculateCost(path: t.Marker[] | null) {
+    return cost(path);
+  }
+
+  end() {
+    this.appDispatch({ type: 'end' });
+    this.running = false;
+    throw 'Stopped';
+  }
+
+  private appDispatch(action: t.FromWorkerAction) {
+    if (!this.running) {
+      throw 'Stopped';
+    }
+    postMessage(action);
+  }
+}

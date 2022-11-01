@@ -1,5 +1,5 @@
-import { MapProps } from 'react-map-gl';
-import { FromWorkerAction, ToWorkerAction } from './workers';
+import type { MapProps } from 'react-map-gl';
+import type { FromWorkerAction, ToWorkerAction } from './workers';
 
 export type Store = {
   params: any;

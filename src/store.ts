@@ -43,7 +43,16 @@ export const useStore = create<t.Store>((set, get) => ({
   multiRunSummary: DEFAULT_MULTI_RUN_SUMMARY,
 
   startRun(currentRun?: number) {
-    const { status, params, markers, speedPercent, performanceMode, workerDispatch } = get();
+    const {
+      status,
+      params,
+      markers,
+      speedPercent,
+      performanceMode,
+      iterationsLimit,
+      iterationsLimitMode,
+      workerDispatch,
+    } = get();
 
     if (status !== 'idle' || markers.length === 0) {
       return;
@@ -64,7 +73,14 @@ export const useStore = create<t.Store>((set, get) => ({
       set({ multiRunSummary: DEFAULT_MULTI_RUN_SUMMARY });
     }
 
-    workerDispatch({ type: 'run', params, markers, speedPercent, performanceMode });
+    workerDispatch({
+      type: 'run',
+      params,
+      markers,
+      speedPercent,
+      performanceMode,
+      iterationsLimit: iterationsLimitMode ? iterationsLimit : null,
+    });
   },
 
   stopRun(manual?: boolean) {
@@ -75,6 +91,9 @@ export const useStore = create<t.Store>((set, get) => ({
       multiRunLimit,
       bestToursHistory,
       multiRunSummary,
+      performanceMode,
+      selectedWorker,
+      workerDispatch,
       startRun,
     } = get();
 
@@ -86,6 +105,17 @@ export const useStore = create<t.Store>((set, get) => ({
       status: 'idle',
       currentTour: null,
     });
+
+    if (performanceMode) {
+      const config = AVAILABLE_WORKERS[selectedWorker];
+      config.worker?.terminate();
+      config.worker = new config.workerClass();
+      set({
+        worker: config.worker,
+      });
+    } else {
+      workerDispatch({ type: 'stop' });
+    }
 
     if (multiRunMode && !manual) {
       const newHistories = [...multiRunSummary.bestToursHistories];
@@ -140,8 +170,7 @@ export const useStore = create<t.Store>((set, get) => ({
   },
 
   handleWorkerAction: (action) => {
-    const { status, bestToursHistory, iteration, iterationsLimitMode, iterationsLimit, stopRun } =
-      get();
+    const { status, bestToursHistory, iteration, stopRun } = get();
 
     if (status === 'idle') {
       return;
@@ -149,11 +178,7 @@ export const useStore = create<t.Store>((set, get) => ({
 
     switch (action.type) {
       case 'updateIteration':
-        set({ iteration: action.iteration });
-        if (iterationsLimitMode && action.iteration >= iterationsLimit) {
-          return stopRun();
-        }
-        return;
+        return set({ iteration: action.iteration });
       case 'updateBestTour': {
         return set({
           bestTour: action.bestTour,
