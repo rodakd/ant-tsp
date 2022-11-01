@@ -7,7 +7,7 @@ export const SpeedSlider = () => {
 
   return (
     <div className='speed-slider'>
-      <Slider value={speedPercent} onChange={setSpeed} />
+      <Slider value={speedPercent} onChange={setSpeed} tooltipVisible={false} />
     </div>
   );
 };
