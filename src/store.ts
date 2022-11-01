@@ -79,7 +79,7 @@ export const useStore = create<t.Store>((set, get) => ({
       markers,
       speedPercent,
       performanceMode,
-      iterationsLimit: iterationsLimitMode ? iterationsLimit : null,
+      iterationsLimit: iterationsLimitMode ? iterationsLimit || 1 : null,
     });
   },
 

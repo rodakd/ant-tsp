@@ -17,7 +17,7 @@ export const Counter = () => {
         <span className='counter__iteration'>
           {multiRunMode && `Run: ${currentRun}, `}
           Iterations: {iteration}
-          {iterationsLimitMode && `/${iterationsLimit}`}
+          {iterationsLimitMode && `/${iterationsLimit || 1}`}
         </span>
         <span className='counter__best-tour'>{bestCost?.toFixed(2) || 0} km</span>
       </div>
