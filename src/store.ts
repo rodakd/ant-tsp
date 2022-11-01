@@ -1,9 +1,10 @@
 import * as t from '~/types';
 import create from 'zustand';
-import { DEFAULT_DATASET, DEFAULT_SPEED_PERCENT } from './constants';
+import { DEFAULT_SPEED_PERCENT } from './constants';
 import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from './workers';
 import { cost } from './helpers';
 import { notification } from 'antd';
+import { DEFAULT_DATASET } from './datasets';
 
 export const useStore = create<t.Store>((set, get) => ({
   iteration: 0,

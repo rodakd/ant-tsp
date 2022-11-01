@@ -32,6 +32,8 @@ export const Map = ({ mapRef }: Props) => {
 
   const drawPath = !performanceMode || status !== 'running';
 
+  console.log(viewState);
+
   return (
     <MapGL
       {...viewState}

@@ -6,10 +6,11 @@ import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import { BiLockAlt } from 'react-icons/bi';
 import { FaFileUpload } from 'react-icons/fa';
 import { MapRef } from 'react-map-gl';
-import { DATASETS, WORLD_VIEWSTATE } from '~/constants';
 import { parseStringToMarkers, uploadFile } from '~/helpers';
 import { useStore } from '~/store';
 import { Dataset } from '~/types';
+import { WORLD_VIEWSTATE } from '~/datasets/viewstates';
+import { DATASETS } from '~/datasets';
 
 type Props = {
   mapRef: MutableRefObject<MapRef | null>;
