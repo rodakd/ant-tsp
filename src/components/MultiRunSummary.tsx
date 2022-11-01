@@ -40,11 +40,26 @@ export const MultiRunSummaryCharts = ({
     return sum / bestToursHistories.length;
   };
 
+  const getBestHistory = () => {
+    const best = bestToursHistories.reduce((a, b) =>
+      a[a.length - 1]?.cost > b[b.length - 1]?.cost ? a : b
+    );
+    return {
+      history: best,
+      idx: bestToursHistories.findIndex((history) => history === best),
+      cost: best[best.length - 1]?.cost,
+    };
+  };
+
+  const best = getBestHistory();
+
   return (
     <div className='multi-run-summary__charts'>
       <h5 className='multi-run-summary__stat'>
-        Total Runs: {bestToursHistories.length}, Average Cost: {getAverageCost().toFixed(2)} km
+        Total Runs: <strong>{bestToursHistories.length}</strong> Average:
+        <strong>{getAverageCost().toFixed(2)} km</strong> Best: <strong>{best.cost} km</strong>
       </h5>
+      <div className='multi-run-summary__best'></div>
       {bestToursHistories.map((history, idx) => {
         return (
           <div key={idx} className='multi-run-summary__item'>
