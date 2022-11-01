@@ -106,7 +106,9 @@ export const useStore = create<t.Store>((set, get) => ({
       currentTour: null,
     });
 
-    if (performanceMode) {
+    if (performanceMode && manual) {
+      // Worker's thread might be too busy to listen for messages
+      // since we have to terminate it and create a new one
       const config = AVAILABLE_WORKERS[selectedWorker];
       config.worker?.terminate();
       config.worker = new config.workerClass();
