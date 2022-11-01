@@ -17,17 +17,20 @@ export type Store = {
   multiRunMode: boolean;
   multiRunLimit: number;
   selectedWorker: string;
-  performanceMode: boolean;
-  iterationsLimitMode: boolean;
   iterationsLimit: number;
+  performanceMode: boolean;
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
+  iterationsLimitMode: boolean;
+  multiRunSummaryOpen: boolean;
   bestToursHistory: HistoryEntry[];
-  stopRun: (manual?: boolean) => void;
-  startRun: (currentRun?: number) => void;
+  multiRunSummary: MultiRunSummary | null;
+
   pauseRun: () => void;
   resumeRun: () => void;
+  stopRun: (manual?: boolean) => void;
   setParams: (newParams: any) => void;
+  startRun: (currentRun?: number) => void;
   setMarkers: (markers: Marker[]) => void;
   setSettingsOpen: (open: boolean) => void;
   setDatasetsOpen: (open: boolean) => void;
@@ -46,11 +49,9 @@ export type Store = {
 };
 
 export type AppStatus = 'running' | 'paused' | 'idle';
-
 export type Longitude = number;
 export type Latitude = number;
 export type Marker = [Longitude, Latitude];
-
 export type ViewState = Partial<MapProps['viewState']>;
 
 export type Dataset = {
@@ -62,4 +63,8 @@ export type Dataset = {
 export type HistoryEntry = {
   cost: number;
   iteration: number;
+};
+
+export type MultiRunSummary = {
+  bestToursHistories: HistoryEntry[][];
 };

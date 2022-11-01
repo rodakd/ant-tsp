@@ -76,3 +76,5 @@ export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
 
   return params;
 };
+
+export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]);

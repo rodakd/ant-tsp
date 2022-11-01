@@ -1,33 +1,45 @@
 import * as t from '~/types';
 import create from 'zustand';
-import { DEFAULT_SPEED_PERCENT } from './constants';
-import { AVAILABLE_WORKERS, DEFAULT_WORKER_NAME, getWorkerDefaultParams } from './workers';
+import {
+  DEFAULT_ITERATIONS_LIMIT,
+  DEFAULT_MULTI_RUN_LIMIT,
+  DEFAULT_MULTI_RUN_SUMMARY,
+  DEFAULT_SPEED_PERCENT,
+} from './constants';
+import {
+  AVAILABLE_WORKERS,
+  DEFAULT_WORKER_NAME,
+  DEFAULT_WORKER_PARAMS,
+  getWorkerDefaultParams,
+} from './workers';
 import { cost } from './helpers';
 import { notification } from 'antd';
 import { DEFAULT_DATASET } from './datasets';
 
 export const useStore = create<t.Store>((set, get) => ({
+  worker: null,
   iteration: 0,
   currentRun: 1,
   status: 'idle',
   bestTour: null,
   hideChart: false,
-  bestToursHistory: [],
   currentTour: null,
-  settingsOpen: false,
   datasetsOpen: true,
+  settingsOpen: false,
   markerModeOn: false,
+  multiRunMode: false,
+  bestToursHistory: [],
+  performanceMode: false,
+  iterationsLimitMode: false,
+  multiRunSummaryOpen: false,
+  params: DEFAULT_WORKER_PARAMS,
   markers: DEFAULT_DATASET.markers,
-  viewState: DEFAULT_DATASET.viewState,
   speedPercent: DEFAULT_SPEED_PERCENT,
   selectedWorker: DEFAULT_WORKER_NAME,
-  worker: null,
-  performanceMode: false,
-  multiRunMode: false,
-  iterationsLimitMode: false,
-  multiRunLimit: 10,
-  iterationsLimit: 100,
-  params: getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]),
+  viewState: DEFAULT_DATASET.viewState,
+  multiRunLimit: DEFAULT_MULTI_RUN_LIMIT,
+  iterationsLimit: DEFAULT_ITERATIONS_LIMIT,
+  multiRunSummary: DEFAULT_MULTI_RUN_SUMMARY,
 
   startRun(currentRun?: number) {
     const { status, params, markers, speedPercent, selectedWorker, worker, performanceMode } =
@@ -112,7 +124,6 @@ export const useStore = create<t.Store>((set, get) => ({
     get().workerDispatch({ type: 'changeSpeed', speedPercent });
   },
 
-  workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   handleWorkerAction: (action) => {
     const { status, bestToursHistory, iteration, iterationsLimitMode, iterationsLimit, stopRun } =
       get();
@@ -151,6 +162,8 @@ export const useStore = create<t.Store>((set, get) => ({
         return stopRun();
     }
   },
+
+  workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   setIterationsLimitMode: (iterationsLimitMode) => set({ iterationsLimitMode }),
   setMultiRunMode: (multiRunMode) => set({ multiRunMode }),
   setIterationsLimit: (iterationsLimit) => set({ iterationsLimit }),
