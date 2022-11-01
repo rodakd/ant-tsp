@@ -8,7 +8,6 @@ export const createWorker = (
   let wi: t.WorkerInterface = new WorkerInstance();
 
   onmessage = async (event) => {
-    postMessage({ type: 'log', toLog: 'lol' });
     if (!event?.data?.type) {
       return;
     }
@@ -74,22 +73,20 @@ class WorkerInstance implements t.WorkerInterface {
   }
 
   async sleep() {
-    return new Promise<void>((res) => {
-      if (!this.running) {
-        throw 'Stopped';
-      }
+    if (!this.running) {
+      throw 'Stopped';
+    }
 
-      if (this.performanceMode) {
-        return res();
-      }
+    if (this.performanceMode) {
+      return;
+    }
 
-      while (this.paused && this.running) {
-        return setTimeout(res, 200);
-      }
+    while (this.paused && this.running) {
+      await new Promise<void>((res) => setTimeout(res, 200));
+    }
 
-      const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
-      return setTimeout(res, delay);
-    });
+    const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
+    return new Promise<void>((res) => setTimeout(res, delay));
   }
 
   log(toLog: any) {
