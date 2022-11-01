@@ -8,6 +8,7 @@ import {
 } from './constants';
 import {
   AVAILABLE_WORKERS,
+  DEFAULT_WORKER,
   DEFAULT_WORKER_NAME,
   DEFAULT_WORKER_PARAMS,
   getWorkerDefaultParams,
@@ -17,7 +18,7 @@ import { notification } from 'antd';
 import { DEFAULT_DATASET } from './datasets';
 
 export const useStore = create<t.Store>((set, get) => ({
-  worker: null,
+  worker: DEFAULT_WORKER.worker,
   iteration: 0,
   currentRun: 1,
   status: 'idle',
@@ -42,15 +43,11 @@ export const useStore = create<t.Store>((set, get) => ({
   multiRunSummary: DEFAULT_MULTI_RUN_SUMMARY,
 
   startRun(currentRun?: number) {
-    const { status, params, markers, speedPercent, selectedWorker, worker, performanceMode } =
-      get();
+    const { status, params, markers, speedPercent, performanceMode, workerDispatch } = get();
 
     if (status !== 'idle' || markers.length === 0) {
       return;
     }
-
-    worker?.terminate();
-    const freshWorker = new AVAILABLE_WORKERS[selectedWorker].worker();
 
     set({
       status: 'running',
@@ -61,20 +58,18 @@ export const useStore = create<t.Store>((set, get) => ({
       iteration: 0,
       currentRun: currentRun || 1,
       bestTour: null,
-      worker: freshWorker,
     });
 
     if (!currentRun) {
       set({ multiRunSummary: DEFAULT_MULTI_RUN_SUMMARY });
     }
 
-    freshWorker.postMessage({ type: 'run', params, markers, speedPercent, performanceMode });
+    workerDispatch({ type: 'run', params, markers, speedPercent, performanceMode });
   },
 
   stopRun(manual?: boolean) {
     const {
       status,
-      worker,
       multiRunMode,
       currentRun,
       multiRunLimit,
@@ -91,8 +86,6 @@ export const useStore = create<t.Store>((set, get) => ({
       status: 'idle',
       currentTour: null,
     });
-
-    worker?.terminate();
 
     if (multiRunMode && !manual) {
       const newHistories = [...multiRunSummary.bestToursHistories];
@@ -137,11 +130,8 @@ export const useStore = create<t.Store>((set, get) => ({
 
   setSelectedWorker: (selectedWorker) => {
     const workerConfig = AVAILABLE_WORKERS[selectedWorker];
-    const params = getWorkerDefaultParams(workerConfig);
-    const worker = new workerConfig.worker();
-
-    get().worker?.terminate();
-    set({ selectedWorker, params, worker });
+    const defaultParams = getWorkerDefaultParams(workerConfig);
+    set({ selectedWorker, params: defaultParams, worker: workerConfig.worker });
   },
 
   setSpeed: (speedPercent) => {

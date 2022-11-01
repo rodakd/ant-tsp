@@ -7,7 +7,7 @@ import { DEFAULT_CUSTOM_CODE } from '~/constants';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Ant Colony Optimization': {
-    worker: ACOWorker,
+    worker: new ACOWorker(),
     params: {
       evaporation: {
         label: 'evaporation',
@@ -44,15 +44,15 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   },
 
   'Nearest Neighbor': {
-    worker: NearestNeighborWorker,
+    worker: new NearestNeighborWorker(),
   },
 
   '2-opt': {
-    worker: TwoOpt,
+    worker: new TwoOpt(),
   },
 
   'Your JavaScript': {
-    worker: Custom,
+    worker: new Custom(),
     params: {
       code: {
         label: 'code',
@@ -62,8 +62,6 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     },
   },
 };
-
-export const DEFAULT_WORKER_NAME: keyof typeof AVAILABLE_WORKERS = '2-opt';
 
 export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   const params = {} as any;
@@ -77,4 +75,6 @@ export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   return params;
 };
 
-export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(AVAILABLE_WORKERS[DEFAULT_WORKER_NAME]);
+export const DEFAULT_WORKER_NAME: keyof typeof AVAILABLE_WORKERS = '2-opt';
+export const DEFAULT_WORKER = AVAILABLE_WORKERS[DEFAULT_WORKER_NAME];
+export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(DEFAULT_WORKER);

@@ -10,7 +10,7 @@ export type Store = {
   currentRun: number;
   speedPercent: number;
   viewState: ViewState;
-  worker: Worker | null;
+  worker: Worker;
   markerModeOn: boolean;
   settingsOpen: boolean;
   datasetsOpen: boolean;

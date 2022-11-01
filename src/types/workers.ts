@@ -22,6 +22,7 @@ export interface WorkerInterface {
 
 export type ToWorkerAction =
   | { type: 'run'; params: any; markers: Marker[]; speedPercent: number; performanceMode: boolean }
+  | { type: 'stop' }
   | { type: 'pause' }
   | { type: 'resume' }
   | { type: 'changeSpeed'; speedPercent: number };
@@ -35,7 +36,7 @@ export type FromWorkerAction =
   | { type: 'end' };
 
 export type WorkerConfig = {
-  worker: new () => Worker;
+  worker: Worker;
   params?: Record<string, ParamConfig>;
 };
 

@@ -35,6 +35,10 @@ export const createWorker = (
     },
 
     sleep: async function () {
+      if (!this.running) {
+        throw 'Stop';
+      }
+
       if (this.performanceMode) {
         return;
       }
@@ -87,7 +91,12 @@ export const createWorker = (
         workerInterface.currentTour = null;
         workerInterface.speedPercent = action.speedPercent;
         workerInterface.performanceMode = action.performanceMode;
-        await algorithm(workerInterface, action.params);
+
+        await algorithm(workerInterface, action.params).catch(() => null);
+
+        break;
+      case 'stop':
+        workerInterface.running = false;
         break;
       case 'pause':
         workerInterface.paused = true;
