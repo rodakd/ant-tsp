@@ -1,8 +1,11 @@
 import { All } from './datasets/All';
 import { Capitals } from './datasets/Capitals';
+import { France } from './datasets/France';
+import { Italy } from './datasets/Italy';
 import { PolandAll } from './datasets/PolandAll';
 import { PolandTop10 } from './datasets/PolandTop10';
 import { PolandTop50 } from './datasets/PolandTop50';
+import { PuertoRico } from './datasets/PuertoRico';
 import { Ukraine } from './datasets/Ukraine';
 import { UnitedStates } from './datasets/UnitedStates';
 import { WorldTop1000 } from './datasets/WorldTop1000';
@@ -51,6 +54,11 @@ export const DATASETS: Dataset[] = [
     viewState: POLAND_VIEWSTATE,
   },
   {
+    name: `Puerto Rico (${PuertoRico.length})`,
+    markers: PuertoRico,
+    viewState: WORLD_VIEWSTATE,
+  },
+  {
     name: `Capitals (${Capitals.length})`,
     markers: Capitals,
     viewState: WORLD_VIEWSTATE,
@@ -68,6 +76,16 @@ export const DATASETS: Dataset[] = [
   {
     name: `Top Population (${WorldTop1000.length})`,
     markers: WorldTop1000,
+    viewState: WORLD_VIEWSTATE,
+  },
+  {
+    name: `France (${France.length})`,
+    markers: France,
+    viewState: WORLD_VIEWSTATE,
+  },
+  {
+    name: `Italy (${Italy.length})`,
+    markers: Italy,
     viewState: WORLD_VIEWSTATE,
   },
   {
