@@ -6,7 +6,7 @@ import { PolandTop50 } from './datasets/PolandTop50';
 import { Ukraine } from './datasets/Ukraine';
 import { UnitedStates } from './datasets/UnitedStates';
 import { WorldTop1000 } from './datasets/WorldTop1000';
-import { Dataset, ViewState } from './types';
+import { Dataset } from './types';
 
 // Doesn't have to be secret
 export const MAPBOX_TOKEN =
@@ -66,7 +66,7 @@ export const DATASETS: Dataset[] = [
     viewState: UKRAINE_VIEWSTATE,
   },
   {
-    name: `World Top (${WorldTop1000.length})`,
+    name: `Top Population (${WorldTop1000.length})`,
     markers: WorldTop1000,
     viewState: WORLD_VIEWSTATE,
   },

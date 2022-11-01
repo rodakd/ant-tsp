@@ -250,7 +250,7 @@
 
 .datasets {
   position: absolute;
-  width: 200px;
+  width: 220px;
   height: 100vh;
   left: 0;
   top: 0;
@@ -258,8 +258,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 50px 10px 10px;
-  row-gap: 10px;
+  padding: 50px 15px 15px;
+  row-gap: 15px;
   overflow-y: auto;
   transform: translateY(-100%);
   transition: transform ease-in-out 300ms;
@@ -269,14 +269,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    column-gap: 5px;
+    column-gap: 7px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     position: absolute;
     top: 0;
     left: 0;
-    width: 200px;
+    width: 220px;
     height: 30px;
+    font-weight: 500;
     background: white;
     box-shadow: $elevation-shadow;
     cursor: pointer;
@@ -286,13 +287,15 @@
     padding: 10px;
     width: 100%;
     text-align: left;
-    background: #eee;
+    background: #e9effb;
+    color: #8aa8e7;
+    font-weight: 500;
     border-radius: 5px;
     transition: opacity ease-in-out 300ms;
     cursor: pointer;
 
     &:hover {
-      opacity: 50%;
+      opacity: 60%;
     }
 
     &--upload {
@@ -301,8 +304,10 @@
       align-items: center;
       column-gap: 10px;
       justify-content: center;
-      background: rgb(0, 173, 255);
-      color: white;
+      background: #e9effb;
+      color: #8aa8e7;
+      font-weight: 500;
+      border-radius: 5px;
     }
   }
 

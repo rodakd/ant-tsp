@@ -2,7 +2,8 @@ import cn from 'classnames';
 
 import { notification } from 'antd';
 import { MutableRefObject } from 'react';
-import { BiDownArrowAlt, BiUpArrowAlt } from 'react-icons/bi';
+import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
+import { BiLockAlt } from 'react-icons/bi';
 import { FaFileUpload } from 'react-icons/fa';
 import { MapRef } from 'react-map-gl';
 import { DATASETS, WORLD_VIEWSTATE } from '~/constants';
@@ -56,10 +57,29 @@ export const DatasetsPanel = ({ mapRef }: Props) => {
     }
   };
 
+  const getBtnIcon = () => {
+    if (status !== 'idle') {
+      return <BiLockAlt size={14} />;
+    }
+
+    if (datasetsOpen) {
+      return <BsChevronUp size={14} />;
+    }
+
+    return <BsChevronDown size={14} />;
+  };
+
   return (
     <>
-      <button className='datasets__btn' onClick={() => setDatasetsOpen(!datasetsOpen)}>
-        Datasets {datasetsOpen ? <BiUpArrowAlt size={18} /> : <BiDownArrowAlt size={18} />}
+      <button
+        className='datasets__btn'
+        onClick={() => {
+          if (status === 'idle') {
+            setDatasetsOpen(!datasetsOpen);
+          }
+        }}
+      >
+        Datasets {getBtnIcon()}
       </button>
       <div className={cn('datasets', { 'datasets--open': datasetsOpen })}>
         {DATASETS.map((ds, idx) => (

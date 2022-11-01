@@ -54,7 +54,7 @@ export const useStore = create<t.Store>((set, get) => ({
     freshWorker.postMessage({ type: 'run', params, markers, speedPercent, performanceMode });
   },
 
-  stopRun() {
+  stopRun(manual?: boolean) {
     const { status, worker, multiRunMode, currentRun, multiRunLimit, startRun } = get();
 
     if (status === 'idle') {
@@ -68,8 +68,7 @@ export const useStore = create<t.Store>((set, get) => ({
 
     worker?.terminate();
 
-    console.log(multiRunMode, currentRun, multiRunLimit);
-    if (multiRunMode) {
+    if (multiRunMode && !manual) {
       if (currentRun < multiRunLimit) {
         return startRun(currentRun + 1);
       }
@@ -157,7 +156,7 @@ export const useStore = create<t.Store>((set, get) => ({
   setMultiRunLimit: (multiRunLimit) => set({ multiRunLimit }),
   setHideChart: (hideChart) => set({ hideChart }),
   setPerformanceMode: (performanceMode) => set({ performanceMode }),
-  setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [] }),
+  setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [], iteration: 0 }),
   setViewState: (viewState) => set({ viewState }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),

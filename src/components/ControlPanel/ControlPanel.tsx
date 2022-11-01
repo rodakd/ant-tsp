@@ -73,7 +73,7 @@ export const ControlPanel = () => {
           title='Stop'
           disabled={disabledBtns.stop}
           icon={<FaSquare size={12} />}
-          onClick={stopRun}
+          onClick={() => stopRun(true)}
         />
         <MarkerModeButton
           markerModeOn={markerModeOn}

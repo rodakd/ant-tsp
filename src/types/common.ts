@@ -23,7 +23,7 @@ export type Store = {
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
   bestToursHistory: HistoryEntry[];
-  stopRun: () => void;
+  stopRun: (manual?: boolean) => void;
   startRun: (currentRun?: number) => void;
   pauseRun: () => void;
   resumeRun: () => void;
