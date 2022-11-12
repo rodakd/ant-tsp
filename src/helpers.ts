@@ -1,33 +1,26 @@
 import * as t from '~/types';
-import { z } from 'zod';
 
-// haversine great circle distance
+// https://www.movable-type.co.uk/scripts/latlong.html
 export const distance = (markerA: t.Marker, markerB: t.Marker) => {
-  const [lng1, lat1] = markerA;
-  const [lng2, lat2] = markerB;
+  const lon1 = markerA[0];
+  const lon2 = markerB[0];
+  const lat1 = markerA[1];
+  const lat2 = markerB[1];
 
-  if (lat1 === lat2 && lng1 === lng2) {
-    return 0;
-  }
+  const R = 6371e3; // metres
+  const φ1 = (lat1 * Math.PI) / 180; // φ, λ in radians
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
 
-  const radlat1 = (Math.PI * lat1) / 180;
-  const radlat2 = (Math.PI * lat2) / 180;
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  const theta = lng1 - lng2;
-  const radtheta = (Math.PI * theta) / 180;
+  const d = R * c; // in metres
 
-  let dist =
-    Math.sin(radlat1) * Math.sin(radlat2) +
-    Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-
-  if (dist > 1) {
-    dist = 1;
-  }
-
-  dist = Math.acos(dist);
-  dist = (dist * 180) / Math.PI;
-
-  return dist * 60 * 1.1515 * 1.609344;
+  return d / 1000; // in km
 };
 
 export const cost = (path: t.Marker[] | null) => {
@@ -70,8 +63,10 @@ export const uploadFile = () => {
 export const parseStringToMarkers = (text: string) => {
   const rows = text.split(/\r\n|\r|\n/).filter((t) => !!t);
   const markers = rows.map<t.Marker>((row) => {
-    const [lng, lat] = row.split(' ');
-    return [Number(lng), Number(lat)];
+    const [a, b] = row.split(' ');
+    const longitude = Number(a);
+    const latitude = Number(b);
+    return [longitude, latitude];
   });
   return markers;
 };
