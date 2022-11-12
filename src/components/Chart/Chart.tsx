@@ -26,7 +26,7 @@ export const Chart = ({ bestToursHistory }: Props) => {
         />
         <Tooltip
           labelFormatter={(v) => `Iteration: ${v}`}
-          formatter={(str: string) => Number(str).toLocaleString('en-US')}
+          formatter={(str: string) => Number(str).toLocaleString('en-US') + ' km'}
         />
       </LineChart>
       <Export />
