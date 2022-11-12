@@ -205,6 +205,7 @@ export const useStore = create<t.Store>((set, get) => ({
           bestTour: action.bestTour,
           bestToursHistory: action.bestToursHistory,
           cost: action.cost,
+          iteration: action.iterations,
         });
         return stopRun();
     }

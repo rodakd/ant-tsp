@@ -41,7 +41,13 @@ export type FromWorkerAction =
   | { type: 'updateCurrentTour'; currentTour: Marker[] }
   | { type: 'log'; toLog: any }
   | { type: 'error'; text?: string }
-  | { type: 'end'; bestTour: Marker[]; bestToursHistory: HistoryEntry[]; cost: number };
+  | {
+      type: 'end';
+      bestTour: Marker[];
+      bestToursHistory: HistoryEntry[];
+      cost: number;
+      iterations: number;
+    };
 
 export type WorkerConfig = {
   workerClass: new () => Worker;
