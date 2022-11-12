@@ -9,6 +9,7 @@ import { useStore } from '~/store';
 const Option = Select.Option;
 
 export const Settings = () => {
+  const hidePath = useStore((state) => state.hidePath);
   const paramsState = useStore((state) => state.params);
   const hideChart = useStore((state) => state.hideChart);
   const settingsOpen = useStore((state) => state.settingsOpen);
@@ -21,6 +22,7 @@ export const Settings = () => {
   const iterationsLimitMode = useStore((state) => state.iterationsLimitMode);
 
   const setParams = useStore((state) => state.setParams);
+  const setHidePath = useStore((state) => state.setHidePath);
   const setHideChart = useStore((state) => state.setHideChart);
   const setSateliteMode = useStore((state) => state.setSateliteMode);
   const setMultiRunMode = useStore((state) => state.setMultiRunMode);
@@ -71,6 +73,9 @@ export const Settings = () => {
       </Checkbox>
       <Checkbox checked={hideChart} onChange={(e) => setHideChart(e.target.checked)}>
         Hide Chart
+      </Checkbox>
+      <Checkbox checked={hidePath} onChange={(e) => setHidePath(e.target.checked)}>
+        Hide Path
       </Checkbox>
       <Checkbox checked={sateliteMode} onChange={(e) => setSateliteMode(e.target.checked)}>
         Satelite Mode

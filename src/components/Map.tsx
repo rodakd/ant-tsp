@@ -16,6 +16,7 @@ export const Map = () => {
   const status = useStore((state) => state.status);
   const markers = useStore((state) => state.markers);
   const bestTour = useStore((state) => state.bestTour);
+  const hidePath = useStore((state) => state.hidePath);
   const viewState = useStore((state) => state.viewState);
   const currentTour = useStore((state) => state.currentTour);
   const sateliteMode = useStore((state) => state.sateliteMode);
@@ -33,7 +34,14 @@ export const Map = () => {
     setMarkers([...markers, newMarker]);
   };
 
-  const drawPath = !performanceMode || status !== 'running';
+  const isDrawingPath = () => {
+    if (performanceMode) {
+      return status !== 'running' && !hidePath;
+    }
+    return !hidePath;
+  };
+
+  const drawPath = isDrawingPath();
 
   const layers = useMemo(() => {
     return [

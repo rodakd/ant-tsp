@@ -15,7 +15,6 @@ import {
 } from './workers';
 import { notification } from 'antd';
 import { DEFAULT_DATASET } from './datasets';
-import _ from 'lodash';
 
 export const useStore = create<t.Store>((set, get) => ({
   cost: 0,
@@ -23,6 +22,7 @@ export const useStore = create<t.Store>((set, get) => ({
   currentRun: 1,
   status: 'idle',
   bestTour: null,
+  hidePath: false,
   hideChart: false,
   currentTour: null,
   datasetsOpen: true,
@@ -213,6 +213,7 @@ export const useStore = create<t.Store>((set, get) => ({
     }
   },
 
+  setHidePath: (hidePath) => set({ hidePath }),
   setViewState: (viewState) => set({ viewState }),
   setHideChart: (hideChart) => set({ hideChart }),
   setMultiRunMode: (multiRunMode) => set({ multiRunMode }),

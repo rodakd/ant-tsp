@@ -8,6 +8,7 @@ export type Store = {
   status: AppStatus;
   iteration: number;
   markers: Marker[];
+  hidePath: boolean;
   hideChart: boolean;
   currentRun: number;
   speedPercent: number;
@@ -34,6 +35,7 @@ export type Store = {
   setParams: (newParams: any) => void;
   startRun: (currentRun?: number) => void;
   setMarkers: (markers: Marker[]) => void;
+  setHidePath: (hidePath: boolean) => void;
   setSettingsOpen: (open: boolean) => void;
   setDatasetsOpen: (open: boolean) => void;
   setSpeed: (speedPercent: number) => void;
