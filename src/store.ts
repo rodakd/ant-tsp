@@ -15,6 +15,7 @@ import {
 } from './workers';
 import { notification } from 'antd';
 import { DEFAULT_DATASET } from './datasets';
+import { mergeWithStorage, loadStorage } from './local-storage';
 
 export const useStore = create<t.Store>((set, get) => ({
   cost: 0,
@@ -43,6 +44,8 @@ export const useStore = create<t.Store>((set, get) => ({
   multiRunLimit: DEFAULT_MULTI_RUN_LIMIT,
   iterationsLimit: DEFAULT_ITERATIONS_LIMIT,
   multiRunSummary: DEFAULT_MULTI_RUN_SUMMARY,
+
+  ...loadStorage(),
 
   startRun(currentRun?: number) {
     const {
@@ -213,18 +216,24 @@ export const useStore = create<t.Store>((set, get) => ({
     }
   },
 
-  setHidePath: (hidePath) => set({ hidePath }),
+  setStorage: (obj: object) => {
+    mergeWithStorage(obj);
+    set(obj);
+  },
+
+  setHidePath: (hidePath) => get().setStorage({ hidePath }),
+  setHideChart: (hideChart) => get().setStorage({ hideChart }),
+  setMultiRunMode: (multiRunMode) => get().setStorage({ multiRunMode }),
+  setDatasetsOpen: (datasetsOpen) => get().setStorage({ datasetsOpen }),
+  setSateliteMode: (sateliteMode) => get().setStorage({ sateliteMode }),
+  setMultiRunLimit: (multiRunLimit) => get().setStorage({ multiRunLimit }),
+  setIterationsLimit: (iterationsLimit) => get().setStorage({ iterationsLimit }),
+  setPerformanceMode: (performanceMode) => get().setStorage({ performanceMode }),
+  setIterationsLimitMode: (iterationsLimitMode) => get().setStorage({ iterationsLimitMode }),
+
   setViewState: (viewState) => set({ viewState }),
-  setHideChart: (hideChart) => set({ hideChart }),
-  setMultiRunMode: (multiRunMode) => set({ multiRunMode }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
-  setDatasetsOpen: (datasetsOpen) => set({ datasetsOpen }),
-  setSateliteMode: (sateliteMode) => set({ sateliteMode }),
-  setMultiRunLimit: (multiRunLimit) => set({ multiRunLimit }),
-  setIterationsLimit: (iterationsLimit) => set({ iterationsLimit }),
-  setPerformanceMode: (performanceMode) => set({ performanceMode }),
-  setIterationsLimitMode: (iterationsLimitMode) => set({ iterationsLimitMode }),
   setMultiRunSummaryOpen: (multiRunSummaryOpen) => set({ multiRunSummaryOpen }),
   workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   setParams: (params) => set((state) => ({ params: { ...state.params, ...params } })),

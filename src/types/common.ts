@@ -31,6 +31,7 @@ export type Store = {
 
   pauseRun: () => void;
   resumeRun: () => void;
+  setStorage: (obj: object) => void;
   stopRun: (manual?: boolean) => void;
   setParams: (newParams: any) => void;
   startRun: (currentRun?: number) => void;

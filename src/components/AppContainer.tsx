@@ -8,12 +8,12 @@ import { PausedOverlay } from './PausedOverlay';
 import { MultiRunSummary } from './MultiRunSummary';
 import { CurrentRunChart } from './Chart/CurrentRunChart';
 import { ControlPanel } from './ControlPanel/ControlPanel';
-import { useWorkerCommunication } from '~/hooks/useWorkerCommunication';
+import { useInitWorkerComms } from '~/hooks/useInitWorkerComms';
 
 export const AppContainer = () => {
   const markerModeOn = useStore((state) => state.markerModeOn);
 
-  useWorkerCommunication();
+  useInitWorkerComms();
 
   return (
     <div className={cn('app-container', { 'app-container--marker-mode': markerModeOn })}>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useStore } from '~/store';
 
-export function useWorkerCommunication() {
+export function useInitWorkerComms() {
   const worker = useStore((state) => state.worker);
   const handleWorkerAction = useStore((state) => state.handleWorkerAction);
 

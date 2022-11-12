@@ -1,4 +1,5 @@
 import * as t from '~/types';
+import { z } from 'zod';
 
 // haversine great circle distance
 export const distance = (markerA: t.Marker, markerB: t.Marker) => {
