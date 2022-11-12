@@ -1,8 +1,9 @@
-import type { MapProps } from 'react-map-gl';
+import { MapViewState } from '@deck.gl/core/typed';
 import type { FromWorkerAction, ToWorkerAction } from './workers';
 
 export type Store = {
   params: any;
+  cost: number;
   worker: Worker;
   status: AppStatus;
   iteration: number;
@@ -53,7 +54,7 @@ export type Latitude = number;
 export type Longitude = number;
 export type Marker = [Longitude, Latitude];
 export type AppStatus = 'running' | 'paused' | 'idle';
-export type ViewState = Partial<MapProps['viewState']>;
+export type ViewState = Partial<MapViewState>;
 
 export type Dataset = {
   name: string;

@@ -1,5 +1,6 @@
 import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '../constants';
 import { cost } from '../helpers';
+import { HistoryEntry } from '../types';
 import * as t from '../types';
 
 export const createWorker = (
@@ -21,8 +22,8 @@ export const createWorker = (
         wi.params = action.params;
         wi.markers = action.markers;
         wi.speedPercent = action.speedPercent;
-        wi.performanceMode = action.performanceMode;
         wi.iterationsLimit = action.iterationsLimit;
+        wi.performanceMode = action.performanceMode;
 
         algorithm(wi, action.params).catch(() => null);
 
@@ -47,16 +48,31 @@ class WorkerInstance implements t.WorkerInterface {
   running = true;
   bestTour: t.Marker[] | null = null;
   currentTour: t.Marker[] | null = null;
+  cost = 0;
   iteration = 0;
   markers = [];
   params = {};
   speedPercent = DEFAULT_SPEED_PERCENT;
   performanceMode = false;
   iterationsLimit: number | null = null;
+  bestToursHistory: HistoryEntry[] = [];
 
-  updateBestTour(bestTour: t.Marker[]) {
+  updateBestTour(bestTour: t.Marker[], cost: number) {
+    const fixedCost = Number(cost.toFixed(2));
+
+    this.cost = fixedCost;
     this.bestTour = bestTour;
-    this.appDispatch({ type: 'updateBestTour', bestTour });
+    this.bestToursHistory = this.bestToursHistory.concat({
+      cost: fixedCost,
+      iteration: this.iteration,
+    });
+
+    this.appDispatch({
+      type: 'updateBestTour',
+      bestTour: this.bestTour,
+      bestToursHistory: this.bestToursHistory,
+      cost: this.cost,
+    });
   }
 
   updateIteration(iteration: number) {
@@ -102,7 +118,12 @@ class WorkerInstance implements t.WorkerInterface {
   }
 
   end() {
-    this.appDispatch({ type: 'end' });
+    postMessage({
+      type: 'end',
+      bestTour: this.currentTour,
+      bestToursHistory: this.bestToursHistory,
+      cost: this.cost,
+    });
     this.running = false;
     throw 'Stopped';
   }
@@ -111,6 +132,11 @@ class WorkerInstance implements t.WorkerInterface {
     if (!this.running) {
       throw 'Stopped';
     }
+
+    if (this.performanceMode) {
+      return;
+    }
+
     postMessage(action);
   }
 }

@@ -5,22 +5,19 @@ import { MutableRefObject } from 'react';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import { BiLockAlt } from 'react-icons/bi';
 import { FaFileUpload } from 'react-icons/fa';
-import { MapRef } from 'react-map-gl';
 import { parseStringToMarkers, uploadFile } from '~/helpers';
 import { useStore } from '~/store';
 import { Dataset } from '~/types';
 import { WORLD_VIEWSTATE } from '~/datasets/viewstates';
 import { DATASETS } from '~/datasets';
+import { FlyToInterpolator } from '@deck.gl/core/typed';
 
-type Props = {
-  mapRef: MutableRefObject<MapRef | null>;
-};
-
-export const DatasetsPanel = ({ mapRef }: Props) => {
+export const DatasetsPanel = () => {
   const status = useStore((state) => state.status);
   const datasetsOpen = useStore((state) => state.datasetsOpen);
   const setMarkers = useStore((state) => state.setMarkers);
   const setDatasetsOpen = useStore((state) => state.setDatasetsOpen);
+  const setViewState = useStore((state) => state.setViewState);
 
   const importMarkers = async () => {
     const str = await uploadFile();
@@ -33,9 +30,13 @@ export const DatasetsPanel = ({ mapRef }: Props) => {
       setMarkers(markers);
 
       const { longitude, latitude, zoom } = WORLD_VIEWSTATE;
-      mapRef.current?.flyTo({
-        center: [longitude, latitude],
+
+      setViewState({
+        longitude,
+        latitude,
         zoom,
+        transitionDuration: 'auto',
+        transitionInterpolator: new FlyToInterpolator({ speed: 1.5 }),
       });
     } catch (err) {
       notification.error({ message: 'An error occurred', description: "Couldn't parse the file" });
@@ -51,9 +52,12 @@ export const DatasetsPanel = ({ mapRef }: Props) => {
 
     const { longitude, latitude, zoom } = ds.viewState;
     if (longitude && latitude) {
-      mapRef.current?.flyTo({
-        center: [longitude, latitude],
+      setViewState({
+        longitude,
+        latitude,
         zoom,
+        transitionDuration: 1000,
+        transitionInterpolator: new FlyToInterpolator(),
       });
     }
   };

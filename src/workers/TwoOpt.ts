@@ -5,9 +5,10 @@ import { createWorker } from './createWorker';
 async function twoOpt(app: Readonly<t.WorkerInterface>) {
   const tour = [...app.markers];
   tour.push(tour[0]);
-  app.updateBestTour(tour);
-
   let best = app.calculateCost(tour);
+
+  app.updateBestTour(tour, best);
+
   let swapped = true;
   while (swapped) {
     swapped = false;
@@ -35,7 +36,7 @@ async function twoOpt(app: Readonly<t.WorkerInterface>) {
         if (newCost < best) {
           swapped = true;
           best = newCost;
-          app.updateBestTour(newTour);
+          app.updateBestTour(newTour, best);
         } else {
           section.reverse();
           tour.splice(i, j + 1 - i, ...section);

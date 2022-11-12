@@ -13,11 +13,12 @@ import {
   DEFAULT_WORKER_PARAMS,
   getWorkerDefaultParams,
 } from './workers';
-import { cost } from './helpers';
 import { notification } from 'antd';
 import { DEFAULT_DATASET } from './datasets';
+import _ from 'lodash';
 
 export const useStore = create<t.Store>((set, get) => ({
+  cost: 0,
   iteration: 0,
   currentRun: 1,
   status: 'idle',
@@ -67,6 +68,7 @@ export const useStore = create<t.Store>((set, get) => ({
       iteration: 0,
       currentRun: currentRun || 1,
       bestTour: null,
+      cost: 0,
     });
 
     if (!currentRun) {
@@ -172,7 +174,7 @@ export const useStore = create<t.Store>((set, get) => ({
   },
 
   handleWorkerAction: (action) => {
-    const { status, bestToursHistory, iteration, stopRun } = get();
+    const { status, stopRun } = get();
 
     if (status === 'idle') {
       return;
@@ -184,10 +186,8 @@ export const useStore = create<t.Store>((set, get) => ({
       case 'updateBestTour': {
         return set({
           bestTour: action.bestTour,
-          bestToursHistory: bestToursHistory.concat({
-            cost: Number(cost(action.bestTour).toFixed(2)),
-            iteration,
-          }),
+          bestToursHistory: action.bestToursHistory,
+          cost: action.cost,
         });
       }
       case 'updateCurrentTour':
@@ -201,6 +201,11 @@ export const useStore = create<t.Store>((set, get) => ({
         });
         return stopRun();
       case 'end':
+        set({
+          bestTour: action.bestTour,
+          bestToursHistory: action.bestToursHistory,
+          cost: action.cost,
+        });
         return stopRun();
     }
   },

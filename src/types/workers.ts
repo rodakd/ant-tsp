@@ -1,4 +1,4 @@
-import type { Marker } from './common';
+import type { HistoryEntry, Marker } from './common';
 
 export interface WorkerInterface {
   params: any;
@@ -16,7 +16,7 @@ export interface WorkerInterface {
   sleep: () => Promise<void>;
   error: (text?: string) => void;
   updateIteration: (iteration: number) => void;
-  updateBestTour: (bestTour: Marker[]) => void;
+  updateBestTour: (bestTour: Marker[], cost: number) => void;
   calculateCost: (tour: Marker[] | null) => number;
   updateCurrentTour: (currentTour: Marker[]) => void;
 }
@@ -37,11 +37,11 @@ export type ToWorkerAction =
 
 export type FromWorkerAction =
   | { type: 'updateIteration'; iteration: number }
-  | { type: 'updateBestTour'; bestTour: Marker[] }
+  | { type: 'updateBestTour'; bestTour: Marker[]; bestToursHistory: HistoryEntry[]; cost: number }
   | { type: 'updateCurrentTour'; currentTour: Marker[] }
   | { type: 'log'; toLog: any }
   | { type: 'error'; text?: string }
-  | { type: 'end' };
+  | { type: 'end'; bestTour: Marker[]; bestToursHistory: HistoryEntry[]; cost: number };
 
 export type WorkerConfig = {
   workerClass: new () => Worker;

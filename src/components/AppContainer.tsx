@@ -1,10 +1,8 @@
 import cn from 'classnames';
 
 import { Map } from './Map';
-import { useRef } from 'react';
 import { useStore } from '~/store';
 import { InfoBar } from './InfoBar';
-import { MapRef } from 'react-map-gl';
 import { DatasetsPanel } from './DatasetsPanel';
 import { PausedOverlay } from './PausedOverlay';
 import { MultiRunSummary } from './MultiRunSummary';
@@ -14,7 +12,6 @@ import { useWorkerCommunication } from '~/hooks/useWorkerCommunication';
 
 export const AppContainer = () => {
   const markerModeOn = useStore((state) => state.markerModeOn);
-  const mapRef = useRef<MapRef>(null);
 
   useWorkerCommunication();
 
@@ -25,8 +22,8 @@ export const AppContainer = () => {
       <PausedOverlay />
       <CurrentRunChart />
       <MultiRunSummary />
-      <Map mapRef={mapRef} />
-      <DatasetsPanel mapRef={mapRef} />
+      <Map />
+      <DatasetsPanel />
     </div>
   );
 };
