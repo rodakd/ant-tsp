@@ -53,7 +53,7 @@ export const Export = () => {
       </Button>
       <Modal
         title='Export Data'
-        visible={modalOpened}
+        open={modalOpened}
         onCancel={() => setModalOpened(false)}
         footer={
           <>

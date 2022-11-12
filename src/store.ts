@@ -206,6 +206,7 @@ export const useStore = create<t.Store>((set, get) => ({
           bestToursHistory: action.bestToursHistory,
           cost: action.cost,
           iteration: action.iterations,
+          currentTour: null,
         });
         return stopRun();
     }
@@ -224,5 +225,6 @@ export const useStore = create<t.Store>((set, get) => ({
   setMultiRunSummaryOpen: (multiRunSummaryOpen) => set({ multiRunSummaryOpen }),
   workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   setParams: (params) => set((state) => ({ params: { ...state.params, ...params } })),
-  setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [], iteration: 0 }),
+  setMarkers: (markers) =>
+    set({ markers, bestTour: null, bestToursHistory: [], iteration: 0, cost: 0 }),
 }));

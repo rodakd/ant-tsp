@@ -29,7 +29,12 @@ export const createWorker = (
 
         break;
       case 'stop':
-        wi.running = false;
+        try {
+          wi.end();
+        } catch (err) {
+          return;
+        }
+
         break;
       case 'pause':
         wi.paused = true;

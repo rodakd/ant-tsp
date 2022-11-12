@@ -14,9 +14,10 @@ export const DEFAULT_CUSTOM_CODE = `// The following is the code for 2-Opt algor
 
 const tour = [...app.markers];
 tour.push(tour[0]);
-app.updateBestTour(tour);
-
 let best = app.calculateCost(tour);
+
+app.updateBestTour(tour, best);
+
 let swapped = true;
 while (swapped) {
   swapped = false;
@@ -44,8 +45,7 @@ while (swapped) {
       if (newCost < best) {
         swapped = true;
         best = newCost;
-        app.log('New best: ' + best);
-        app.updateBestTour(newTour);
+        app.updateBestTour(newTour, best);
       } else {
         section.reverse();
         tour.splice(i, j + 1 - i, ...section);
@@ -57,6 +57,6 @@ while (swapped) {
   }
 }
 
-app.log('Ended with cost: ' + best);
 app.end();
+
 `;
