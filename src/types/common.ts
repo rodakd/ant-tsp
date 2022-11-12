@@ -3,6 +3,7 @@ import type { FromWorkerAction, ToWorkerAction } from './workers';
 
 export type Store = {
   params: any;
+  worker: Worker;
   status: AppStatus;
   iteration: number;
   markers: Marker[];
@@ -10,7 +11,6 @@ export type Store = {
   currentRun: number;
   speedPercent: number;
   viewState: ViewState;
-  worker: Worker;
   markerModeOn: boolean;
   settingsOpen: boolean;
   datasetsOpen: boolean;
@@ -49,16 +49,16 @@ export type Store = {
   setIterationsLimitMode: (iterationsLimitModel: boolean) => void;
 };
 
-export type AppStatus = 'running' | 'paused' | 'idle';
-export type Longitude = number;
 export type Latitude = number;
+export type Longitude = number;
 export type Marker = [Longitude, Latitude];
+export type AppStatus = 'running' | 'paused' | 'idle';
 export type ViewState = Partial<MapProps['viewState']>;
 
 export type Dataset = {
   name: string;
-  viewState: NonNullable<ViewState>;
   markers: Marker[];
+  viewState: NonNullable<ViewState>;
 };
 
 export type HistoryEntry = {

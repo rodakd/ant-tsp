@@ -1,36 +1,32 @@
 import cn from 'classnames';
-import { useEffect, useRef } from 'react';
-import { MapRef } from 'react-map-gl';
+
+import { Map } from './Map';
+import { useRef } from 'react';
 import { useStore } from '~/store';
+import { InfoBar } from './InfoBar';
+import { MapRef } from 'react-map-gl';
+import { DatasetsPanel } from './DatasetsPanel';
+import { PausedOverlay } from './PausedOverlay';
+import { MultiRunSummary } from './MultiRunSummary';
 import { CurrentRunChart } from './Chart/CurrentRunChart';
 import { ControlPanel } from './ControlPanel/ControlPanel';
-import { DatasetsPanel } from './DatasetsPanel';
-import { Map } from './Map';
-import { MultiRunSummary } from './MultiRunSummary';
-import { PausedOverlay } from './PausedOverlay';
+import { useWorkerCommunication } from '~/hooks/useWorkerCommunication';
 
 export const AppContainer = () => {
-  const status = useStore((state) => state.status);
   const markerModeOn = useStore((state) => state.markerModeOn);
-  const worker = useStore((state) => state.worker);
-  const handleWorkerAction = useStore((state) => state.handleWorkerAction);
-
-  useEffect(() => {
-    if (worker) {
-      worker.onmessage = (evt) => handleWorkerAction(evt.data);
-    }
-  }, [worker]);
-
   const mapRef = useRef<MapRef>(null);
+
+  useWorkerCommunication();
 
   return (
     <div className={cn('app-container', { 'app-container--marker-mode': markerModeOn })}>
-      {status === 'paused' && <PausedOverlay />}
+      <InfoBar />
       <ControlPanel />
-      <Map mapRef={mapRef} />
+      <PausedOverlay />
       <CurrentRunChart />
-      <DatasetsPanel mapRef={mapRef} />
       <MultiRunSummary />
+      <Map mapRef={mapRef} />
+      <DatasetsPanel mapRef={mapRef} />
     </div>
   );
 };

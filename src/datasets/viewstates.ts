@@ -5,9 +5,9 @@ export const POLAND_VIEWSTATE = {
 };
 
 export const WORLD_VIEWSTATE = {
-  latitude: 34.87322478158413,
-  longitude: -30.854692483216354,
-  zoom: 1.1125846432617081,
+  latitude: 30.238339866742223,
+  longitude: -14.99924082918676,
+  zoom: 1.3487281337730868,
 };
 
 export const UKRAINE_VIEWSTATE = {

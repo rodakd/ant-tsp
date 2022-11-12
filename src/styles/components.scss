@@ -250,6 +250,7 @@
 
 .datasets {
   position: absolute;
+  z-index: 2;
   width: 220px;
   height: 100vh;
   left: 0;
@@ -265,7 +266,7 @@
   transition: transform ease-in-out 300ms;
 
   &__btn {
-    z-index: 2;
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -386,4 +387,11 @@
 
 .mapboxgl-ctrl-bottom-left {
   display: none;
+}
+
+.info-bar {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  z-index: 1;
 }

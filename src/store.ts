@@ -18,7 +18,6 @@ import { notification } from 'antd';
 import { DEFAULT_DATASET } from './datasets';
 
 export const useStore = create<t.Store>((set, get) => ({
-  worker: DEFAULT_WORKER.worker,
   iteration: 0,
   currentRun: 1,
   status: 'idle',
@@ -34,6 +33,7 @@ export const useStore = create<t.Store>((set, get) => ({
   iterationsLimitMode: false,
   multiRunSummaryOpen: false,
   params: DEFAULT_WORKER_PARAMS,
+  worker: DEFAULT_WORKER.worker,
   markers: DEFAULT_DATASET.markers,
   speedPercent: DEFAULT_SPEED_PERCENT,
   selectedWorker: DEFAULT_WORKER_NAME,
@@ -108,7 +108,7 @@ export const useStore = create<t.Store>((set, get) => ({
 
     if (performanceMode && manual) {
       // Worker's thread might be too busy to listen for messages
-      // since we have to terminate it and create a new one
+      // We have to terminate it and create a new one
       const config = AVAILABLE_WORKERS[selectedWorker];
       config.worker?.terminate();
       config.worker = new config.workerClass();
@@ -205,19 +205,18 @@ export const useStore = create<t.Store>((set, get) => ({
     }
   },
 
-  workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
-
-  setMultiRunSummaryOpen: (multiRunSummaryOpen) => set({ multiRunSummaryOpen }),
-  setIterationsLimitMode: (iterationsLimitMode) => set({ iterationsLimitMode }),
-  setMultiRunMode: (multiRunMode) => set({ multiRunMode }),
-  setIterationsLimit: (iterationsLimit) => set({ iterationsLimit }),
-  setMultiRunLimit: (multiRunLimit) => set({ multiRunLimit }),
-  setHideChart: (hideChart) => set({ hideChart }),
-  setPerformanceMode: (performanceMode) => set({ performanceMode }),
-  setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [], iteration: 0 }),
   setViewState: (viewState) => set({ viewState }),
+  setHideChart: (hideChart) => set({ hideChart }),
+  setMultiRunMode: (multiRunMode) => set({ multiRunMode }),
   setMarkerModeOn: (markerModeOn) => set({ markerModeOn }),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
   setDatasetsOpen: (datasetsOpen) => set({ datasetsOpen }),
+  setMultiRunLimit: (multiRunLimit) => set({ multiRunLimit }),
+  setIterationsLimit: (iterationsLimit) => set({ iterationsLimit }),
+  setPerformanceMode: (performanceMode) => set({ performanceMode }),
+  setIterationsLimitMode: (iterationsLimitMode) => set({ iterationsLimitMode }),
+  setMultiRunSummaryOpen: (multiRunSummaryOpen) => set({ multiRunSummaryOpen }),
+  workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   setParams: (params) => set((state) => ({ params: { ...state.params, ...params } })),
+  setMarkers: (markers) => set({ markers, bestTour: null, bestToursHistory: [], iteration: 0 }),
 }));

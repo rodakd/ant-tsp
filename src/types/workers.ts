@@ -1,24 +1,24 @@
 import type { Marker } from './common';
 
 export interface WorkerInterface {
+  params: any;
   paused: boolean;
   running: boolean;
   markers: Marker[];
+  iteration: number;
+  speedPercent: number;
+  performanceMode: boolean;
   bestTour: Marker[] | null;
   currentTour: Marker[] | null;
-  speedPercent: number;
-  iteration: number;
-  params: any;
-  performanceMode: boolean;
   iterationsLimit: number | null;
+  end: () => void;
+  log: (toLog: any) => void;
+  sleep: () => Promise<void>;
+  error: (text?: string) => void;
   updateIteration: (iteration: number) => void;
   updateBestTour: (bestTour: Marker[]) => void;
-  updateCurrentTour: (currentTour: Marker[]) => void;
-  sleep: () => Promise<void>;
-  log: (toLog: any) => void;
   calculateCost: (tour: Marker[] | null) => number;
-  error: (text?: string) => void;
-  end: () => void;
+  updateCurrentTour: (currentTour: Marker[]) => void;
 }
 
 export type ToWorkerAction =
