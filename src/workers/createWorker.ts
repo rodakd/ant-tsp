@@ -25,16 +25,16 @@ export const createWorker = (
         wi.iterationsLimit = action.iterationsLimit;
         wi.performanceMode = action.performanceMode;
 
-        algorithm(wi, action.params).catch(() => null);
+        algorithm(wi, action.params).catch((err) => {
+          if (err === 'Stopped') {
+            return;
+          }
+          throw err;
+        });
 
         break;
       case 'stop':
-        try {
-          wi.end();
-        } catch (err) {
-          return;
-        }
-
+        wi.running = false;
         break;
       case 'pause':
         wi.paused = true;
@@ -115,7 +115,10 @@ class WorkerInstance implements t.WorkerInterface {
   }
 
   error(text?: string) {
-    this.appDispatch({ type: 'error', text });
+    postMessage({
+      type: 'error',
+      text,
+    });
   }
 
   calculateCost(path: t.Marker[] | null) {

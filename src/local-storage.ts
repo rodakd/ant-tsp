@@ -13,8 +13,10 @@ export const STORAGE_SCHEMA = z
     multiRunLimit: z.number().int(),
     iterationsLimitMode: z.boolean(),
     iterationsLimit: z.number().int(),
+    speedPercent: z.number().int(),
   })
-  .partial();
+  .partial()
+  .strict();
 
 export const mergeWithStorage = (obj: object) => {
   const storage = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -33,6 +35,7 @@ export const loadStorage = () => {
     return validatedStorage;
   } catch (err) {
     console.error(err);
+    localStorage.setItem(STORAGE_KEY, '{}');
     return {};
   }
 };

@@ -172,11 +172,6 @@ export const useStore = create<t.Store>((set, get) => ({
     set({ selectedWorker, params: defaultParams, worker: workerConfig.worker });
   },
 
-  setSpeed: (speedPercent) => {
-    set({ speedPercent });
-    get().workerDispatch({ type: 'changeSpeed', speedPercent });
-  },
-
   handleWorkerAction: (action) => {
     const { status, stopRun } = get();
 
@@ -219,6 +214,11 @@ export const useStore = create<t.Store>((set, get) => ({
   setStorage: (obj: object) => {
     mergeWithStorage(obj);
     set(obj);
+  },
+
+  setSpeed: (speedPercent) => {
+    get().setStorage({ speedPercent });
+    get().workerDispatch({ type: 'changeSpeed', speedPercent });
   },
 
   setHidePath: (hidePath) => get().setStorage({ hidePath }),

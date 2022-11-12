@@ -12,16 +12,7 @@ export const Export = () => {
     bestToursHistory.forEach((entry) =>
       dataArr.push([entry.iteration.toString(), entry.cost.toString()])
     );
-
-    const data = dataArr
-      .map(
-        (row) =>
-          row
-            .map((v) => `"${v}"`) // quote it
-            .join(',') // comma-separated
-      )
-      .join('\r\n'); // rows starting on new lines
-
+    const data = dataArr.map((row) => row.join(',')).join('\r\n');
     downloadFile({ data, filename: 'export.csv', type: 'text/csv;charset=utf-8;' });
   };
 

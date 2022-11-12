@@ -23,7 +23,7 @@ export const Counter = () => {
           Iterations: {iteration}
           {iterationsLimitMode && `/${iterationsLimit || 1}`}
         </span>
-        <span className='counter__best-tour'>{cost || 0} km</span>
+        <span className='counter__best-tour'>{cost.toLocaleString('en-US') || 0} km</span>
       </div>
       {!performanceMode && <SpeedSlider />}
     </div>
