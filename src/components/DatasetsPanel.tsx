@@ -84,7 +84,7 @@ export const DatasetsPanel = () => {
           }
         }}
       >
-        Datasets {getBtnIcon()}
+        Cities {getBtnIcon()}
       </button>
       <div className={cn('datasets', { 'datasets--open': datasetsOpen })}>
         {DATASETS.map((ds, idx) => (
