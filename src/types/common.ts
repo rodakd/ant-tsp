@@ -12,6 +12,7 @@ export type Store = {
   currentRun: number;
   speedPercent: number;
   viewState: ViewState;
+  sateliteMode: boolean;
   markerModeOn: boolean;
   settingsOpen: boolean;
   datasetsOpen: boolean;
@@ -39,6 +40,7 @@ export type Store = {
   setHideChart: (hideChart: boolean) => void;
   setViewState: (viewState: ViewState) => void;
   setSelectedWorker: (workerName: string) => void;
+  setSateliteMode: (sateliteMode: boolean) => void;
   workerDispatch: (action: ToWorkerAction) => void;
   setMarkerModeOn: (markerModeOn: boolean) => void;
   setMultiRunMode: (multiRunMode: boolean) => void;

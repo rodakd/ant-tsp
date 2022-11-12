@@ -9,25 +9,26 @@ import { useStore } from '~/store';
 const Option = Select.Option;
 
 export const Settings = () => {
-  const settingsOpen = useStore((state) => state.settingsOpen);
-  const selectedWorker = useStore((state) => state.selectedWorker);
   const paramsState = useStore((state) => state.params);
-  const performanceMode = useStore((state) => state.performanceMode);
-  const iterationsLimitMode = useStore((state) => state.iterationsLimitMode);
-  const iterationsLimit = useStore((state) => state.iterationsLimit);
-  const multiRunMode = useStore((state) => state.multiRunMode);
-  const multiRunLimit = useStore((state) => state.multiRunLimit);
   const hideChart = useStore((state) => state.hideChart);
+  const settingsOpen = useStore((state) => state.settingsOpen);
+  const multiRunMode = useStore((state) => state.multiRunMode);
+  const sateliteMode = useStore((state) => state.sateliteMode);
+  const multiRunLimit = useStore((state) => state.multiRunLimit);
+  const selectedWorker = useStore((state) => state.selectedWorker);
+  const performanceMode = useStore((state) => state.performanceMode);
+  const iterationsLimit = useStore((state) => state.iterationsLimit);
+  const iterationsLimitMode = useStore((state) => state.iterationsLimitMode);
 
-  const setHideChart = useStore((state) => state.setHideChart);
-  const setMultiRunMode = useStore((state) => state.setMultiRunMode);
-  const setIterationsLimitMode = useStore((state) => state.setIterationsLimitMode);
-  const setMultiRunLimit = useStore((state) => state.setMultiRunLimit);
-  const setIterationsLimit = useStore((state) => state.setIterationsLimit);
-
-  const setPerformanceMode = useStore((state) => state.setPerformanceMode);
   const setParams = useStore((state) => state.setParams);
+  const setHideChart = useStore((state) => state.setHideChart);
+  const setSateliteMode = useStore((state) => state.setSateliteMode);
+  const setMultiRunMode = useStore((state) => state.setMultiRunMode);
+  const setMultiRunLimit = useStore((state) => state.setMultiRunLimit);
   const setSelectedWorker = useStore((state) => state.setSelectedWorker);
+  const setIterationsLimit = useStore((state) => state.setIterationsLimit);
+  const setPerformanceMode = useStore((state) => state.setPerformanceMode);
+  const setIterationsLimitMode = useStore((state) => state.setIterationsLimitMode);
 
   function getWorkerOptions() {
     return Object.keys(AVAILABLE_WORKERS).map((workerName) => (
@@ -70,6 +71,9 @@ export const Settings = () => {
       </Checkbox>
       <Checkbox checked={hideChart} onChange={(e) => setHideChart(e.target.checked)}>
         Hide Chart
+      </Checkbox>
+      <Checkbox checked={sateliteMode} onChange={(e) => setSateliteMode(e.target.checked)}>
+        Satelite Mode
       </Checkbox>
       <Checkbox checked={multiRunMode} onChange={(e) => setMultiRunMode(e.target.checked)}>
         Multi-Run Mode

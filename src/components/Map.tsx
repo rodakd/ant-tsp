@@ -10,13 +10,16 @@ import { useMemo } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { PickingInfo } from '@deck.gl/core/typed';
 
+const controller = { doubleClickZoom: false };
+
 export const Map = () => {
-  const viewState = useStore((state) => state.viewState);
-  const markerModeOn = useStore((state) => state.markerModeOn);
+  const status = useStore((state) => state.status);
   const markers = useStore((state) => state.markers);
   const bestTour = useStore((state) => state.bestTour);
-  const status = useStore((state) => state.status);
+  const viewState = useStore((state) => state.viewState);
   const currentTour = useStore((state) => state.currentTour);
+  const sateliteMode = useStore((state) => state.sateliteMode);
+  const markerModeOn = useStore((state) => state.markerModeOn);
   const performanceMode = useStore((state) => state.performanceMode);
 
   const setMarkers = useStore((state) => state.setMarkers);
@@ -63,14 +66,18 @@ export const Map = () => {
     ];
   }, [markers, drawPath, currentTour, bestTour]);
 
+  const mapStyle = sateliteMode
+    ? 'mapbox://styles/mapbox/satellite-v9'
+    : 'mapbox://styles/mapbox/light-v10';
+
   return (
     <DeckGL
       onClick={addMarker}
       initialViewState={viewState}
       layers={layers}
-      controller={{ doubleClickZoom: false }}
+      controller={controller}
     >
-      <MapGL mapboxAccessToken={MAPBOX_TOKEN} mapStyle='mapbox://styles/mapbox/light-v10' />
+      <MapGL key={mapStyle} mapboxAccessToken={MAPBOX_TOKEN} mapStyle={mapStyle} />
     </DeckGL>
   );
 };
