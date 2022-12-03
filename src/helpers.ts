@@ -34,6 +34,19 @@ export const cost = (path: t.Marker[] | null) => {
     .reduce((a, b) => a + b, 0);
 };
 
+export const createDistanceMatrix = (markers: t.Marker[]) => {
+  const matrix: number[][] = [];
+
+  for (let i = 0; i < markers.length; i++) {
+    matrix[i] = [];
+    for (let j = 0; j < markers.length; j++) {
+      matrix[i][j] = distance(markers[i], markers[j]);
+    }
+  }
+
+  return matrix;
+};
+
 export const uploadFile = () => {
   return new Promise<string | null>((res) => {
     const el = document.createElement('input');

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { z } from 'zod';
 
 export const STORAGE_KEY = 'storage';
@@ -28,7 +27,7 @@ export const mergeWithStorage = (obj: object) => {
 export const loadStorage = () => {
   try {
     const storage = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    if (!_.isEmpty(storage)) {
+    if (Object.keys(storage).length > 0) {
       console.log('Loading storage: ', storage);
     }
     const validatedStorage = STORAGE_SCHEMA.parse(storage);

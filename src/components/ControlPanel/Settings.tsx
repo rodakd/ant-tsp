@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import cn from 'classnames';
 
 import { Param } from './Param';
@@ -48,7 +47,8 @@ export const Settings = () => {
     }
 
     return Object.entries(workerConfig.params).map(([name, p]: any) => {
-      const restProps = _.omit(p, ['label']);
+      const restProps = { ...p };
+      delete restProps['label'];
 
       return (
         <Param
