@@ -1,5 +1,12 @@
 import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '../constants';
-import { cost } from '../helpers';
+import {
+  arrayCost,
+  createDistanceMatrix,
+  createRandomPermutation,
+  ds2optToIdxTour,
+  idxTourToDS2opt,
+  matrixCost,
+} from '../helpers';
 import { HistoryEntry } from '../types';
 import * as t from '../types';
 
@@ -121,14 +128,55 @@ class WorkerInstance implements t.WorkerInterface {
     });
   }
 
-  calculateCost(path: t.Marker[] | null) {
-    return cost(path);
+  calcCostByArray(path: t.Marker[] | null) {
+    return arrayCost(path);
+  }
+
+  calcCostByMatrix(matrix: number[][], idxTour: number[]) {
+    return matrixCost(matrix, idxTour);
+  }
+
+  getDistanceMatrix() {
+    return createDistanceMatrix(this.markers);
+  }
+
+  getRandomIdxTour() {
+    return createRandomPermutation(this.markers.length);
+  }
+
+  idxTourToDS2opt(idxTour: number[]) {
+    return idxTourToDS2opt(idxTour);
+  }
+
+  idxTourToMarkerPath(idxTour: number[]) {
+    const path: t.Marker[] = [];
+    idxTour.forEach((idx) => {
+      path.push(this.markers[idx]);
+    });
+    path.push(this.markers[idxTour[0]]);
+    return path;
+  }
+
+  ds2optToIdxTour(t: number[]) {
+    return ds2optToIdxTour(t);
+  }
+
+  updateBestTourByDS2opt(t: number[], cost: number) {
+    const idxTour = ds2optToIdxTour(t);
+    const path = this.idxTourToMarkerPath(idxTour);
+    this.updateBestTour(path, cost);
+  }
+
+  updateCurrentTourByDS2opt(t: number[]) {
+    const idxTour = ds2optToIdxTour(t);
+    const path = this.idxTourToMarkerPath(idxTour);
+    this.updateCurrentTour(path);
   }
 
   end() {
     postMessage({
       type: 'end',
-      bestTour: this.currentTour,
+      bestTour: this.bestTour,
       bestToursHistory: this.bestToursHistory,
       cost: this.cost,
       iterations: this.iteration,

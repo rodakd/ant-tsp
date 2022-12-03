@@ -42,7 +42,7 @@ export const MultiRunSummaryCharts = ({
 
   const getBestHistory = () => {
     const best = bestToursHistories.reduce((a, b) =>
-      a[a.length - 1]?.cost > b[b.length - 1]?.cost ? a : b
+      a[a.length - 1]?.cost > b[b.length - 1]?.cost ? b : a
     );
     return {
       history: best,

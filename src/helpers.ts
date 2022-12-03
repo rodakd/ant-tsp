@@ -23,7 +23,7 @@ export const distance = (markerA: t.Marker, markerB: t.Marker) => {
   return d / 1000; // in km
 };
 
-export const cost = (path: t.Marker[] | null) => {
+export const arrayCost = (path: t.Marker[] | null) => {
   if (!path?.length) {
     return 0;
   }
@@ -32,6 +32,17 @@ export const cost = (path: t.Marker[] | null) => {
     .slice(0, -1)
     .map((point, idx) => distance(point, path[idx + 1]))
     .reduce((a, b) => a + b, 0);
+};
+
+export const matrixCost = (matrix: number[][], tour: number[]) => {
+  let cost = 0;
+  for (let i = 0; i < tour.length - 1; i++) {
+    const idxCityA = tour[i];
+    const idxCityB = tour[i + 1];
+    cost += matrix[idxCityA][idxCityB];
+  }
+  cost += matrix[tour[tour.length - 1]][tour[0]];
+  return cost;
 };
 
 export const createDistanceMatrix = (markers: t.Marker[]) => {
@@ -45,6 +56,62 @@ export const createDistanceMatrix = (markers: t.Marker[]) => {
   }
 
   return matrix;
+};
+
+export const createRandomPermutation = (n: number) => {
+  const perm = [];
+
+  for (let i = 0; i < n; i++) {
+    perm.push(i);
+  }
+
+  return shuffleArray(perm);
+};
+
+export const idxTourToDS2opt = (idxTour: number[]) => {
+  const n = idxTour.length;
+  const t = new Array(2 * n).fill(-1);
+
+  // Forward tour
+  for (let i = 0; i < n - 1; i++) {
+    t[2 * idxTour[i]] = 2 * idxTour[i + 1];
+  }
+  t[2 * idxTour[n - 1]] = 2 * idxTour[0];
+
+  // Backward tour
+  for (let i = 1; i < n; i++) {
+    t[2 * idxTour[i] + 1] = 2 * idxTour[i - 1] + 1;
+  }
+  t[2 * idxTour[0] + 1] = 2 * idxTour[n - 1] + 1;
+
+  return t;
+};
+
+export const ds2optToIdxTour = (t: number[]) => {
+  const n = Math.ceil(t.length / 2);
+  const tour = new Array(n).fill(-1);
+  let j = 0;
+
+  for (let i = 0; i < n; i++) {
+    tour[i] = j >> 1;
+    j = t[j];
+  }
+
+  return tour;
+};
+
+// Fisher–Yates shuffle
+export const shuffleArray = (arr: any[]) => {
+  let currentIndex = arr.length,
+    randomIndex;
+
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+  }
+
+  return arr;
 };
 
 export const uploadFile = () => {

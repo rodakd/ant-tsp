@@ -17,7 +17,15 @@ export interface WorkerInterface {
   error: (text?: string) => void;
   updateIteration: (iteration: number) => void;
   updateBestTour: (bestTour: Marker[], cost: number) => void;
-  calculateCost: (tour: Marker[] | null) => number;
+  calcCostByArray: (tour: Marker[] | null) => number;
+  calcCostByMatrix: (matrix: number[][], tour: number[]) => number;
+  getDistanceMatrix: () => number[][];
+  getRandomIdxTour: () => number[];
+  idxTourToDS2opt: (idxTour: number[]) => number[];
+  idxTourToMarkerPath: (idxTour: number[]) => Marker[];
+  ds2optToIdxTour: (t: number[]) => number[];
+  updateBestTourByDS2opt: (t: number[], cost: number) => void;
+  updateCurrentTourByDS2opt: (t: number[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
 }
 
