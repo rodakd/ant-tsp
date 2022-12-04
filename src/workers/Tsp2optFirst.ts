@@ -2,6 +2,7 @@ import * as t from '~/types';
 import { createWorker } from './createWorker';
 
 // This is a port of Python code originally published by Éric D. Taillard
+// It was slightly modified for the needs of this application
 // http://mistic.heig-vd.ch/taillard/
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
@@ -27,7 +28,11 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
       delta =
         d[i >> 1][j >> 1] + d[t[i] >> 1][t[j] >> 1] - d[i >> 1][t[i] >> 1] - d[j >> 1][t[j] >> 1];
       if (delta < 0) {
-        app.updateBestTourByDS2opt(t, length);
+        if (app.performanceMode) {
+          app.updateBestTourByDS2opt([], length);
+        } else {
+          app.updateBestTourByDS2opt(t, length);
+        }
         next_i = t[i];
         next_j = t[j];
         t[i] = j ^ 1;
@@ -45,6 +50,9 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
     i = t[i];
   }
 
+  if (app.performanceMode) {
+    app.updateBestTourByDS2opt(t, length);
+  }
   app.end();
 }
 

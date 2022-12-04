@@ -10,7 +10,7 @@ export const DEFAULT_MULTI_RUN_SUMMARY = {
   bestToursHistories: [],
 };
 
-export const DEFAULT_CUSTOM_CODE = `// The following is the code for 2-Opt algorithm
+export const DEFAULT_CUSTOM_CODE = `// The following is the code for basic 2-Opt algorithm
 
 const tour = [...app.markers];
 tour.push(tour[0]);

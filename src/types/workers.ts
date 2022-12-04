@@ -20,10 +20,19 @@ export interface WorkerInterface {
   calcCostByArray: (tour: Marker[] | null) => number;
   calcCostByMatrix: (matrix: number[][], tour: number[]) => number;
   getDistanceMatrix: () => number[][];
+
+  // Gets random idx tour
   getRandomIdxTour: () => number[];
+
+  // Parses idxTour to 2-opt data structure which allows linear time moving
   idxTourToDS2opt: (idxTour: number[]) => number[];
-  idxTourToMarkerPath: (idxTour: number[]) => Marker[];
+
+  // Parses 2-opt data structure to idx tour
   ds2optToIdxTour: (t: number[]) => number[];
+
+  // Parses idx tour to marker path
+  idxTourToMarkerPath: (idxTour: number[]) => Marker[];
+
   updateBestTourByDS2opt: (t: number[], cost: number) => void;
   updateCurrentTourByDS2opt: (t: number[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
