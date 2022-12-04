@@ -72,12 +72,10 @@ class WorkerInstance implements t.WorkerInterface {
   bestToursHistory: HistoryEntry[] = [];
 
   updateBestTour(bestTour: t.Marker[], cost: number) {
-    const fixedCost = Number(cost.toFixed(2));
-
-    this.cost = fixedCost;
+    this.cost = cost;
     this.bestTour = bestTour;
     this.bestToursHistory.push({
-      cost: fixedCost,
+      cost,
       iteration: this.iteration,
     });
 
