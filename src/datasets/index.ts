@@ -14,6 +14,7 @@ import {
   UKRAINE_VIEWSTATE,
   UNITED_KINGDOM_VIEWSTATE,
   SPAIN_VIEWSTATE,
+  UNITED_STATES_VIEWSTATE,
 } from './viewstates';
 import { Canada } from './Canada';
 import { India } from './India';
@@ -28,6 +29,8 @@ import FRFlag from '~/assets/flags/fr.svg';
 import GBFlag from '~/assets/flags/gb.svg';
 import INFlag from '~/assets/flags/in.svg';
 import UAFlag from '~/assets/flags/ua.svg';
+import USFlag from '~/assets/flags/us.svg';
+import { UnitedStates } from './UnitedStates';
 
 // TODO: Add flags
 export const DATASETS: Dataset[] = [
@@ -85,6 +88,12 @@ export const DATASETS: Dataset[] = [
     markers: Brazil,
     viewState: BRAZIL_VIEWSTATE,
     flag: BRFlag,
+  },
+  {
+    name: `US (${UnitedStates.length})`,
+    markers: UnitedStates,
+    viewState: UNITED_STATES_VIEWSTATE,
+    flag: USFlag,
   },
 ];
 

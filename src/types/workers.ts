@@ -15,24 +15,15 @@ export interface WorkerInterface {
   log: (toLog: any) => void;
   sleep: () => Promise<void>;
   error: (text?: string) => void;
-  updateIteration: (iteration: number) => void;
-  updateBestTour: (bestTour: Marker[], cost: number) => void;
   calcCostByArray: (tour: Marker[] | null) => number;
   calcCostByMatrix: (matrix: number[][], tour: number[]) => number;
   getDistanceMatrix: () => number[][];
-
-  // Gets random idx tour
   getRandomIdxTour: () => number[];
-
-  // Parses idxTour to 2-opt data structure which allows linear time moving
   idxTourToDS2opt: (idxTour: number[]) => number[];
-
-  // Parses 2-opt data structure to idx tour
   ds2optToIdxTour: (t: number[]) => number[];
-
-  // Parses idx tour to marker path
   idxTourToMarkerPath: (idxTour: number[]) => Marker[];
-
+  updateIteration: (iteration: number) => void;
+  updateBestTour: (bestTour: Marker[], cost: number) => void;
   updateBestTourByDS2opt: (t: number[], cost: number) => void;
   updateBestTourByIdxTour: (idxTour: number[], cost: number) => void;
   updateCurrentTourByDS2opt: (t: number[]) => void;

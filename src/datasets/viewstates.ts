@@ -57,3 +57,9 @@ export const INDIA_VIEWSTATE = {
   longitude: 79.38256925723752,
   zoom: 3.8232462736680484,
 };
+
+export const UNITED_STATES_VIEWSTATE = {
+  latitude: 46.02520199017895,
+  longitude: -120.0971506744986,
+  zoom: 2.853538586295994,
+};

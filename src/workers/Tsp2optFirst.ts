@@ -20,6 +20,12 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
   length = app.calcCostByMatrix(d, idxTour);
   iteration = 0;
 
+  if (noDSParse) {
+    app.updateBestTourByDS2opt([], length);
+  } else {
+    app.updateBestTourByDS2opt(t, length);
+  }
+
   while (t[t[i]] >> 1 !== last_i) {
     j = t[t[i]];
     while (j >> 1 !== last_i && (t[j] >> 1 !== last_i || i >> 1 !== last_i)) {
