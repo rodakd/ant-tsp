@@ -75,7 +75,7 @@ class WorkerInstance implements t.WorkerInterface {
 
     this.cost = fixedCost;
     this.bestTour = bestTour;
-    this.bestToursHistory = this.bestToursHistory.concat({
+    this.bestToursHistory.push({
       cost: fixedCost,
       iteration: this.iteration,
     });

@@ -1,4 +1,3 @@
-import { All } from './All';
 import { Brazil } from './Brazil';
 import { Capitals } from './Capitals';
 import { France } from './France';
@@ -64,11 +63,6 @@ export const DATASETS: Dataset[] = [
     name: `United States (${UnitedStates.length})`,
     markers: UnitedStates,
     viewState: US_VIEWSTATE,
-  },
-  {
-    name: `World (${All.length})`,
-    markers: All,
-    viewState: WORLD_VIEWSTATE,
   },
 ];
 
