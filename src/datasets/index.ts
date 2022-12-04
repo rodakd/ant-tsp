@@ -1,12 +1,9 @@
 import { Brazil } from './Brazil';
-import { Capitals } from './Capitals';
 import { France } from './France';
 import { PolandAll } from './PolandAll';
 import { PolandTop10 } from './PolandTop10';
 import { PuertoRico } from './PuertoRico';
 import { Ukraine } from './Ukraine';
-import { UnitedStates } from './UnitedStates';
-import { WorldTop1000 } from './WorldTop1000';
 import { Dataset } from '~/types';
 import {
   BRAZIL_VIEWSTATE,
@@ -14,8 +11,6 @@ import {
   POLAND_VIEWSTATE,
   PUERTO_RICO_VIEWSTATE,
   UKRAINE_VIEWSTATE,
-  US_VIEWSTATE,
-  WORLD_VIEWSTATE,
 } from './viewstates';
 
 export const DATASETS: Dataset[] = [
@@ -30,11 +25,6 @@ export const DATASETS: Dataset[] = [
     viewState: PUERTO_RICO_VIEWSTATE,
   },
   {
-    name: `Capitals (${Capitals.length})`,
-    markers: Capitals,
-    viewState: WORLD_VIEWSTATE,
-  },
-  {
     name: `Poland (${PolandAll.length})`,
     markers: PolandAll,
     viewState: POLAND_VIEWSTATE,
@@ -45,11 +35,6 @@ export const DATASETS: Dataset[] = [
     viewState: UKRAINE_VIEWSTATE,
   },
   {
-    name: `Top Population (${WorldTop1000.length})`,
-    markers: WorldTop1000,
-    viewState: WORLD_VIEWSTATE,
-  },
-  {
     name: `France (${France.length})`,
     markers: France,
     viewState: FRANCE_VIEWSTATE,
@@ -58,11 +43,6 @@ export const DATASETS: Dataset[] = [
     name: `Brazil (${Brazil.length})`,
     markers: Brazil,
     viewState: BRAZIL_VIEWSTATE,
-  },
-  {
-    name: `United States (${UnitedStates.length})`,
-    markers: UnitedStates,
-    viewState: US_VIEWSTATE,
   },
 ];
 
