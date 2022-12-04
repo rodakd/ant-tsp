@@ -87,6 +87,15 @@ export const idxTourToDS2opt = (idxTour: number[]) => {
   return t;
 };
 
+export const idxTourToMarkerPath = (idxTour: number[], markers: t.Marker[]) => {
+  const path: t.Marker[] = [];
+  idxTour.forEach((idx) => {
+    path.push(markers[idx]);
+  });
+  path.push(markers[idxTour[0]]);
+  return path;
+};
+
 export const ds2optToIdxTour = (t: number[]) => {
   const n = Math.ceil(t.length / 2);
   const tour = new Array(n).fill(-1);

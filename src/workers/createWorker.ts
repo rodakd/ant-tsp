@@ -5,6 +5,7 @@ import {
   createRandomPermutation,
   ds2optToIdxTour,
   idxTourToDS2opt,
+  idxTourToMarkerPath,
   matrixCost,
 } from '../helpers';
 import { HistoryEntry } from '../types';
@@ -149,12 +150,7 @@ class WorkerInstance implements t.WorkerInterface {
   }
 
   idxTourToMarkerPath(idxTour: number[]) {
-    const path: t.Marker[] = [];
-    idxTour.forEach((idx) => {
-      path.push(this.markers[idx]);
-    });
-    path.push(this.markers[idxTour[0]]);
-    return path;
+    return idxTourToMarkerPath(idxTour, this.markers);
   }
 
   ds2optToIdxTour(t: number[]) {
