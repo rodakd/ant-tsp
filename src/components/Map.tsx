@@ -78,6 +78,12 @@ export const Map = () => {
     ? 'mapbox://styles/mapbox/satellite-v9'
     : 'mapbox://styles/mapbox/light-v10';
 
+  console.log({
+    latitude: viewState.latitude,
+    longitude: viewState.longitude,
+    zoom: viewState.zoom,
+  });
+
   return (
     <DeckGL
       onClick={addMarker}

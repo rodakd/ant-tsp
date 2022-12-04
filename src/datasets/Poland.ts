@@ -1,6 +1,6 @@
 import { Marker } from '~/types';
 
-export const PolandAll: Marker[] = [
+export const Poland: Marker[] = [
   [21.0111, 52.23],
   [19.9372, 50.0614],
   [19.4547, 51.7769],

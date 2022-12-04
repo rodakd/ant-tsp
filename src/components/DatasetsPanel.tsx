@@ -36,6 +36,11 @@ export const DatasetsPanel = () => {
         transitionDuration: 'auto',
         transitionInterpolator: new FlyToInterpolator({ speed: 1.5 }),
       });
+
+      notification.success({
+        message: `Success`,
+        description: `Uploaded ${markers.length} cities!`,
+      });
     } catch (err) {
       notification.error({ message: 'An error occurred', description: "Couldn't parse the file" });
     }

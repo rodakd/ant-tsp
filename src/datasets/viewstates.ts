@@ -16,18 +16,6 @@ export const UKRAINE_VIEWSTATE = {
   zoom: 5.431885792789866,
 };
 
-export const PUERTO_RICO_VIEWSTATE = {
-  latitude: 18.25268498532793,
-  longitude: -66.55025566911638,
-  zoom: 8.85166977669005,
-};
-
-export const US_VIEWSTATE = {
-  latitude: 43.90254185874704,
-  longitude: -124.02563542435257,
-  zoom: 3.0375660647805325,
-};
-
 export const FRANCE_VIEWSTATE = {
   latitude: 47.3184567700618,
   longitude: 2.056290958517252,
@@ -38,4 +26,34 @@ export const BRAZIL_VIEWSTATE = {
   latitude: -10.314685154275892,
   longitude: -52.95797065963677,
   zoom: 3.422928244274975,
+};
+
+export const AUSTRALIA_VIEWSTATE = {
+  latitude: -23.440602565059958,
+  longitude: 132.5886582327032,
+  zoom: 3.8051459240574865,
+};
+
+export const SPAIN_VIEWSTATE = {
+  latitude: 37.697243727540545,
+  longitude: -9.747036993965004,
+  zoom: 4.401253524772054,
+};
+
+export const UNITED_KINGDOM_VIEWSTATE = {
+  latitude: 56.32791543746108,
+  longitude: -2.407584823594372,
+  zoom: 4.603618608829729,
+};
+
+export const CANADA_VIEWSTATE = {
+  latitude: 54.58485864628674,
+  longitude: -103.1879155115868,
+  zoom: 3.2404606209893854,
+};
+
+export const INDIA_VIEWSTATE = {
+  latitude: 24.442755978930162,
+  longitude: 79.38256925723752,
+  zoom: 3.8232462736680484,
 };
