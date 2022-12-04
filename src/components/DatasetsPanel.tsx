@@ -2,7 +2,7 @@ import cn from 'classnames';
 
 import { notification } from 'antd';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
-import { FaFileUpload } from 'react-icons/fa';
+import { FiUpload } from 'react-icons/fi';
 import { parseStringToMarkers, uploadFile } from '~/helpers';
 import { useStore } from '~/store';
 import { Dataset } from '~/types';
@@ -94,7 +94,7 @@ export const DatasetsPanel = () => {
           onClick={importMarkers}
           className='datasets__item datasets__item--upload'
         >
-          <FaFileUpload />
+          <FiUpload />
           Upload
         </button>
       </div>

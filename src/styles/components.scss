@@ -284,11 +284,12 @@
     padding: 10px;
     width: 100%;
     text-align: left;
-    background: #e9effb;
-    color: #8aa8e7;
     font-weight: 500;
     border-radius: 5px;
     transition: opacity ease-in-out 300ms;
+    color: #555;
+    background: white;
+    border: 1px solid #555;
     cursor: pointer;
 
     &:hover {
@@ -301,8 +302,9 @@
       align-items: center;
       column-gap: 10px;
       justify-content: center;
-      background: #e9effb;
-      color: #8aa8e7;
+      color: #555;
+      background: white;
+      border: 1px solid #555;
       font-weight: 500;
       border-radius: 5px;
     }
