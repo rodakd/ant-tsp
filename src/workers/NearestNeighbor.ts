@@ -35,18 +35,18 @@ async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
     tour[i] = tour[nearest];
     tour[nearest] = swap;
 
-    length += cost_ins;
+    length = app.calcCostByMatrix(d, tour);
 
     if (noIdxTourParse) {
-      app.updateBestTourByIdxTour([], length + d[tour[n - 1]][tour[0]]);
+      app.updateBestTourByIdxTour([], length);
     } else {
-      app.updateBestTourByIdxTour(tour, length + d[tour[n - 1]][tour[0]]);
+      app.updateBestTourByIdxTour(tour, length);
     }
 
     await app.sleep();
   }
 
-  app.updateBestTourByIdxTour(tour, length + d[tour[n - 1]][tour[0]]);
+  app.updateBestTourByIdxTour(tour, length);
   app.end();
 }
 
