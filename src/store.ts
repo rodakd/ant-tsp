@@ -67,7 +67,6 @@ export const useStore = create<t.Store>((set, get) => ({
       status: 'running',
       markerModeOn: false,
       settingsOpen: false,
-      datasetsOpen: false,
       bestToursHistory: [],
       iteration: 0,
       currentRun: currentRun || 1,

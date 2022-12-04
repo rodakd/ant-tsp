@@ -1,9 +1,7 @@
 import cn from 'classnames';
 
 import { notification } from 'antd';
-import { MutableRefObject } from 'react';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
-import { BiLockAlt } from 'react-icons/bi';
 import { FaFileUpload } from 'react-icons/fa';
 import { parseStringToMarkers, uploadFile } from '~/helpers';
 import { useStore } from '~/store';
@@ -63,10 +61,6 @@ export const DatasetsPanel = () => {
   };
 
   const getBtnIcon = () => {
-    if (status !== 'idle') {
-      return <BiLockAlt size={14} />;
-    }
-
     if (datasetsOpen) {
       return <BsChevronUp size={14} />;
     }
@@ -79,20 +73,27 @@ export const DatasetsPanel = () => {
       <button
         className='datasets__btn'
         onClick={() => {
-          if (status === 'idle') {
-            setDatasetsOpen(!datasetsOpen);
-          }
+          setDatasetsOpen(!datasetsOpen);
         }}
       >
         Cities {getBtnIcon()}
       </button>
       <div className={cn('datasets', { 'datasets--open': datasetsOpen })}>
         {DATASETS.map((ds, idx) => (
-          <button key={idx} className='datasets__item' onClick={() => setDataset(ds)}>
+          <button
+            disabled={status !== 'idle'}
+            key={idx}
+            className='datasets__item'
+            onClick={() => setDataset(ds)}
+          >
             {ds.name}
           </button>
         ))}
-        <button onClick={importMarkers} className='datasets__item datasets__item--upload'>
+        <button
+          disabled={status !== 'idle'}
+          onClick={importMarkers}
+          className='datasets__item datasets__item--upload'
+        >
           <FaFileUpload />
           Upload
         </button>
