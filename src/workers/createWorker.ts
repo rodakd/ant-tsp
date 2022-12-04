@@ -120,7 +120,7 @@ class WorkerInstance implements t.WorkerInterface {
       await new Promise<void>((res) => setTimeout(res, 200));
     }
 
-    const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS;
+    const delay = BASE_DELAY_MS - (this.speedPercent / 100) * BASE_DELAY_MS + 50;
     return new Promise<void>((res) => setTimeout(res, delay));
   }
 

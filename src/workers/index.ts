@@ -2,6 +2,7 @@ import * as t from '~/types';
 import ACOWorker from './AntColonyOptimization?worker';
 import Tsp2optFirst from './Tsp2optFirst?worker';
 import Tsp2optBest from './Tsp2optBest?worker';
+import NearestNeighbor from './NearestNeighbor?worker';
 import Custom from './Custom?worker';
 import { DEFAULT_CUSTOM_CODE } from '~/constants';
 
@@ -44,6 +45,11 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     },
   },
 
+  'Nearest Neighbor': {
+    workerClass: NearestNeighbor,
+    worker: new NearestNeighbor(),
+  },
+
   '2-opt First Improvement': {
     workerClass: Tsp2optFirst,
     worker: new Tsp2optFirst(),
@@ -79,6 +85,6 @@ export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   return params;
 };
 
-export const DEFAULT_WORKER_NAME = '2-opt Best Improvement';
+export const DEFAULT_WORKER_NAME = 'Nearest Neighbor';
 export const DEFAULT_WORKER = AVAILABLE_WORKERS[DEFAULT_WORKER_NAME];
 export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(DEFAULT_WORKER);

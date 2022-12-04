@@ -158,7 +158,7 @@ export const deduplicateMarkers = (markers: t.Marker[]) => {
 
     for (let j = i + 1; j < markers.length; j++) {
       const y = markers[j];
-      if (x[0] === y[0] || x[1] === y[1]) {
+      if (x[0] === y[0] && x[1] === y[1]) {
         push = false;
         break;
       }
