@@ -149,6 +149,29 @@ export const uploadFile = () => {
   });
 };
 
+export const deduplicateMarkers = (markers: t.Marker[]) => {
+  const parsed: t.Marker[] = [];
+
+  for (let i = 0; i < markers.length; i++) {
+    const x = markers[i];
+    let push = true;
+
+    for (let j = i + 1; j < markers.length; j++) {
+      const y = markers[j];
+      if (x[0] === y[0] || x[1] === y[1]) {
+        push = false;
+        break;
+      }
+    }
+
+    if (push) {
+      parsed.push(x);
+    }
+  }
+
+  return parsed;
+};
+
 export const parseStringToMarkers = (text: string) => {
   const rows = text.split(/\r\n|\r|\n/).filter((t) => !!t);
   const markers = rows.map<t.Marker>((row) => {

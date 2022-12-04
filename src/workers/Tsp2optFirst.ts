@@ -18,7 +18,7 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
   i = 0;
   last_i = 0;
   length = app.calcCostByMatrix(d, idxTour);
-  iteration = 1;
+  iteration = 0;
 
   while (t[t[i]] >> 1 !== last_i) {
     j = t[t[i]];
@@ -42,7 +42,6 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
         t[next_j ^ 1] = next_i;
         length += delta;
         last_i = i >> 1;
-        j = t[i];
       }
       j = t[j];
 

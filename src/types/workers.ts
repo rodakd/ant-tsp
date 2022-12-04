@@ -34,6 +34,7 @@ export interface WorkerInterface {
   idxTourToMarkerPath: (idxTour: number[]) => Marker[];
 
   updateBestTourByDS2opt: (t: number[], cost: number) => void;
+  updateBestTourByIdxTour: (idxTour: number[], cost: number) => void;
   updateCurrentTourByDS2opt: (t: number[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
 }

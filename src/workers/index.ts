@@ -1,6 +1,7 @@
 import * as t from '~/types';
 import ACOWorker from './AntColonyOptimization?worker';
 import Tsp2optFirst from './Tsp2optFirst?worker';
+import Tsp2optBest from './Tsp2optBest?worker';
 import Custom from './Custom?worker';
 import { DEFAULT_CUSTOM_CODE } from '~/constants';
 
@@ -48,6 +49,11 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     worker: new Tsp2optFirst(),
   },
 
+  '2-opt Best Improvement': {
+    workerClass: Tsp2optBest,
+    worker: new Tsp2optBest(),
+  },
+
   'Your JavaScript': {
     workerClass: Custom,
     worker: new Custom(),
@@ -73,6 +79,6 @@ export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   return params;
 };
 
-export const DEFAULT_WORKER_NAME = '2-opt First Improvement';
+export const DEFAULT_WORKER_NAME = '2-opt Best Improvement';
 export const DEFAULT_WORKER = AVAILABLE_WORKERS[DEFAULT_WORKER_NAME];
 export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(DEFAULT_WORKER);

@@ -3,6 +3,7 @@ import {
   arrayCost,
   createDistanceMatrix,
   createRandomPermutation,
+  deduplicateMarkers,
   ds2optToIdxTour,
   idxTourToDS2opt,
   idxTourToMarkerPath,
@@ -28,7 +29,7 @@ export const createWorker = (
         wi = new WorkerInstance();
 
         wi.params = action.params;
-        wi.markers = action.markers;
+        wi.markers = deduplicateMarkers(action.markers);
         wi.speedPercent = action.speedPercent;
         wi.iterationsLimit = action.iterationsLimit;
         wi.performanceMode = action.performanceMode;
@@ -86,6 +87,11 @@ class WorkerInstance implements t.WorkerInterface {
       bestToursHistory: this.bestToursHistory,
       cost: this.cost,
     });
+  }
+
+  updateBestTourByIdxTour(idxTour: number[], cost: number) {
+    const path = this.idxTourToMarkerPath(idxTour);
+    this.updateBestTour(path, cost);
   }
 
   updateIteration(iteration: number) {
