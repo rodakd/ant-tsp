@@ -8,6 +8,7 @@ import { createWorker } from './createWorker';
 
 // Local search with 2-opt neighbourhood and first improvement policy
 async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
+  const noDSParse = app.performanceMode && !app.iterationsLimit;
   const d = app.getDistanceMatrix();
   const idxTour = app.getRandomIdxTour();
   const t = app.idxTourToDS2opt(idxTour);
@@ -28,7 +29,7 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
       delta =
         d[i >> 1][j >> 1] + d[t[i] >> 1][t[j] >> 1] - d[i >> 1][t[i] >> 1] - d[j >> 1][t[j] >> 1];
       if (delta < 0) {
-        if (app.performanceMode) {
+        if (noDSParse) {
           app.updateBestTourByDS2opt([], length);
         } else {
           app.updateBestTourByDS2opt(t, length);
@@ -50,9 +51,10 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
     i = t[i];
   }
 
-  if (app.performanceMode) {
+  if (noDSParse) {
     app.updateBestTourByDS2opt(t, length);
   }
+
   app.end();
 }
 
