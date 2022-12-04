@@ -65,6 +65,7 @@ export type Dataset = {
   name: string;
   markers: Marker[];
   viewState: NonNullable<ViewState>;
+  flag: string;
 };
 
 export type HistoryEntry = {

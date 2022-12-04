@@ -290,10 +290,20 @@
     color: #555;
     background: white;
     border: 1px solid #555;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
     cursor: pointer;
 
     &:hover {
       opacity: 60%;
+    }
+
+    img {
+      height: 17px;
+      width: 27px;
+      border: 1px solid #555;
+      object-fit: cover;
     }
 
     &--upload {

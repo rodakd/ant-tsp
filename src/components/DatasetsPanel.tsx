@@ -91,6 +91,7 @@ export const DatasetsPanel = () => {
             className='datasets__item'
             onClick={() => setDataset(ds)}
           >
+            <img src={ds.flag} alt={`${ds.name} flag`} />
             {ds.name}
           </button>
         ))}
