@@ -30,6 +30,7 @@ export interface WorkerInterface {
   updateBestTourBySuccessors: (successors: number[], cost: number) => void;
   updateCurrentTourByDS2opt: (t: number[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
+  updateCurrentTourBySuccessors: (t: number[]) => void;
 }
 
 export type ToWorkerAction =

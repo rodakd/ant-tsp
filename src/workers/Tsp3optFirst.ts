@@ -28,6 +28,15 @@ async function Tsp3optFirst(app: Readonly<t.WorkerInterface>) {
 
   app.updateBestTourBySuccessors(succ, length);
 
+  const move = (succ: number[], i: number, j: number, k: number) => {
+    swap_i = succ[i];
+    swap_j = succ[j];
+    swap_k = succ[k];
+    succ[i] = swap_j;
+    succ[j] = swap_k;
+    succ[k] = swap_i;
+  };
+
   while (true) {
     iteration += 1;
     app.updateIteration(iteration);
@@ -35,15 +44,14 @@ async function Tsp3optFirst(app: Readonly<t.WorkerInterface>) {
     delta =
       d[i][succ[j]] + d[j][succ[k]] + d[k][succ[i]] - d[i][succ[i]] - d[j][succ[j]] - d[k][succ[k]];
 
+    const currentSucc = [...succ];
+    move(currentSucc, i, j, k);
+    app.updateCurrentTourBySuccessors(currentSucc);
+
     if (delta < 0) {
       length += delta;
 
-      swap_i = succ[i];
-      swap_j = succ[j];
-      swap_k = succ[k];
-      succ[i] = swap_j;
-      succ[j] = swap_k;
-      succ[k] = swap_i;
+      move(succ, i, j, k);
 
       sj = j;
       j = k;
