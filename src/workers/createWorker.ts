@@ -195,6 +195,11 @@ class WorkerInstance implements t.WorkerInterface {
     this.updateCurrentTour(path);
   }
 
+  updateCurrentTourByIdxTour(idxTour: number[]) {
+    const path = idxTourToMarkerPath(idxTour, this.markers);
+    this.updateCurrentTour(path);
+  }
+
   end() {
     postMessage({
       type: 'end',

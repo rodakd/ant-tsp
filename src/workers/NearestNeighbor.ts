@@ -16,6 +16,15 @@ async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
   length = 0;
   iteration = 0;
 
+  const move = (tour: number[], i: number, nearest: number) => {
+    swap = tour[i];
+    tour[i] = tour[nearest];
+    tour[nearest] = swap;
+  };
+
+  length = app.calcCostByMatrix(d, tour);
+  app.updateBestTourByIdxTour(tour, length);
+
   for (i = 1; i < n; i++) {
     iteration += 1;
     app.updateIteration(iteration);
@@ -23,20 +32,22 @@ async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
     cost_ins = d[tour[i - 1]][tour[i]];
 
     for (j = i + 1; j < n; j++) {
+      const currentTour = [...tour];
+      move(currentTour, i, j);
+      app.updateCurrentTourByIdxTour(currentTour);
+
       if (d[tour[i - 1]][tour[j]] < cost_ins) {
         cost_ins = d[tour[i - 1]][tour[j]];
         nearest = j;
       }
+
+      await app.sleep();
     }
 
-    swap = tour[i];
-    tour[i] = tour[nearest];
-    tour[nearest] = swap;
+    move(tour, i, nearest);
 
     length = app.calcCostByMatrix(d, tour);
     app.updateBestTourByIdxTour(tour, length);
-
-    await app.sleep();
   }
 
   app.end();
