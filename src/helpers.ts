@@ -120,6 +120,19 @@ export const idxTourToSuccessors = (idxTour: number[]) => {
   return successors;
 };
 
+export const successorsToIdxTour = (succ: number[]) => {
+  const n = succ.length;
+  const tour = new Array<number>(n).fill(-1);
+  let j = 0;
+
+  for (let i = 0; i < n; i++) {
+    tour[i] = j;
+    j = succ[j];
+  }
+
+  return tour;
+};
+
 // Fisher–Yates shuffle
 export const shuffleArray = (arr: any[]) => {
   let currentIndex = arr.length,
