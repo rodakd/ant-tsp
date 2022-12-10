@@ -9,5 +9,3 @@ export const DEFAULT_ITERATIONS_LIMIT = 100;
 export const DEFAULT_MULTI_RUN_SUMMARY = {
   bestToursHistories: [],
 };
-
-export const DEFAULT_CUSTOM_CODE = ``;

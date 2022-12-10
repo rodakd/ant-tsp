@@ -1,9 +1,8 @@
 import { Input } from 'antd';
-import { CodeEditor } from '../CodeEditor';
 
 type Props = {
   title: string;
-  type: 'number' | 'code';
+  type: 'number';
 } & any;
 
 export const Param = ({ title, type, onChange, ...props }: Props) => {
@@ -17,8 +16,6 @@ export const Param = ({ title, type, onChange, ...props }: Props) => {
             {...props}
           />
         );
-      case 'code':
-        return <CodeEditor onChange={onChange} {...props} />;
     }
   };
 

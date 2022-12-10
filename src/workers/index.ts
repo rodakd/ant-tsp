@@ -6,8 +6,6 @@ import Tsp3optFirst from './Tsp3optFirst?worker';
 import Tsp3optLimited from './Tsp3optLimited?worker';
 import LK from './LK?worker';
 import NearestNeighbor from './NearestNeighbor?worker';
-import Custom from './Custom?worker';
-import { DEFAULT_CUSTOM_CODE } from '~/constants';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Ant Colony Optimization': {
@@ -76,18 +74,6 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Lin-Kernighan': {
     workerClass: LK,
     worker: new LK(),
-  },
-
-  'Your JavaScript': {
-    workerClass: Custom,
-    worker: new Custom(),
-    params: {
-      code: {
-        label: 'code',
-        type: 'code',
-        default: DEFAULT_CUSTOM_CODE,
-      },
-    },
   },
 };
 
