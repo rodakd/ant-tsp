@@ -9,6 +9,7 @@ import {
   idxTourToMarkerPath,
   idxTourToSuccessors,
   matrixCost,
+  successorsToIdxTour,
 } from '../helpers';
 import { HistoryEntry } from '../types';
 import * as t from '../types';
@@ -180,6 +181,12 @@ class WorkerInstance implements t.WorkerInterface {
     const idxTour = ds2optToIdxTour(t);
     const path = this.idxTourToMarkerPath(idxTour);
     this.updateCurrentTour(path);
+  }
+
+  updateBestTourBySuccessors(successors: number[], cost: number) {
+    const idxTour = successorsToIdxTour(successors);
+    const path = this.idxTourToMarkerPath(idxTour);
+    this.updateBestTour(path, cost);
   }
 
   end() {

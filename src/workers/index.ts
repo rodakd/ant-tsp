@@ -103,6 +103,6 @@ export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   return params;
 };
 
-export const DEFAULT_WORKER_NAME = 'Nearest Neighbor';
+export const DEFAULT_WORKER_NAME = '2-opt Best Improvement';
 export const DEFAULT_WORKER = AVAILABLE_WORKERS[DEFAULT_WORKER_NAME];
 export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(DEFAULT_WORKER);

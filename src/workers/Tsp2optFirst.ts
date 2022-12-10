@@ -43,10 +43,10 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
         app.updateBestTourByDS2opt(t, length);
       }
       j = t[j];
-
-      await app.sleep();
     }
+
     i = t[i];
+    await app.sleep();
   }
 
   app.end();

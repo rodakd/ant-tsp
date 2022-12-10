@@ -27,6 +27,7 @@ export interface WorkerInterface {
   updateBestTour: (bestTour: Marker[], cost: number) => void;
   updateBestTourByDS2opt: (t: number[], cost: number) => void;
   updateBestTourByIdxTour: (idxTour: number[], cost: number) => void;
+  updateBestTourBySuccessors: (successors: number[], cost: number) => void;
   updateCurrentTourByDS2opt: (t: number[]) => void;
   updateCurrentTour: (currentTour: Marker[]) => void;
 }
