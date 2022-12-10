@@ -2,7 +2,7 @@ import { Brazil } from './Brazil';
 import { France } from './France';
 import { Poland } from './Poland';
 import { Ukraine } from './Ukraine';
-import { Dataset } from '~/types';
+import { Dataset, Marker } from '~/types';
 import { Australia } from './Australia';
 import {
   AUSTRALIA_VIEWSTATE,
@@ -116,6 +116,6 @@ export const DEFAULT_DATASET = {
     [22.012338699220788, 50.00379561106426],
     [21.16535446434748, 51.365900056862344],
     [15.51336351240496, 51.911761202354874],
-  ],
+  ] as Marker[],
   viewState: POLAND_VIEWSTATE,
 };
