@@ -19,21 +19,35 @@ async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
 
   app.updateBestTourByIdxTour(tour, length);
 
-  while (best_delta < 0) {
-    iteration += 1;
-    app.updateIteration(iteration);
+  const move = (tour: number[], i: number, j: number) => {
+    while (i < j) {
+      swap = tour[i];
+      tour[i] = tour[j];
+      tour[j] = swap;
+      i = i + 1;
+      j = j - 1;
+    }
+  };
 
+  while (best_delta < 0) {
     best_delta = Infinity;
     best_i = best_j = -1;
 
     for (i = 0; i < n - 2; i++) {
       j = i + 2;
       while (j < n && (i > 0 || j < n - 1)) {
+        iteration += 1;
+        app.updateIteration(iteration);
+
         delta =
           d[tour[i]][tour[j]] +
           d[tour[i + 1]][tour[(j + 1) % n]] -
           d[tour[i]][tour[i + 1]] -
           d[tour[j]][tour[(j + 1) % n]];
+
+        const currentTour = [...tour];
+        move(currentTour, i + 1, j);
+        app.updateCurrentTourByIdxTour(currentTour);
 
         if (delta < best_delta) {
           best_delta = delta;
@@ -41,6 +55,8 @@ async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
           best_j = j;
         }
         j += 1;
+
+        await app.sleep();
       }
     }
 
@@ -49,18 +65,10 @@ async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
       i = best_i + 1;
       j = best_j;
 
-      while (i < j) {
-        swap = tour[i];
-        tour[i] = tour[j];
-        tour[j] = swap;
-        i = i + 1;
-        j = j - 1;
-      }
+      move(tour, i, j);
 
       app.updateBestTourByIdxTour(tour, length);
     }
-
-    await app.sleep();
   }
 
   app.end();

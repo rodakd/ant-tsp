@@ -26,12 +26,13 @@ async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
   app.updateBestTourByIdxTour(tour, length);
 
   for (i = 1; i < n; i++) {
-    iteration += 1;
-    app.updateIteration(iteration);
     nearest = i;
     cost_ins = d[tour[i - 1]][tour[i]];
 
     for (j = i + 1; j < n; j++) {
+      iteration += 1;
+      app.updateIteration(iteration);
+
       const currentTour = [...tour];
       move(currentTour, i, j);
       app.updateCurrentTourByIdxTour(currentTour);

@@ -29,12 +29,12 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
   };
 
   while (t[t[i]] >> 1 !== last_i) {
-    iteration += 1;
-    app.updateIteration(iteration);
-
     j = t[t[i]];
 
     while (j >> 1 !== last_i && (t[j] >> 1 !== last_i || i >> 1 !== last_i)) {
+      iteration += 1;
+      app.updateIteration(iteration);
+
       delta =
         d[i >> 1][j >> 1] + d[t[i] >> 1][t[j] >> 1] - d[i >> 1][t[i] >> 1] - d[j >> 1][t[j] >> 1];
 
@@ -51,10 +51,11 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
         app.updateBestTourByDS2opt(t, length);
       }
       j = t[j];
+
+      await app.sleep();
     }
 
     i = t[i];
-    await app.sleep();
   }
 
   app.end();
