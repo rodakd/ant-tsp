@@ -7,6 +7,7 @@ import {
   ds2optToIdxTour,
   idxTourToDS2opt,
   idxTourToMarkerPath,
+  idxTourToSuccessors,
   matrixCost,
 } from '../helpers';
 import { HistoryEntry } from '../types';
@@ -62,7 +63,7 @@ class WorkerInstance implements t.WorkerInterface {
   running = true;
   bestTour: t.Marker[] | null = null;
   currentTour: t.Marker[] | null = null;
-  cost = 0;
+  cost = Infinity;
   iteration = 0;
   markers = [];
   params = {};
@@ -72,6 +73,10 @@ class WorkerInstance implements t.WorkerInterface {
   bestToursHistory: HistoryEntry[] = [];
 
   updateBestTour(bestTour: t.Marker[], cost: number) {
+    if (cost >= this.cost) {
+      return;
+    }
+
     this.cost = cost;
     this.bestTour = bestTour;
     this.bestToursHistory.push({
@@ -155,6 +160,10 @@ class WorkerInstance implements t.WorkerInterface {
 
   idxTourToMarkerPath(idxTour: number[]) {
     return idxTourToMarkerPath(idxTour, this.markers);
+  }
+
+  idxTourToSuccessors(idxTour: number[]) {
+    return idxTourToSuccessors(idxTour);
   }
 
   ds2optToIdxTour(t: number[]) {

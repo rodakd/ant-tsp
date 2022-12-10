@@ -8,8 +8,6 @@ import { createWorker } from './createWorker';
 
 // Local search with 2-opt neighbourhood and best improvement policy
 async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
-  const noIdxTourParse = app.performanceMode && !app.iterationsLimit;
-
   const d = app.getDistanceMatrix();
   const tour = app.getRandomIdxTour();
   const n = tour.length;
@@ -19,11 +17,7 @@ async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
   iteration = 0;
   length = app.calcCostByMatrix(d, tour);
 
-  if (noIdxTourParse) {
-    app.updateBestTourByIdxTour([], length);
-  } else {
-    app.updateBestTourByIdxTour(tour, length);
-  }
+  app.updateBestTourByIdxTour(tour, length);
 
   while (best_delta < 0) {
     iteration += 1;
@@ -52,15 +46,9 @@ async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
 
     if (best_delta < 0) {
       length += best_delta;
-
-      if (noIdxTourParse) {
-        app.updateBestTourByIdxTour([], length);
-      } else {
-        app.updateBestTourByIdxTour(tour, length);
-      }
-
       i = best_i + 1;
       j = best_j;
+
       while (i < j) {
         swap = tour[i];
         tour[i] = tour[j];
@@ -68,9 +56,7 @@ async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
         i = i + 1;
         j = j - 1;
       }
-    }
 
-    if (noIdxTourParse) {
       app.updateBestTourByIdxTour(tour, length);
     }
 

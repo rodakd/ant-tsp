@@ -8,7 +8,6 @@ import { createWorker } from './createWorker';
 
 // Local search with 2-opt neighbourhood and first improvement policy
 async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
-  const noDSParse = app.performanceMode && !app.iterationsLimit;
   const d = app.getDistanceMatrix();
   const idxTour = app.getRandomIdxTour();
   const t = app.idxTourToDS2opt(idxTour);
@@ -20,26 +19,19 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
   length = app.calcCostByMatrix(d, idxTour);
   iteration = 0;
 
-  if (noDSParse) {
-    app.updateBestTourByDS2opt([], length);
-  } else {
-    app.updateBestTourByDS2opt(t, length);
-  }
+  app.updateBestTourByDS2opt(t, length);
 
   while (t[t[i]] >> 1 !== last_i) {
-    j = t[t[i]];
-    while (j >> 1 !== last_i && (t[j] >> 1 !== last_i || i >> 1 !== last_i)) {
-      iteration += 1;
-      app.updateIteration(iteration);
+    iteration += 1;
+    app.updateIteration(iteration);
 
+    j = t[t[i]];
+
+    while (j >> 1 !== last_i && (t[j] >> 1 !== last_i || i >> 1 !== last_i)) {
       delta =
         d[i >> 1][j >> 1] + d[t[i] >> 1][t[j] >> 1] - d[i >> 1][t[i] >> 1] - d[j >> 1][t[j] >> 1];
+
       if (delta < 0) {
-        if (noDSParse) {
-          app.updateBestTourByDS2opt([], length);
-        } else {
-          app.updateBestTourByDS2opt(t, length);
-        }
         next_i = t[i];
         next_j = t[j];
         t[i] = j ^ 1;
@@ -48,16 +40,13 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
         t[next_j ^ 1] = next_i;
         length += delta;
         last_i = i >> 1;
+        app.updateBestTourByDS2opt(t, length);
       }
       j = t[j];
 
       await app.sleep();
     }
     i = t[i];
-  }
-
-  if (noDSParse) {
-    app.updateBestTourByDS2opt(t, length);
   }
 
   app.end();

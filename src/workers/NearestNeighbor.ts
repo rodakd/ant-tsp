@@ -8,8 +8,6 @@ import { createWorker } from './createWorker';
 
 // Nearest Neighbour greedy heuristic for the TSP
 async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
-  const noIdxTourParse = app.performanceMode && !app.iterationsLimit;
-
   const d = app.getDistanceMatrix();
   const tour = app.getRandomIdxTour();
   const n = tour.length;
@@ -36,17 +34,11 @@ async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
     tour[nearest] = swap;
 
     length = app.calcCostByMatrix(d, tour);
-
-    if (noIdxTourParse) {
-      app.updateBestTourByIdxTour([], length);
-    } else {
-      app.updateBestTourByIdxTour(tour, length);
-    }
+    app.updateBestTourByIdxTour(tour, length);
 
     await app.sleep();
   }
 
-  app.updateBestTourByIdxTour(tour, length);
   app.end();
 }
 

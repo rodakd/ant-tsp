@@ -2,6 +2,9 @@ import * as t from '~/types';
 import ACOWorker from './AntColonyOptimization?worker';
 import Tsp2optFirst from './Tsp2optFirst?worker';
 import Tsp2optBest from './Tsp2optBest?worker';
+import Tsp3optFirst from './Tsp3optFirst?worker';
+import Tsp3optLimited from './Tsp3optLimited?worker';
+import LK from './LK?worker';
 import NearestNeighbor from './NearestNeighbor?worker';
 import Custom from './Custom?worker';
 import { DEFAULT_CUSTOM_CODE } from '~/constants';
@@ -58,6 +61,21 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   '2-opt Best Improvement': {
     workerClass: Tsp2optBest,
     worker: new Tsp2optBest(),
+  },
+
+  '3-opt First': {
+    workerClass: Tsp3optFirst,
+    worker: new Tsp3optFirst(),
+  },
+
+  '3-opt Limited': {
+    workerClass: Tsp3optLimited,
+    worker: new Tsp3optLimited(),
+  },
+
+  'Lin-Kernighan': {
+    workerClass: LK,
+    worker: new LK(),
   },
 
   'Your JavaScript': {

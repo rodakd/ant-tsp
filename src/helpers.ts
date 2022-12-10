@@ -70,7 +70,7 @@ export const createRandomPermutation = (n: number) => {
 
 export const idxTourToDS2opt = (idxTour: number[]) => {
   const n = idxTour.length;
-  const t = new Array(2 * n).fill(-1);
+  const t = new Array<number>(2 * n).fill(-1);
 
   // Forward tour
   for (let i = 0; i < n - 1; i++) {
@@ -98,7 +98,7 @@ export const idxTourToMarkerPath = (idxTour: number[], markers: t.Marker[]) => {
 
 export const ds2optToIdxTour = (t: number[]) => {
   const n = Math.ceil(t.length / 2);
-  const tour = new Array(n).fill(-1);
+  const tour = new Array<number>(n).fill(-1);
   let j = 0;
 
   for (let i = 0; i < n; i++) {
@@ -107,6 +107,17 @@ export const ds2optToIdxTour = (t: number[]) => {
   }
 
   return tour;
+};
+
+export const idxTourToSuccessors = (idxTour: number[]) => {
+  const n = idxTour.length;
+  const successors = new Array<number>(n).fill(-1);
+
+  for (let i = 0; i < n; i++) {
+    successors[idxTour[i]] = idxTour[(i + 1) % n];
+  }
+
+  return successors;
 };
 
 // Fisher–Yates shuffle

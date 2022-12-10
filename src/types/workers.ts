@@ -22,6 +22,7 @@ export interface WorkerInterface {
   idxTourToDS2opt: (idxTour: number[]) => number[];
   ds2optToIdxTour: (t: number[]) => number[];
   idxTourToMarkerPath: (idxTour: number[]) => Marker[];
+  idxTourToSuccessors: (idxTour: number[]) => number[];
   updateIteration: (iteration: number) => void;
   updateBestTour: (bestTour: Marker[], cost: number) => void;
   updateBestTourByDS2opt: (t: number[], cost: number) => void;

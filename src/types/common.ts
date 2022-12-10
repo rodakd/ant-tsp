@@ -62,10 +62,10 @@ export type AppStatus = 'running' | 'paused' | 'idle';
 export type ViewState = Partial<MapViewState>;
 
 export type Dataset = {
-  name: string;
   markers: Marker[];
   viewState: NonNullable<ViewState>;
-  flag: string;
+  name?: string;
+  flag?: string;
 };
 
 export type HistoryEntry = {
