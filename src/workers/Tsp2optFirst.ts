@@ -21,6 +21,13 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
 
   app.updateBestTourByDS2opt(t, length);
 
+  const move = (t: number[], i: number, j: number, next_i: number, next_j: number) => {
+    t[i] = j ^ 1;
+    t[j] = i ^ 1;
+    t[next_i ^ 1] = next_j;
+    t[next_j ^ 1] = next_i;
+  };
+
   while (t[t[i]] >> 1 !== last_i) {
     iteration += 1;
     app.updateIteration(iteration);
@@ -31,13 +38,14 @@ async function Tsp2optFirst(app: Readonly<t.WorkerInterface>) {
       delta =
         d[i >> 1][j >> 1] + d[t[i] >> 1][t[j] >> 1] - d[i >> 1][t[i] >> 1] - d[j >> 1][t[j] >> 1];
 
+      const currentT = [...t];
+      move(currentT, i, j, t[i], t[j]);
+      app.updateCurrentTourByDS2opt(currentT);
+
       if (delta < 0) {
         next_i = t[i];
         next_j = t[j];
-        t[i] = j ^ 1;
-        t[j] = i ^ 1;
-        t[next_i ^ 1] = next_j;
-        t[next_j ^ 1] = next_i;
+        move(t, i, j, next_i, next_j);
         length += delta;
         last_i = i >> 1;
         app.updateBestTourByDS2opt(t, length);
