@@ -1,7 +1,6 @@
 import type { HistoryEntry, Marker } from './common';
 
 export interface WorkerInterface {
-  params: Record<string, any>;
   paused: boolean;
   running: boolean;
   markers: Marker[];
@@ -9,6 +8,7 @@ export interface WorkerInterface {
   speedPercent: number;
   helpers: WorkerHelpers;
   performanceMode: boolean;
+  params: Record<string, any>;
   iterationsLimit: number | null;
 
   end: () => void;
@@ -17,10 +17,10 @@ export interface WorkerInterface {
   error: (text?: string) => void;
 
   getInput: () => {
+    n: number;
+    cost: number;
     d: number[][];
     tour: number[];
-    cost: number;
-    n: number;
     params: Record<string, any>;
   };
 

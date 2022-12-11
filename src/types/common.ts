@@ -5,7 +5,6 @@ export type Store = {
   params: any;
   cost: number;
   worker: Worker;
-  trail: Marker[] | null;
   status: AppStatus;
   iteration: number;
   markers: Marker[];
@@ -21,6 +20,7 @@ export type Store = {
   multiRunMode: boolean;
   multiRunLimit: number;
   selectedWorker: string;
+  trail: Marker[] | null;
   iterationsLimit: number;
   performanceMode: boolean;
   bestTour: Marker[] | null;
@@ -59,14 +59,14 @@ export type Store = {
 export type Latitude = number;
 export type Longitude = number;
 export type Marker = [Longitude, Latitude];
-export type AppStatus = 'running' | 'paused' | 'idle';
 export type ViewState = Partial<MapViewState>;
+export type AppStatus = 'running' | 'paused' | 'idle';
 
 export type Dataset = {
-  markers: Marker[];
-  viewState: NonNullable<ViewState>;
   name?: string;
   flag?: string;
+  markers: Marker[];
+  viewState: NonNullable<ViewState>;
 };
 
 export type HistoryEntry = {
