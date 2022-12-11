@@ -62,15 +62,22 @@ async function LinKernighan(app: Readonly<t.WorkerInterface>) {
 
       while (succ[c] != a) {
         const d = succ[c];
+
+        const currentSucc = [...succ];
+        move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
+        app.updateCurrentTourBySuccessors(currentSucc);
+
         if (path_length - D[c][d] + D[c][a] + D[b][d] < length) {
           best_c = c;
           ref_struct_cost = path_length - D[c][d] + D[c][a] + D[b][d];
           break;
         }
+
         if (tabu[c][d] != iteration && path_length + D[b][d] < ref_struct_cost) {
           ref_struct_cost = path_length + D[b][d];
           best_c = c;
         }
+
         c = d;
       }
 
