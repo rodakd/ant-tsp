@@ -61,7 +61,7 @@ export const ControlPanel = () => {
       })}
     >
       <div className='control-panel__inner'>
-        <h1 className='control-panel__title'>Ant-TSP</h1>
+        <h1 className='control-panel__title'>Heuristic-TSP</h1>
         <StartPauseButton
           status={status}
           onStart={() => startRun()}
