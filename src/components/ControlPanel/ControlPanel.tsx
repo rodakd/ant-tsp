@@ -1,5 +1,3 @@
-import cn from 'classnames';
-
 import { IoMdRefresh } from 'react-icons/io';
 import { FaSquare } from 'react-icons/fa';
 import { PanelButton } from './buttons/PanelButton';
@@ -24,7 +22,6 @@ export const ControlPanel = () => {
   const settingsOpen = useStore((state) => state.settingsOpen);
   const markers = useStore((state) => state.markers);
   const markerModeOn = useStore((state) => state.markerModeOn);
-  const selectedWorker = useStore((state) => state.selectedWorker);
   const performanceMode = useStore((state) => state.performanceMode);
   const startRun = useStore((state) => state.startRun);
   const stopRun = useStore((state) => state.stopRun);
