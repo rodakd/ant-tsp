@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Local search with 2-opt neighbourhood and best improvement policy
-async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
+async function TSP2optBest(app: Readonly<t.WorkerInterface>) {
   const d = app.getDistanceMatrix();
   const tour = app.getRandomIdxTour();
   const n = tour.length;
@@ -74,4 +74,4 @@ async function Tsp2optBest(app: Readonly<t.WorkerInterface>) {
   app.end();
 }
 
-createWorker(Tsp2optBest);
+createWorker(TSP2optBest);

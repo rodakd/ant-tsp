@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Local search with 3-opt neighbourhood and first improvement policy
-async function Tsp3optFirst(app: Readonly<t.WorkerInterface>) {
+async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
   const d = app.getDistanceMatrix();
   const idxTour = app.getRandomIdxTour();
   const succ = app.idxTourToSuccessors(idxTour);
@@ -87,4 +87,4 @@ async function Tsp3optFirst(app: Readonly<t.WorkerInterface>) {
   app.end();
 }
 
-createWorker(Tsp3optFirst);
+createWorker(TSP3optFirst);

@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Basic Lin & Kernighan improvement procedure for the TSP
-async function LinKernighan(app: Readonly<t.WorkerInterface>) {
+async function TSPLinKernighan(app: Readonly<t.WorkerInterface>) {
   const D = app.getDistanceMatrix();
   let tour = app.getRandomIdxTour();
   let succ = app.idxTourToSuccessors(tour);
@@ -115,4 +115,4 @@ async function LinKernighan(app: Readonly<t.WorkerInterface>) {
   app.end();
 }
 
-createWorker(LinKernighan);
+createWorker(TSPLinKernighan);

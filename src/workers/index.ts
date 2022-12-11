@@ -1,73 +1,49 @@
 import * as t from '~/types';
-import ACOWorker from './AntColonyOptimization?worker';
-import Tsp2optFirst from './Tsp2optFirst?worker';
-import Tsp2optBest from './Tsp2optBest?worker';
-import Tsp3optFirst from './Tsp3optFirst?worker';
-import NearestNeighbor from './NearestNeighbor?worker';
-import LinKernighan from './LinKernighan?worker';
+import TSPAntSystem from './TSPAntSystem?worker';
+import TSP2optFirst from './TSP2optFirst?worker';
+import TSP2optBest from './TSP2optBest?worker';
+import TSP3optFirst from './TSP3optFirst?worker';
+import TSPNearestNeighbor from './TSPNearestNeighbor?worker';
+import TSPLinKernighan from './TSPLinKernighan?worker';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
-  'Ant Colony Optimization': {
-    workerClass: ACOWorker,
-    worker: new ACOWorker(),
+  'Fast Ant System': {
+    workerClass: TSPAntSystem,
+    worker: new TSPAntSystem(),
     params: {
-      evaporation: {
-        label: 'evaporation',
+      exploitation: {
+        label: 'exploitation',
         type: 'number',
-        step: 0.1,
-        default: 0.7,
-      },
-      alpha: {
-        label: 'alpha',
-        type: 'number',
+        step: 1,
         default: 1,
-        min: 0,
-      },
-      beta: {
-        label: 'beta',
-        type: 'number',
-        default: 1,
-        min: 0,
-      },
-      qParam: {
-        label: 'Q',
-        type: 'number',
-        default: 1,
-        min: 0,
-      },
-      percentOfAnts: {
-        label: '% of ants',
-        type: 'number',
-        default: 80,
         min: 1,
-        max: 100,
       },
     },
   },
 
   'Nearest Neighbor': {
-    workerClass: NearestNeighbor,
-    worker: new NearestNeighbor(),
+    workerClass: TSPNearestNeighbor,
+    worker: new TSPNearestNeighbor(),
   },
 
   '2-opt First Improvement': {
-    workerClass: Tsp2optFirst,
-    worker: new Tsp2optFirst(),
+    workerClass: TSP2optFirst,
+    worker: new TSP2optFirst(),
   },
 
   '2-opt Best Improvement': {
-    workerClass: Tsp2optBest,
-    worker: new Tsp2optBest(),
+    workerClass: TSP2optBest,
+    worker: new TSP2optBest(),
   },
 
   '3-opt First': {
-    workerClass: Tsp3optFirst,
-    worker: new Tsp3optFirst(),
+    workerClass: TSP3optFirst,
+    worker: new TSP3optFirst(),
   },
 
   'Lin-Kernighan': {
-    workerClass: LinKernighan,
-    worker: new LinKernighan(),
+    workerClass: TSPLinKernighan,
+    worker: new TSPLinKernighan(),
   },
 };
 
@@ -83,6 +59,6 @@ export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   return params;
 };
 
-export const DEFAULT_WORKER_NAME = '2-opt Best Improvement';
+export const DEFAULT_WORKER_NAME = 'Fast Ant System';
 export const DEFAULT_WORKER = AVAILABLE_WORKERS[DEFAULT_WORKER_NAME];
 export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(DEFAULT_WORKER);

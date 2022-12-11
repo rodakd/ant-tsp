@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Nearest Neighbour greedy heuristic for the TSP
-async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
+async function TSPNearestNeighbor(app: Readonly<t.WorkerInterface>) {
   const d = app.getDistanceMatrix();
   const tour = app.getRandomIdxTour();
   const n = tour.length;
@@ -54,4 +54,4 @@ async function NearestNeighbor(app: Readonly<t.WorkerInterface>) {
   app.end();
 }
 
-createWorker(NearestNeighbor);
+createWorker(TSPNearestNeighbor);
