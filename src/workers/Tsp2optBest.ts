@@ -8,36 +8,31 @@ import { createWorker } from './createWorker';
 
 // Local search with 2-opt neighbourhood and best improvement policy
 async function TSP2optBest(app: Readonly<t.WorkerInterface>) {
-  const d = app.getDistanceMatrix();
-  const tour = app.getRandomIdxTour();
-  const n = tour.length;
+  const { d, cost, n, tour } = app.getInput();
+  let length = cost;
 
-  let best_delta, best_i, j, i, delta, best_j, iteration, length, swap;
-  best_delta = -1;
-  iteration = 0;
-  length = app.calcCostByMatrix(d, tour);
+  let bestDelta = -1,
+    bestI: number,
+    j: number,
+    i: number,
+    delta: number,
+    bestJ: number;
 
-  app.updateBestTourByIdxTour(tour, length);
-
-  const move = (tour: number[], i: number, j: number) => {
-    while (i < j) {
-      swap = tour[i];
-      tour[i] = tour[j];
-      tour[j] = swap;
-      i = i + 1;
-      j = j - 1;
-    }
-  };
-
-  while (best_delta < 0) {
-    best_delta = Infinity;
-    best_i = best_j = -1;
+  while (bestDelta < 0) {
+    bestDelta = Infinity;
+    bestI = bestJ = -1;
 
     for (i = 0; i < n - 2; i++) {
       j = i + 2;
+
       while (j < n && (i > 0 || j < n - 1)) {
-        iteration += 1;
-        app.updateIteration(iteration);
+        app.incrementIteration();
+
+        await app.updateCurrentTour(() => {
+          const currentTour = tour.slice();
+          move(currentTour, i + 1, j);
+          return currentTour;
+        });
 
         delta =
           d[tour[i]][tour[j]] +
@@ -45,33 +40,40 @@ async function TSP2optBest(app: Readonly<t.WorkerInterface>) {
           d[tour[i]][tour[i + 1]] -
           d[tour[j]][tour[(j + 1) % n]];
 
-        const currentTour = [...tour];
-        move(currentTour, i + 1, j);
-        app.updateCurrentTourByIdxTour(currentTour);
-
-        if (delta < best_delta) {
-          best_delta = delta;
-          best_i = i;
-          best_j = j;
+        if (delta < bestDelta) {
+          bestDelta = delta;
+          bestI = i;
+          bestJ = j;
         }
-        j += 1;
 
-        await app.sleep();
+        j += 1;
       }
     }
 
-    if (best_delta < 0) {
-      length += best_delta;
-      i = best_i + 1;
-      j = best_j;
+    if (bestDelta < 0) {
+      length += bestDelta;
+      i = bestI + 1;
+      j = bestJ;
 
       move(tour, i, j);
 
-      app.updateBestTourByIdxTour(tour, length);
+      await app.updateBestTour(() => tour, length);
     }
   }
 
   app.end();
+}
+
+function move(tour: number[], i: number, j: number) {
+  let swap;
+
+  while (i < j) {
+    swap = tour[i];
+    tour[i] = tour[j];
+    tour[j] = swap;
+    i = i + 1;
+    j = j - 1;
+  }
 }
 
 createWorker(TSP2optBest);

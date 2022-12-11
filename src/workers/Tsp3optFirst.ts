@@ -8,45 +8,30 @@ import { createWorker } from './createWorker';
 
 // Local search with 3-opt neighbourhood and first improvement policy
 async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
-  const d = app.getDistanceMatrix();
-  const idxTour = app.getRandomIdxTour();
-  const succ = app.idxTourToSuccessors(idxTour);
+  const { d, tour, cost } = app.getInput();
+  const succ = app.helpers.tourToSuccessors(tour);
 
   let last_i = 0,
     last_j = succ[0],
     last_k = succ[succ[0]],
+    length = cost,
     i = last_i,
     j = last_j,
     k = last_k,
-    iteration = 0,
-    length = app.calcCostByMatrix(d, idxTour),
     delta: number,
-    sj: number,
-    swap_i: number,
-    swap_j: number,
-    swap_k: number;
-
-  app.updateBestTourBySuccessors(succ, length);
-
-  const move = (succ: number[], i: number, j: number, k: number) => {
-    swap_i = succ[i];
-    swap_j = succ[j];
-    swap_k = succ[k];
-    succ[i] = swap_j;
-    succ[j] = swap_k;
-    succ[k] = swap_i;
-  };
+    sj: number;
 
   while (true) {
-    iteration += 1;
-    app.updateIteration(iteration);
+    app.incrementIteration();
 
     delta =
       d[i][succ[j]] + d[j][succ[k]] + d[k][succ[i]] - d[i][succ[i]] - d[j][succ[j]] - d[k][succ[k]];
 
-    const currentSucc = [...succ];
-    move(currentSucc, i, j, k);
-    app.updateCurrentTourBySuccessors(currentSucc);
+    await app.updateCurrentTour(() => {
+      const currentSucc = succ.slice();
+      move(currentSucc, i, j, k);
+      return app.helpers.successorsToTour(currentSucc);
+    });
 
     if (delta < 0) {
       length += delta;
@@ -61,7 +46,7 @@ async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
       last_j = j;
       last_k = k;
 
-      app.updateBestTourBySuccessors(succ, length);
+      await app.updateBestTour(() => app.helpers.successorsToTour(succ), length);
     }
 
     k = succ[k];
@@ -80,11 +65,18 @@ async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
     if (i === last_i && j === last_j && k === last_k) {
       break;
     }
-
-    await app.sleep();
   }
 
   app.end();
+}
+
+function move(succ: number[], i: number, j: number, k: number) {
+  const swap_i = succ[i];
+  const swap_j = succ[j];
+  const swap_k = succ[k];
+  succ[i] = swap_j;
+  succ[j] = swap_k;
+  succ[k] = swap_i;
 }
 
 createWorker(TSP3optFirst);

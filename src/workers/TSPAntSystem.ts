@@ -69,12 +69,11 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
       tour[j] = tour[i];
       tour[i] = temp;
     }
-    return [tour, app.calcCostByMatrix(d, tour)];
+    return [tour, app.helpers.matrixCost(d, tour)];
   }
 
   async function tspLK(D: number[][], tour: number[], length: number): Promise<[number[], number]> {
-    let succ = app.idxTourToSuccessors(tour);
-    const n = tour.length;
+    let succ = app.helpers.tourToSuccessors(tour);
 
     const tabu: number[][] = [];
     for (let i = 0; i < n; i++) {
@@ -90,7 +89,7 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
       improved = true,
       d = null;
 
-    const move = (succ: number[], si: number, i: number, c: number, d: number, b: number) => {
+    function move(succ: number[], si: number, i: number, c: number, d: number, b: number) {
       succ[b] = d;
       while (i != c) {
         const swap_i = i;
@@ -101,7 +100,7 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
         i = swap_si;
         si = swap_succsi;
       }
-    };
+    }
 
     while (a != last_a || improved) {
       improved = false;
@@ -117,6 +116,8 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
         let best_c = c;
 
         while (succ[c] != a) {
+          app.incrementIteration();
+
           const d = succ[c];
 
           if (path_length - D[c][d] + D[c][a] + D[b][d] < length) {
@@ -131,17 +132,15 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
           }
 
           c = d;
+
+          await app.updateCurrentTour(() => {
+            const currentSucc = succ.slice();
+            move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
+            return app.helpers.successorsToTour(currentSucc);
+          });
         }
 
-        const currentSucc = [...succ];
-        move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
-        app.updateCurrentTourBySuccessors(currentSucc);
-
-        await app.sleep();
-
         if (Number(ref_struct_cost.toFixed(7)) < Number(length.toFixed(7))) {
-          const currentSucc = [...succ];
-
           path_modified = true;
           c = best_c;
           d = succ[best_c];
@@ -151,9 +150,6 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
           const si = succ[b];
 
           move(succ, si, i, c, d, b);
-          move(currentSucc, currentSucc[b], i, c, currentSucc[c], b);
-          app.updateTrailByIdxTour(app.successorsToIdxTour(currentSucc));
-          await app.sleep();
 
           b = c;
 
@@ -162,38 +158,36 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
             succ[a] = b;
             last_a = b;
             improved = true;
-            tour = app.successorsToIdxTour(succ);
+            tour = app.helpers.successorsToTour(succ);
+            await app.updateTrail(() => tour);
           }
         }
       }
 
-      succ = app.idxTourToSuccessors(tour);
+      succ = app.helpers.tourToSuccessors(tour);
       a = succ[a];
     }
 
     return [tour, length];
   }
 
-  const d = app.getDistanceMatrix();
+  const input = app.getInput();
+  const {
+    d,
+    params: { exploitation },
+  } = input;
   const n = d[0].length;
 
-  let tour = app.getRandomIdxTour();
-  let bestCost = app.calcCostByMatrix(d, tour);
+  let tour = input.tour;
+  let bestCost = input.cost;
   let exploration = 1;
-  const exploitation = app.params.exploitation;
-  let iterations = 0;
   let cost = 0;
   let bestSol = tour.slice();
-  let trail = new Array<number[]>(n).fill(new Array(n).fill(-1));
-  trail = initTrail(exploration, trail);
+  let trail = initTrail(exploration, new Array<number[]>(n).fill(new Array(n).fill(-1)));
 
-  for (let i = 0; i < (app.iterationsLimit || 5); i++) {
-    iterations += 1;
-    app.updateIteration(iterations);
-
+  for (let i = 0; i < 5; i++) {
     [tour, cost] = generateSolutionTrail(d, tour, trail);
-    app.updateTrailByIdxTour(tour);
-    await app.sleep();
+    await app.updateTrail(() => tour);
     [tour, cost] = await tspLK(d, tour, cost);
 
     if (Number(cost.toFixed(7)) < Number(bestCost.toFixed(7))) {
@@ -201,7 +195,7 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
       bestSol = tour.slice();
       exploration = 1;
       trail = initTrail(exploration, trail);
-      app.updateBestTourByIdxTour(bestSol, bestCost);
+      await app.updateBestTour(() => bestSol, bestCost);
     } else {
       [trail, exploration] = updateTrail(tour, bestSol, exploration, exploitation, trail);
     }

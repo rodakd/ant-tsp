@@ -1,40 +1,40 @@
 import type { HistoryEntry, Marker } from './common';
 
 export interface WorkerInterface {
-  params: any;
+  params: Record<string, any>;
   paused: boolean;
   running: boolean;
   markers: Marker[];
   iteration: number;
   speedPercent: number;
+  helpers: WorkerHelpers;
   performanceMode: boolean;
-  bestTour: Marker[] | null;
-  currentTour: Marker[] | null;
   iterationsLimit: number | null;
+
   end: () => void;
   log: (toLog: any) => void;
   sleep: () => Promise<void>;
   error: (text?: string) => void;
-  calcCostByArray: (tour: Marker[] | null) => number;
-  calcCostByMatrix: (matrix: number[][], tour: number[]) => number;
-  getDistanceMatrix: () => number[][];
-  getRandomIdxTour: () => number[];
-  idxTourToDS2opt: (idxTour: number[]) => number[];
-  ds2optToIdxTour: (t: number[]) => number[];
-  idxTourToMarkerPath: (idxTour: number[]) => Marker[];
-  idxTourToSuccessors: (idxTour: number[]) => number[];
-  successorsToIdxTour: (succ: number[]) => number[];
-  updateIteration: (iteration: number) => void;
-  updateBestTour: (bestTour: Marker[], cost: number) => void;
-  updateBestTourByDS2opt: (t: number[], cost: number) => void;
-  updateBestTourByIdxTour: (idxTour: number[], cost: number) => void;
-  updateBestTourBySuccessors: (successors: number[], cost: number) => void;
-  updateCurrentTourByDS2opt: (t: number[]) => void;
-  updateCurrentTour: (currentTour: Marker[]) => void;
-  updateCurrentTourBySuccessors: (t: number[]) => void;
-  updateCurrentTourByIdxTour: (idxTour: number[]) => void;
-  updateTrail: (trail: Marker[]) => void;
-  updateTrailByIdxTour: (idxTour: number[]) => void;
+
+  getInput: () => {
+    d: number[][];
+    tour: number[];
+    cost: number;
+    n: number;
+    params: Record<string, any>;
+  };
+
+  incrementIteration: () => void;
+
+  updateTrail: (getTrail: () => number[]) => Promise<void>;
+  updateCurrentTour: (getCurrentTour: () => number[]) => Promise<void>;
+  updateBestTour: (getBestTour: () => number[], cost: number) => Promise<void>;
+}
+
+export interface WorkerHelpers {
+  matrixCost: (d: number[][], tour: number[]) => number;
+  tourToSuccessors: (tour: number[]) => number[];
+  successorsToTour: (succ: number[]) => number[];
 }
 
 export type ToWorkerAction =

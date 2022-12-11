@@ -1,10 +1,7 @@
 import { BASE_DELAY_MS, DEFAULT_SPEED_PERCENT } from '../constants';
 import {
-  arrayCost,
   createDistanceMatrix,
   createRandomPermutation,
-  ds2optToIdxTour,
-  idxTourToDS2opt,
   idxTourToMarkerPath,
   idxTourToSuccessors,
   matrixCost,
@@ -14,9 +11,11 @@ import {
 import { HistoryEntry } from '../types';
 import * as t from '../types';
 
-export const createWorker = (
-  algorithm: (workerInterface: t.WorkerInterface, params: any) => Promise<void>
-) => {
+export function appDispatch(action: t.FromWorkerAction) {
+  postMessage(action);
+}
+
+export const createWorker = (algorithm: (workerInterface: t.WorkerInterface) => Promise<void>) => {
   let wi: t.WorkerInterface = new WorkerInstance();
 
   onmessage = async (event) => {
@@ -36,7 +35,7 @@ export const createWorker = (
         wi.iterationsLimit = action.iterationsLimit;
         wi.performanceMode = action.performanceMode;
 
-        algorithm(wi, action.params).catch((err) => {
+        algorithm(wi).catch((err) => {
           if (err === 'Stopped') {
             return;
           }
@@ -60,62 +59,107 @@ export const createWorker = (
 };
 
 class WorkerInstance implements t.WorkerInterface {
+  private bestTour: t.Marker[] = [];
+
+  params = {};
+  markers = [];
+  iteration = 0;
   paused = false;
   running = true;
-  bestTour: t.Marker[] | null = null;
-  currentTour: t.Marker[] | null = null;
   cost = Infinity;
-  iteration = 0;
-  markers = [];
-  params = {};
-  speedPercent = DEFAULT_SPEED_PERCENT;
   performanceMode = false;
+  speedPercent = DEFAULT_SPEED_PERCENT;
   iterationsLimit: number | null = null;
   bestToursHistory: HistoryEntry[] = [];
+  lastGetBestTour: (() => number[]) | null = null;
 
-  updateBestTour(bestTour: t.Marker[], cost: number) {
+  getInput() {
+    const d = createDistanceMatrix(this.markers);
+    const tour = createRandomPermutation(this.markers.length);
+    const cost = matrixCost(d, tour);
+    const n = this.markers.length;
+    const params = this.params;
+
+    this.updateBestTour(() => tour, cost);
+
+    return {
+      d,
+      tour,
+      cost,
+      n,
+      params,
+    };
+  }
+
+  async updateBestTour(getBestTour: () => number[], cost: number) {
     if (cost >= this.cost) {
       return;
     }
-
     this.cost = cost;
-    this.bestTour = bestTour;
-    this.bestToursHistory.push({
+
+    const historyEntry = {
       cost,
       iteration: this.iteration,
-    });
+    };
+    this.bestToursHistory.push(historyEntry);
 
-    this.appDispatch({
+    if (this.performanceMode) {
+      this.lastGetBestTour = getBestTour;
+      return;
+    }
+
+    this.bestTour = idxTourToMarkerPath(getBestTour(), this.markers);
+
+    appDispatch({
       type: 'updateBestTour',
       bestTour: this.bestTour,
       bestToursHistory: this.bestToursHistory,
       cost: this.cost,
     });
+
+    await this.sleep();
   }
 
-  updateTrail(trail: t.Marker[]) {
-    this.appDispatch({
+  async updateTrail(getTrail: () => number[]) {
+    if (this.performanceMode) {
+      return;
+    }
+
+    const trail = idxTourToMarkerPath(getTrail(), this.markers);
+
+    appDispatch({
       type: 'updateTrail',
       trail,
     });
+
+    await this.sleep();
   }
 
-  updateBestTourByIdxTour(idxTour: number[], cost: number) {
-    const path = this.idxTourToMarkerPath(idxTour);
-    this.updateBestTour(path, cost);
-  }
+  incrementIteration() {
+    this.iteration++;
 
-  updateIteration(iteration: number) {
-    this.iteration = iteration;
     if (this.iterationsLimit && this.iteration > this.iterationsLimit) {
+      this.iteration--;
       return this.end();
     }
-    this.appDispatch({ type: 'updateIteration', iteration });
+
+    if (this.performanceMode) {
+      return;
+    }
+
+    appDispatch({ type: 'updateIteration', iteration: this.iteration });
   }
 
-  updateCurrentTour(currentTour: t.Marker[]) {
-    this.currentTour = currentTour;
-    this.appDispatch({ type: 'updateCurrentTour', currentTour });
+  async updateCurrentTour(getCurrentTour: () => number[]) {
+    if (this.performanceMode) {
+      return;
+    }
+
+    const currentTour = idxTourToMarkerPath(getCurrentTour(), this.markers);
+
+    appDispatch({ type: 'updateCurrentTour', currentTour });
+
+    await this.sleep();
   }
 
   async sleep() {
@@ -136,107 +180,46 @@ class WorkerInstance implements t.WorkerInterface {
   }
 
   log(toLog: any) {
-    this.appDispatch({ type: 'log', toLog: JSON.stringify(toLog) });
+    appDispatch({ type: 'log', toLog: JSON.stringify(toLog) });
   }
 
   error(text?: string) {
-    postMessage({
+    appDispatch({
       type: 'error',
       text,
     });
   }
 
-  calcCostByArray(path: t.Marker[] | null) {
-    return arrayCost(path);
-  }
-
-  calcCostByMatrix(matrix: number[][], idxTour: number[]) {
-    return matrixCost(matrix, idxTour);
-  }
-
-  getDistanceMatrix() {
-    return createDistanceMatrix(this.markers);
-  }
-
-  getRandomIdxTour() {
-    return createRandomPermutation(this.markers.length);
-  }
-
-  idxTourToDS2opt(idxTour: number[]) {
-    return idxTourToDS2opt(idxTour);
-  }
-
-  idxTourToMarkerPath(idxTour: number[]) {
-    return idxTourToMarkerPath(idxTour, this.markers);
-  }
-
-  idxTourToSuccessors(idxTour: number[]) {
-    return idxTourToSuccessors(idxTour);
-  }
-
-  successorsToIdxTour(succ: number[]) {
-    return successorsToIdxTour(succ);
-  }
-
-  ds2optToIdxTour(t: number[]) {
-    return ds2optToIdxTour(t);
-  }
-
-  updateBestTourByDS2opt(t: number[], cost: number) {
-    const idxTour = ds2optToIdxTour(t);
-    const path = this.idxTourToMarkerPath(idxTour);
-    this.updateBestTour(path, cost);
-  }
-
-  updateCurrentTourByDS2opt(t: number[]) {
-    const idxTour = ds2optToIdxTour(t);
-    const path = this.idxTourToMarkerPath(idxTour);
-    this.updateCurrentTour(path);
-  }
-
-  updateBestTourBySuccessors(successors: number[], cost: number) {
-    const idxTour = successorsToIdxTour(successors);
-    const path = this.idxTourToMarkerPath(idxTour);
-    this.updateBestTour(path, cost);
-  }
-
-  updateCurrentTourBySuccessors(successors: number[]) {
-    const idxTour = successorsToIdxTour(successors);
-    const path = this.idxTourToMarkerPath(idxTour);
-    this.updateCurrentTour(path);
-  }
-
-  updateCurrentTourByIdxTour(idxTour: number[]) {
-    const path = idxTourToMarkerPath(idxTour, this.markers);
-    this.updateCurrentTour(path);
-  }
-
-  updateTrailByIdxTour(idxTour: number[]) {
-    const path = idxTourToMarkerPath(idxTour, this.markers);
-    this.updateTrail(path);
-  }
-
   end() {
-    postMessage({
+    let lastBestTour = this.bestTour;
+
+    if (this.lastGetBestTour) {
+      lastBestTour = idxTourToMarkerPath(this.lastGetBestTour(), this.markers);
+    }
+
+    appDispatch({
       type: 'end',
-      bestTour: this.bestTour,
-      bestToursHistory: this.bestToursHistory,
       cost: this.cost,
+      bestTour: lastBestTour,
       iterations: this.iteration,
+      bestToursHistory: this.bestToursHistory,
     });
+
     this.running = false;
     throw 'Stopped';
   }
 
-  private appDispatch(action: t.FromWorkerAction) {
-    if (!this.running) {
-      throw 'Stopped';
-    }
+  helpers = {
+    matrixCost(matrix: number[][], tour: number[]) {
+      return matrixCost(matrix, tour);
+    },
 
-    if (this.performanceMode) {
-      return;
-    }
+    tourToSuccessors(idxTour: number[]) {
+      return idxTourToSuccessors(idxTour);
+    },
 
-    postMessage(action);
-  }
+    successorsToTour(succ: number[]) {
+      return successorsToIdxTour(succ);
+    },
+  };
 }

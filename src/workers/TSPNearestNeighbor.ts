@@ -1,4 +1,5 @@
 import * as t from '~/types';
+import { matrixCost } from '~/helpers';
 import { createWorker } from './createWorker';
 
 // This is a port of Python code originally published by Éric D. Taillard
@@ -8,34 +9,26 @@ import { createWorker } from './createWorker';
 
 // Nearest Neighbour greedy heuristic for the TSP
 async function TSPNearestNeighbor(app: Readonly<t.WorkerInterface>) {
-  const d = app.getDistanceMatrix();
-  const tour = app.getRandomIdxTour();
-  const n = tour.length;
+  const { cost, d, tour, n } = app.getInput();
 
-  let length, i, j, nearest, cost_ins, swap, iteration;
-  length = 0;
-  iteration = 0;
-
-  const move = (tour: number[], i: number, nearest: number) => {
-    swap = tour[i];
-    tour[i] = tour[nearest];
-    tour[nearest] = swap;
-  };
-
-  length = app.calcCostByMatrix(d, tour);
-  app.updateBestTourByIdxTour(tour, length);
+  let length = cost,
+    i: number,
+    j: number,
+    nearest: number,
+    cost_ins: number;
 
   for (i = 1; i < n; i++) {
     nearest = i;
     cost_ins = d[tour[i - 1]][tour[i]];
 
     for (j = i + 1; j < n; j++) {
-      iteration += 1;
-      app.updateIteration(iteration);
+      app.incrementIteration();
 
-      const currentTour = [...tour];
-      move(currentTour, i, j);
-      app.updateCurrentTourByIdxTour(currentTour);
+      await app.updateCurrentTour(() => {
+        const currentTour = tour.slice();
+        move(currentTour, i, j);
+        return currentTour;
+      });
 
       if (d[tour[i - 1]][tour[j]] < cost_ins) {
         cost_ins = d[tour[i - 1]][tour[j]];
@@ -46,12 +39,17 @@ async function TSPNearestNeighbor(app: Readonly<t.WorkerInterface>) {
     }
 
     move(tour, i, nearest);
-
-    length = app.calcCostByMatrix(d, tour);
-    app.updateBestTourByIdxTour(tour, length);
+    length = matrixCost(d, tour);
+    await app.updateBestTour(() => tour, length);
   }
 
   app.end();
+}
+
+function move(tour: number[], i: number, nearest: number) {
+  const swap = tour[i];
+  tour[i] = tour[nearest];
+  tour[nearest] = swap;
 }
 
 createWorker(TSPNearestNeighbor);

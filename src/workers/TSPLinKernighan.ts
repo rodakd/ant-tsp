@@ -8,11 +8,12 @@ import { createWorker } from './createWorker';
 
 // Basic Lin & Kernighan improvement procedure for the TSP
 async function TSPLinKernighan(app: Readonly<t.WorkerInterface>) {
-  const D = app.getDistanceMatrix();
-  let tour = app.getRandomIdxTour();
-  let succ = app.idxTourToSuccessors(tour);
-  let length = app.calcCostByMatrix(D, tour);
-  const n = tour.length;
+  const input = app.getInput();
+  const D = input.d;
+  const n = input.n;
+  let tour = input.tour;
+  let length = input.cost;
+  let succ = app.helpers.tourToSuccessors(tour);
 
   const tabu: number[][] = [];
   for (let i = 0; i < n; i++) {
@@ -23,26 +24,10 @@ async function TSPLinKernighan(app: Readonly<t.WorkerInterface>) {
   }
 
   let iteration = 0,
-    appIteration = 0,
     last_a = 0,
     a = 0,
     improved = true,
     d = null;
-
-  app.updateBestTourByIdxTour(tour, length);
-
-  const move = (succ: number[], si: number, i: number, c: number, d: number, b: number) => {
-    succ[b] = d;
-    while (i != c) {
-      const swap_i = i;
-      const swap_succsi = succ[si];
-      const swap_si = si;
-
-      succ[si] = swap_i;
-      i = swap_si;
-      si = swap_succsi;
-    }
-  };
 
   while (a != last_a || improved) {
     improved = false;
@@ -58,6 +43,8 @@ async function TSPLinKernighan(app: Readonly<t.WorkerInterface>) {
       let best_c = c;
 
       while (succ[c] != a) {
+        app.incrementIteration();
+
         const d = succ[c];
 
         if (path_length - D[c][d] + D[c][a] + D[b][d] < length) {
@@ -72,18 +59,14 @@ async function TSPLinKernighan(app: Readonly<t.WorkerInterface>) {
         }
 
         c = d;
+
+        await app.updateCurrentTour(() => {
+          const currentSucc = succ.slice();
+          move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
+          return app.helpers.successorsToTour(currentSucc);
+        });
       }
 
-      appIteration += 1;
-      app.updateIteration(appIteration);
-
-      const currentSucc = [...succ];
-      move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
-      app.updateCurrentTourBySuccessors(currentSucc);
-
-      await app.sleep();
-
-      // need to fix numbers cause of float rounding error
       if (Number(ref_struct_cost.toFixed(7)) < Number(length.toFixed(7))) {
         path_modified = true;
         c = best_c;
@@ -102,17 +85,30 @@ async function TSPLinKernighan(app: Readonly<t.WorkerInterface>) {
           succ[a] = b;
           last_a = b;
           improved = true;
-          tour = app.successorsToIdxTour(succ);
-          app.updateBestTourByIdxTour(tour, length);
+          tour = app.helpers.successorsToTour(succ);
+          await app.updateBestTour(() => tour, length);
         }
       }
     }
 
-    succ = app.idxTourToSuccessors(tour);
+    succ = app.helpers.tourToSuccessors(tour);
     a = succ[a];
   }
 
   app.end();
+}
+
+function move(succ: number[], si: number, i: number, c: number, d: number, b: number) {
+  succ[b] = d;
+  while (i != c) {
+    const swap_i = i;
+    const swap_succsi = succ[si];
+    const swap_si = si;
+
+    succ[si] = swap_i;
+    i = swap_si;
+    si = swap_succsi;
+  }
 }
 
 createWorker(TSPLinKernighan);
