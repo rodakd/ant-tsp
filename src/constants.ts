@@ -9,3 +9,7 @@ export const DEFAULT_ITERATIONS_LIMIT = 100;
 export const DEFAULT_MULTI_RUN_SUMMARY = {
   bestToursHistories: [],
 };
+
+export const BEST_TOUR_COLOR = [24, 178, 188];
+export const TRAIL_COLOR = [252, 186, 3];
+export const CURRENT_TOUR_COLOR = [180, 180, 180];

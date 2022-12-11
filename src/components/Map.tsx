@@ -3,7 +3,7 @@ import * as t from '~/types';
 import MapGL from 'react-map-gl';
 import DeckGL from '@deck.gl/react/typed';
 import { ScatterplotLayer, PathLayer } from '@deck.gl/layers/typed';
-import { MAPBOX_TOKEN } from '~/constants';
+import { BEST_TOUR_COLOR, CURRENT_TOUR_COLOR, MAPBOX_TOKEN, TRAIL_COLOR } from '~/constants';
 import { useStore } from '~/store';
 import { useMemo } from 'react';
 
@@ -59,17 +59,17 @@ export const Map = () => {
           data: [
             {
               name: 'Current',
-              color: [180, 180, 180],
+              color: CURRENT_TOUR_COLOR,
               path: currentTour,
             },
             {
               name: 'Trail',
-              color: [252, 186, 3],
+              color: TRAIL_COLOR,
               path: trail,
             },
             {
               name: 'Best',
-              color: [24, 178, 188],
+              color: BEST_TOUR_COLOR,
               path: bestTour,
             },
           ],
