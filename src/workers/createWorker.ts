@@ -167,6 +167,10 @@ class WorkerInstance implements t.WorkerInterface {
     return idxTourToSuccessors(idxTour);
   }
 
+  successorsToIdxTour(succ: number[]) {
+    return successorsToIdxTour(succ);
+  }
+
   ds2optToIdxTour(t: number[]) {
     return ds2optToIdxTour(t);
   }

@@ -4,6 +4,7 @@ import Tsp2optFirst from './Tsp2optFirst?worker';
 import Tsp2optBest from './Tsp2optBest?worker';
 import Tsp3optFirst from './Tsp3optFirst?worker';
 import NearestNeighbor from './NearestNeighbor?worker';
+import LinKernighan from './LinKernighan?worker';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Ant Colony Optimization': {
@@ -62,6 +63,11 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   '3-opt First': {
     workerClass: Tsp3optFirst,
     worker: new Tsp3optFirst(),
+  },
+
+  'Lin-Kernighan': {
+    workerClass: LinKernighan,
+    worker: new LinKernighan(),
   },
 };
 
