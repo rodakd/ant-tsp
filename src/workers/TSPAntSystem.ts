@@ -7,7 +7,6 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Fast Ant System for the TSP
-
 async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
   function initTrail(initialVal: number, trail: number[][]) {
     const n = trail[0].length;
@@ -141,6 +140,8 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
         await app.sleep();
 
         if (Number(ref_struct_cost.toFixed(7)) < Number(length.toFixed(7))) {
+          const currentSucc = [...succ];
+
           path_modified = true;
           c = best_c;
           d = succ[best_c];
@@ -150,6 +151,9 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
           const si = succ[b];
 
           move(succ, si, i, c, d, b);
+          move(currentSucc, currentSucc[b], i, c, currentSucc[c], b);
+          app.updateTrailByIdxTour(app.successorsToIdxTour(currentSucc));
+          await app.sleep();
 
           b = c;
 
@@ -183,14 +187,12 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
   let trail = new Array<number[]>(n).fill(new Array(n).fill(-1));
   trail = initTrail(exploration, trail);
 
-  app.updateBestTourByIdxTour(tour, bestCost);
-
   for (let i = 0; i < (app.iterationsLimit || 5); i++) {
     iterations += 1;
     app.updateIteration(iterations);
 
     [tour, cost] = generateSolutionTrail(d, tour, trail);
-    app.updateCurrentTourByIdxTour(tour);
+    app.updateTrailByIdxTour(tour);
     await app.sleep();
     [tour, cost] = await tspLK(d, tour, cost);
 

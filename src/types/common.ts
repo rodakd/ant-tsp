@@ -5,6 +5,7 @@ export type Store = {
   params: any;
   cost: number;
   worker: Worker;
+  trail: Marker[] | null;
   status: AppStatus;
   iteration: number;
   markers: Marker[];

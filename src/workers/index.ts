@@ -7,7 +7,7 @@ import TSPNearestNeighbor from './TSPNearestNeighbor?worker';
 import TSPLinKernighan from './TSPLinKernighan?worker';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
-  'Fast Ant System': {
+  'Fast Ant Meta Heuristic': {
     workerClass: TSPAntSystem,
     worker: new TSPAntSystem(),
     params: {
@@ -21,14 +21,9 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     },
   },
 
-  'Nearest Neighbor': {
-    workerClass: TSPNearestNeighbor,
-    worker: new TSPNearestNeighbor(),
-  },
-
-  '2-opt First Improvement': {
-    workerClass: TSP2optFirst,
-    worker: new TSP2optFirst(),
+  'Lin-Kernighan': {
+    workerClass: TSPLinKernighan,
+    worker: new TSPLinKernighan(),
   },
 
   '2-opt Best Improvement': {
@@ -36,14 +31,19 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
     worker: new TSP2optBest(),
   },
 
+  '2-opt First Improvement': {
+    workerClass: TSP2optFirst,
+    worker: new TSP2optFirst(),
+  },
+
   '3-opt First': {
     workerClass: TSP3optFirst,
     worker: new TSP3optFirst(),
   },
 
-  'Lin-Kernighan': {
-    workerClass: TSPLinKernighan,
-    worker: new TSPLinKernighan(),
+  'Nearest Neighbor': {
+    workerClass: TSPNearestNeighbor,
+    worker: new TSPNearestNeighbor(),
   },
 };
 
@@ -59,6 +59,6 @@ export const getWorkerDefaultParams = (config: t.WorkerConfig) => {
   return params;
 };
 
-export const DEFAULT_WORKER_NAME = 'Fast Ant System';
+export const DEFAULT_WORKER_NAME = 'Fast Ant Meta Heuristic';
 export const DEFAULT_WORKER = AVAILABLE_WORKERS[DEFAULT_WORKER_NAME];
 export const DEFAULT_WORKER_PARAMS = getWorkerDefaultParams(DEFAULT_WORKER);

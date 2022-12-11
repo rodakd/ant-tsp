@@ -33,6 +33,8 @@ export interface WorkerInterface {
   updateCurrentTour: (currentTour: Marker[]) => void;
   updateCurrentTourBySuccessors: (t: number[]) => void;
   updateCurrentTourByIdxTour: (idxTour: number[]) => void;
+  updateTrail: (trail: Marker[]) => void;
+  updateTrailByIdxTour: (idxTour: number[]) => void;
 }
 
 export type ToWorkerAction =
@@ -53,6 +55,7 @@ export type FromWorkerAction =
   | { type: 'updateIteration'; iteration: number }
   | { type: 'updateBestTour'; bestTour: Marker[]; bestToursHistory: HistoryEntry[]; cost: number }
   | { type: 'updateCurrentTour'; currentTour: Marker[] }
+  | { type: 'updateTrail'; trail: Marker[] }
   | { type: 'log'; toLog: any }
   | { type: 'error'; text?: string }
   | {

@@ -13,6 +13,7 @@ import { PickingInfo } from '@deck.gl/core/typed';
 const controller = { doubleClickZoom: false };
 
 export const Map = () => {
+  const trail = useStore((state) => state.trail);
   const status = useStore((state) => state.status);
   const markers = useStore((state) => state.markers);
   const bestTour = useStore((state) => state.bestTour);
@@ -58,8 +59,13 @@ export const Map = () => {
           data: [
             {
               name: 'Current',
-              color: [180, 180, 180, 180],
+              color: [180, 180, 180],
               path: currentTour,
+            },
+            {
+              name: 'Trail',
+              color: [252, 186, 3],
+              path: trail,
             },
             {
               name: 'Best',

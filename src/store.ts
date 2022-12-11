@@ -19,6 +19,7 @@ import { mergeWithStorage, loadStorage } from './local-storage';
 
 export const useStore = create<t.Store>((set, get) => ({
   cost: 0,
+  trail: null,
   iteration: 0,
   currentRun: 1,
   status: 'idle',
@@ -71,6 +72,7 @@ export const useStore = create<t.Store>((set, get) => ({
       iteration: 0,
       currentRun: currentRun || 1,
       bestTour: null,
+      trail: null,
       cost: 0,
     });
 
@@ -188,6 +190,11 @@ export const useStore = create<t.Store>((set, get) => ({
           cost: action.cost,
         });
       }
+      case 'updateTrail': {
+        return set({
+          trail: action.trail,
+        });
+      }
       case 'updateCurrentTour':
         return set({ currentTour: action.currentTour });
       case 'log':
@@ -205,6 +212,7 @@ export const useStore = create<t.Store>((set, get) => ({
           cost: action.cost,
           iteration: action.iterations,
           currentTour: null,
+          trail: null,
         });
         return stopRun();
     }
@@ -237,5 +245,5 @@ export const useStore = create<t.Store>((set, get) => ({
   workerDispatch: (action: t.ToWorkerAction) => get().worker?.postMessage(action),
   setParams: (params) => set((state) => ({ params: { ...state.params, ...params } })),
   setMarkers: (markers) =>
-    set({ markers, bestTour: null, bestToursHistory: [], iteration: 0, cost: 0 }),
+    set({ markers, bestTour: null, trail: null, bestToursHistory: [], iteration: 0, cost: 0 }),
 }));

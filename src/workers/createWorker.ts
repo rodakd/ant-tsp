@@ -93,6 +93,13 @@ class WorkerInstance implements t.WorkerInterface {
     });
   }
 
+  updateTrail(trail: t.Marker[]) {
+    this.appDispatch({
+      type: 'updateTrail',
+      trail,
+    });
+  }
+
   updateBestTourByIdxTour(idxTour: number[], cost: number) {
     const path = this.idxTourToMarkerPath(idxTour);
     this.updateBestTour(path, cost);
@@ -202,6 +209,11 @@ class WorkerInstance implements t.WorkerInterface {
   updateCurrentTourByIdxTour(idxTour: number[]) {
     const path = idxTourToMarkerPath(idxTour, this.markers);
     this.updateCurrentTour(path);
+  }
+
+  updateTrailByIdxTour(idxTour: number[]) {
+    const path = idxTourToMarkerPath(idxTour, this.markers);
+    this.updateTrail(path);
   }
 
   end() {
