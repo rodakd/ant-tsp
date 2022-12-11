@@ -1,5 +1,4 @@
 import * as t from '~/types';
-import { matrixCost } from '~/helpers';
 import { createWorker } from './createWorker';
 
 // This is a port of Python code originally published by Éric D. Taillard
@@ -8,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Nearest Neighbour greedy heuristic for the TSP
-async function TSPNearestNeighbor(app: Readonly<t.WorkerInterface>) {
+async function TSPNearestNeighbor(app: t.App) {
   const { cost, d, tour, n } = app.getInput();
 
   let length = cost,
@@ -39,7 +38,7 @@ async function TSPNearestNeighbor(app: Readonly<t.WorkerInterface>) {
     }
 
     move(tour, i, nearest);
-    length = matrixCost(d, tour);
+    length = app.helpers.matrixCost(d, tour);
     await app.updateBestTour(() => tour, length);
   }
 

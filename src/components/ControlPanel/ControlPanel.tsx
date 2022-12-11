@@ -55,11 +55,7 @@ export const ControlPanel = () => {
   const disabledBtns = getDisabledButtons();
 
   return (
-    <div
-      className={cn('control-panel', {
-        'control-panel--big': selectedWorker === 'Your JavaScript',
-      })}
-    >
+    <div className='control-panel'>
       <div className='control-panel__inner'>
         <h1 className='control-panel__title'>Heuristic TSP</h1>
         <StartPauseButton

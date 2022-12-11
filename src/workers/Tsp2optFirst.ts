@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Local search with 2-opt neighbourhood and first improvement policy
-async function TSP2optFirst(app: Readonly<t.WorkerInterface>) {
+async function TSP2optFirst(app: t.App) {
   const { d, tour, cost } = app.getInput();
   const t = tourToT(tour);
 

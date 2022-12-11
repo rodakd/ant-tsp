@@ -37,6 +37,8 @@ export interface WorkerHelpers {
   successorsToTour: (succ: number[]) => number[];
 }
 
+export type App = Readonly<WorkerInterface>;
+
 export type ToWorkerAction =
   | {
       type: 'run';

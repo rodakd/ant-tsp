@@ -18,7 +18,7 @@ export const DatasetsPanel = () => {
   const setViewState = useStore((state) => state.setViewState);
 
   const importMarkers = async () => {
-    const str = await uploadFile();
+    const str = await uploadFile('.txt');
     if (!str) {
       return;
     }
@@ -101,7 +101,7 @@ export const DatasetsPanel = () => {
           className='datasets__item datasets__item--upload'
         >
           <FiUpload />
-          Upload
+          Upload Dataset
         </button>
       </div>
     </>

@@ -53,15 +53,6 @@
       margin-left: auto;
     }
   }
-
-  &--big {
-    .control-panel__inner,
-    .settings,
-    .counter {
-      width: $big-panel-width;
-      left: calc(50% - ($big-panel-width / 2));
-    }
-  }
 }
 
 .panel-button {
@@ -403,4 +394,8 @@
   right: 5px;
   top: 5px;
   z-index: 1;
+}
+
+.upload-code {
+  margin-top: 5px;
 }

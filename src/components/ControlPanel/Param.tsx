@@ -1,8 +1,10 @@
 import { Input } from 'antd';
+import { UploadCode } from './UploadCode';
 
 type Props = {
   title: string;
-  type: 'number';
+  type: 'number' | 'code';
+  value: any;
 } & any;
 
 export const Param = ({ title, type, onChange, ...props }: Props) => {
@@ -16,6 +18,8 @@ export const Param = ({ title, type, onChange, ...props }: Props) => {
             {...props}
           />
         );
+      case 'code':
+        return <UploadCode code={props['value']} onChange={(code) => onChange(code)} />;
     }
   };
 

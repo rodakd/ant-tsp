@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Local search with 2-opt neighbourhood and best improvement policy
-async function TSP2optBest(app: Readonly<t.WorkerInterface>) {
+async function TSP2optBest(app: t.App) {
   const { d, cost, n, tour } = app.getInput();
   let length = cost;
 

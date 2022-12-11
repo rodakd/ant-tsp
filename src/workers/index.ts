@@ -5,6 +5,7 @@ import TSP2optBest from './TSP2optBest?worker';
 import TSP3optFirst from './TSP3optFirst?worker';
 import TSPNearestNeighbor from './TSPNearestNeighbor?worker';
 import TSPLinKernighan from './TSPLinKernighan?worker';
+import TSPCustom from './TSPCustom?worker';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Fast Ant Meta Heuristic': {
@@ -51,6 +52,18 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Nearest Neighbor': {
     workerClass: TSPNearestNeighbor,
     worker: new TSPNearestNeighbor(),
+  },
+
+  'Your JavaScript': {
+    workerClass: TSPCustom,
+    worker: new TSPCustom(),
+    params: {
+      code: {
+        label: 'code',
+        type: 'code',
+        default: '',
+      },
+    },
   },
 };
 

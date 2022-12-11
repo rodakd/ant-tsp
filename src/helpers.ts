@@ -104,11 +104,11 @@ export const shuffleArray = (arr: any[]) => {
   return arr;
 };
 
-export const uploadFile = () => {
+export const uploadFile = (accept: string) => {
   return new Promise<string | null>((res) => {
     const el = document.createElement('input');
     el.type = 'file';
-    el.accept = '.txt';
+    el.accept = accept;
     el.addEventListener('change', () => {
       if (!el.files?.[0]) {
         return res(null);
