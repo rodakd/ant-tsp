@@ -173,9 +173,10 @@ export const uploadFile = () => {
   });
 };
 
-export const deduplicateMarkers = (markers: t.Marker[]) => {
+export const prepareMarkers = (markers: t.Marker[]) => {
   const parsed: t.Marker[] = [];
 
+  // deduplicate markers
   for (let i = 0; i < markers.length; i++) {
     const x = markers[i];
     let push = true;
@@ -192,6 +193,12 @@ export const deduplicateMarkers = (markers: t.Marker[]) => {
       parsed.push(x);
     }
   }
+
+  // fix lat long to 6 precision which is typically good enough
+  parsed.forEach((marker) => {
+    marker[0] = Number(marker[0].toFixed(6));
+    marker[1] = Number(marker[1].toFixed(6));
+  });
 
   return parsed;
 };

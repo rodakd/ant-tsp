@@ -52,9 +52,6 @@ async function LinKernighan(app: Readonly<t.WorkerInterface>) {
     let path_modified = true;
 
     while (path_modified) {
-      appIteration += 1;
-      app.updateIteration(appIteration);
-
       path_modified = false;
       let ref_struct_cost = length;
       let c = succ[b];
@@ -62,10 +59,6 @@ async function LinKernighan(app: Readonly<t.WorkerInterface>) {
 
       while (succ[c] != a) {
         const d = succ[c];
-
-        const currentSucc = [...succ];
-        move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
-        app.updateCurrentTourBySuccessors(currentSucc);
 
         if (path_length - D[c][d] + D[c][a] + D[b][d] < length) {
           best_c = c;
@@ -81,7 +74,17 @@ async function LinKernighan(app: Readonly<t.WorkerInterface>) {
         c = d;
       }
 
-      if (ref_struct_cost < length) {
+      appIteration += 1;
+      app.updateIteration(appIteration);
+
+      const currentSucc = [...succ];
+      move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
+      app.updateCurrentTourBySuccessors(currentSucc);
+
+      await app.sleep();
+
+      // need to fix numbers cause of float rounding error
+      if (Number(ref_struct_cost.toFixed(7)) < Number(length.toFixed(7))) {
         path_modified = true;
         c = best_c;
         d = succ[best_c];
@@ -103,8 +106,6 @@ async function LinKernighan(app: Readonly<t.WorkerInterface>) {
           app.updateBestTourByIdxTour(tour, length);
         }
       }
-
-      await app.sleep();
     }
 
     succ = app.idxTourToSuccessors(tour);

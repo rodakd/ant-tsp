@@ -3,12 +3,12 @@ import {
   arrayCost,
   createDistanceMatrix,
   createRandomPermutation,
-  deduplicateMarkers,
   ds2optToIdxTour,
   idxTourToDS2opt,
   idxTourToMarkerPath,
   idxTourToSuccessors,
   matrixCost,
+  prepareMarkers,
   successorsToIdxTour,
 } from '../helpers';
 import { HistoryEntry } from '../types';
@@ -31,7 +31,7 @@ export const createWorker = (
         wi = new WorkerInstance();
 
         wi.params = action.params;
-        wi.markers = deduplicateMarkers(action.markers);
+        wi.markers = prepareMarkers(action.markers);
         wi.speedPercent = action.speedPercent;
         wi.iterationsLimit = action.iterationsLimit;
         wi.performanceMode = action.performanceMode;
