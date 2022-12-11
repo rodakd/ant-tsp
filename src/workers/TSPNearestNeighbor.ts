@@ -15,11 +15,11 @@ async function TSPNearestNeighbor(app: Readonly<t.WorkerInterface>) {
     i: number,
     j: number,
     nearest: number,
-    cost_ins: number;
+    costIns: number;
 
   for (i = 1; i < n; i++) {
     nearest = i;
-    cost_ins = d[tour[i - 1]][tour[i]];
+    costIns = d[tour[i - 1]][tour[i]];
 
     for (j = i + 1; j < n; j++) {
       app.incrementIteration();
@@ -30,8 +30,8 @@ async function TSPNearestNeighbor(app: Readonly<t.WorkerInterface>) {
         return currentTour;
       });
 
-      if (d[tour[i - 1]][tour[j]] < cost_ins) {
-        cost_ins = d[tour[i - 1]][tour[j]];
+      if (d[tour[i - 1]][tour[j]] < costIns) {
+        costIns = d[tour[i - 1]][tour[j]];
         nearest = j;
       }
 

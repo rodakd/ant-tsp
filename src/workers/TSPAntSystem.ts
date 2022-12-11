@@ -84,7 +84,7 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
     }
 
     let iteration = 0,
-      last_a = 0,
+      lastA = 0,
       a = 0,
       improved = true,
       d = null;
@@ -92,43 +92,43 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
     function move(succ: number[], si: number, i: number, c: number, d: number, b: number) {
       succ[b] = d;
       while (i != c) {
-        const swap_i = i;
-        const swap_succsi = succ[si];
-        const swap_si = si;
+        const swapI = i;
+        const swapSuccSI = succ[si];
+        const swapSI = si;
 
-        succ[si] = swap_i;
-        i = swap_si;
-        si = swap_succsi;
+        succ[si] = swapI;
+        i = swapSI;
+        si = swapSuccSI;
       }
     }
 
-    while (a != last_a || improved) {
+    while (a != lastA || improved) {
       improved = false;
       iteration += 1;
       let b = succ[a];
-      let path_length = length - D[a][b];
-      let path_modified = true;
+      let pathLength = length - D[a][b];
+      let pathModified = true;
 
-      while (path_modified) {
-        path_modified = false;
-        let ref_struct_cost = length;
+      while (pathModified) {
+        pathModified = false;
+        let refStructCost = length;
         let c = succ[b];
-        let best_c = c;
+        let bestC = c;
 
         while (succ[c] != a) {
           app.incrementIteration();
 
           const d = succ[c];
 
-          if (path_length - D[c][d] + D[c][a] + D[b][d] < length) {
-            best_c = c;
-            ref_struct_cost = path_length - D[c][d] + D[c][a] + D[b][d];
+          if (pathLength - D[c][d] + D[c][a] + D[b][d] < length) {
+            bestC = c;
+            refStructCost = pathLength - D[c][d] + D[c][a] + D[b][d];
             break;
           }
 
-          if (tabu[c][d] != iteration && path_length + D[b][d] < ref_struct_cost) {
-            ref_struct_cost = path_length + D[b][d];
-            best_c = c;
+          if (tabu[c][d] != iteration && pathLength + D[b][d] < refStructCost) {
+            refStructCost = pathLength + D[b][d];
+            bestC = c;
           }
 
           c = d;
@@ -140,12 +140,12 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
           });
         }
 
-        if (Number(ref_struct_cost.toFixed(7)) < Number(length.toFixed(7))) {
-          path_modified = true;
-          c = best_c;
-          d = succ[best_c];
+        if (Number(refStructCost.toFixed(7)) < Number(length.toFixed(7))) {
+          pathModified = true;
+          c = bestC;
+          d = succ[bestC];
           tabu[c][d] = tabu[d][c] = iteration;
-          path_length += D[b][d] - D[c][d];
+          pathLength += D[b][d] - D[c][d];
           const i = b;
           const si = succ[b];
 
@@ -153,10 +153,10 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
 
           b = c;
 
-          if (path_length + D[a][b] < length) {
-            length = path_length + D[a][b];
+          if (pathLength + D[a][b] < length) {
+            length = pathLength + D[a][b];
             succ[a] = b;
-            last_a = b;
+            lastA = b;
             improved = true;
             tour = app.helpers.successorsToTour(succ);
             await app.updateTrail(() => tour);

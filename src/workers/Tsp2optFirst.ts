@@ -12,17 +12,17 @@ async function TSP2optFirst(app: Readonly<t.WorkerInterface>) {
   const t = tourToT(tour);
 
   let i = 0,
-    last_i = 0,
+    lastI = 0,
     length = cost,
     j: number,
     delta: number,
-    next_i: number,
-    next_j: number;
+    nextI: number,
+    nextJ: number;
 
-  while (t[t[i]] >> 1 !== last_i) {
+  while (t[t[i]] >> 1 !== lastI) {
     j = t[t[i]];
 
-    while (j >> 1 !== last_i && (t[j] >> 1 !== last_i || i >> 1 !== last_i)) {
+    while (j >> 1 !== lastI && (t[j] >> 1 !== lastI || i >> 1 !== lastI)) {
       app.incrementIteration();
 
       await app.updateCurrentTour(() => {
@@ -35,12 +35,12 @@ async function TSP2optFirst(app: Readonly<t.WorkerInterface>) {
         d[i >> 1][j >> 1] + d[t[i] >> 1][t[j] >> 1] - d[i >> 1][t[i] >> 1] - d[j >> 1][t[j] >> 1];
 
       if (delta < 0) {
-        next_i = t[i];
-        next_j = t[j];
+        nextI = t[i];
+        nextJ = t[j];
         length += delta;
-        last_i = i >> 1;
+        lastI = i >> 1;
 
-        move(t, i, j, next_i, next_j);
+        move(t, i, j, nextI, nextJ);
 
         await app.updateBestTour(() => TtoTour(t), length);
       }
@@ -86,11 +86,11 @@ function TtoTour(t: number[]) {
   return tour;
 }
 
-function move(t: number[], i: number, j: number, next_i: number, next_j: number) {
+function move(t: number[], i: number, j: number, nextI: number, nextJ: number) {
   t[i] = j ^ 1;
   t[j] = i ^ 1;
-  t[next_i ^ 1] = next_j;
-  t[next_j ^ 1] = next_i;
+  t[nextI ^ 1] = nextJ;
+  t[nextJ ^ 1] = nextI;
 }
 
 createWorker(TSP2optFirst);

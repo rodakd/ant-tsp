@@ -11,13 +11,13 @@ async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
   const { d, tour, cost } = app.getInput();
   const succ = app.helpers.tourToSuccessors(tour);
 
-  let last_i = 0,
-    last_j = succ[0],
-    last_k = succ[succ[0]],
+  let lastI = 0,
+    lastJ = succ[0],
+    lastK = succ[succ[0]],
     length = cost,
-    i = last_i,
-    j = last_j,
-    k = last_k,
+    i = lastI,
+    j = lastJ,
+    k = lastK,
     delta: number,
     sj: number;
 
@@ -42,9 +42,9 @@ async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
       j = k;
       k = sj;
 
-      last_i = i;
-      last_j = j;
-      last_k = k;
+      lastI = i;
+      lastJ = j;
+      lastK = k;
 
       await app.updateBestTour(() => app.helpers.successorsToTour(succ), length);
     }
@@ -62,7 +62,7 @@ async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
       k = succ[j];
     }
 
-    if (i === last_i && j === last_j && k === last_k) {
+    if (i === lastI && j === lastJ && k === lastK) {
       break;
     }
   }
@@ -71,12 +71,12 @@ async function TSP3optFirst(app: Readonly<t.WorkerInterface>) {
 }
 
 function move(succ: number[], i: number, j: number, k: number) {
-  const swap_i = succ[i];
-  const swap_j = succ[j];
-  const swap_k = succ[k];
-  succ[i] = swap_j;
-  succ[j] = swap_k;
-  succ[k] = swap_i;
+  const swapI = succ[i];
+  const swapJ = succ[j];
+  const swapK = succ[k];
+  succ[i] = swapJ;
+  succ[j] = swapK;
+  succ[k] = swapI;
 }
 
 createWorker(TSP3optFirst);
