@@ -18,6 +18,13 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
         default: 1,
         min: 1,
       },
+      loops: {
+        label: 'loops',
+        type: 'number',
+        step: 1,
+        default: 2,
+        min: 1,
+      },
     },
   },
 

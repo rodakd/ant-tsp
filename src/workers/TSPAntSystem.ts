@@ -174,7 +174,7 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
   const input = app.getInput();
   const {
     d,
-    params: { exploitation },
+    params: { exploitation, loops },
   } = input;
   const n = d[0].length;
 
@@ -185,7 +185,7 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
   let bestSol = tour.slice();
   let trail = initTrail(exploration, new Array<number[]>(n).fill(new Array(n).fill(-1)));
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < loops; i++) {
     [tour, cost] = generateSolutionTrail(d, tour, trail);
     await app.updateTrail(() => tour);
     [tour, cost] = await tspLK(d, tour, cost);
