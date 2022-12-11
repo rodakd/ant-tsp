@@ -273,23 +273,12 @@
   }
 
   &__item {
-    padding: 10px;
     width: 100%;
     text-align: left;
-    font-weight: 500;
-    border-radius: 5px;
-    transition: opacity ease-in-out 300ms;
-    color: #555;
-    background: white;
-    border: 1px solid #555;
     display: flex;
     align-items: center;
     column-gap: 10px;
-    cursor: pointer;
-
-    &:hover {
-      opacity: 60%;
-    }
+    min-height: 40px;
 
     img {
       height: 17px;
@@ -304,11 +293,6 @@
       align-items: center;
       column-gap: 10px;
       justify-content: center;
-      color: #555;
-      background: white;
-      border: 1px solid #555;
-      font-weight: 500;
-      border-radius: 5px;
     }
   }
 
@@ -398,4 +382,7 @@
 
 .upload-code {
   margin-top: 5px;
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
 }

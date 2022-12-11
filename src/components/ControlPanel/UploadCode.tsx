@@ -1,4 +1,5 @@
 import { Button } from 'antd';
+import { FiTrash2, FiUpload } from 'react-icons/fi';
 import { uploadFile } from '~/helpers';
 
 type Props = {
@@ -18,6 +19,7 @@ export const UploadCode = ({ code, onChange }: Props) => {
   if (code) {
     return (
       <Button onClick={() => onChange('')} className='upload-code'>
+        <FiTrash2 />
         Remove Code
       </Button>
     );
@@ -25,6 +27,7 @@ export const UploadCode = ({ code, onChange }: Props) => {
 
   return (
     <Button onClick={uploadCode} className='upload-code'>
+      <FiUpload />
       Upload Code
     </Button>
   );

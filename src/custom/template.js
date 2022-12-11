@@ -3,9 +3,11 @@
 const app = globalThis['app'];
 
 const { cost, d, tour } = app.getInput();
+app.log('START');
 
 /**
  * Write your code here
  */
 
+app.log('END');
 app.end();

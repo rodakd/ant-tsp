@@ -166,6 +166,9 @@ export const parseStringToMarkers = (text: string) => {
     const [a, b] = row.split(' ');
     const longitude = Number(a);
     const latitude = Number(b);
+    if (isNaN(longitude) || isNaN(latitude)) {
+      throw 'Invalid format';
+    }
     return [longitude, latitude];
   });
   return markers;

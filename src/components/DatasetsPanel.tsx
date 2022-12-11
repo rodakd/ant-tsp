@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import { notification } from 'antd';
+import { Button, notification } from 'antd';
 import { BsChevronUp, BsChevronDown } from 'react-icons/bs';
 import { FiUpload } from 'react-icons/fi';
 import { parseStringToMarkers, uploadFile } from '~/helpers';
@@ -85,7 +85,7 @@ export const DatasetsPanel = () => {
       </button>
       <div className={cn('datasets', { 'datasets--open': datasetsOpen })}>
         {DATASETS.map((ds, idx) => (
-          <button
+          <Button
             disabled={status !== 'idle'}
             key={idx}
             className='datasets__item'
@@ -93,16 +93,16 @@ export const DatasetsPanel = () => {
           >
             <img src={ds.flag} alt={`${ds.name} flag`} />
             {ds.name}
-          </button>
+          </Button>
         ))}
-        <button
+        <Button
           disabled={status !== 'idle'}
           onClick={importMarkers}
           className='datasets__item datasets__item--upload'
         >
           <FiUpload />
           Upload Dataset
-        </button>
+        </Button>
       </div>
     </>
   );
