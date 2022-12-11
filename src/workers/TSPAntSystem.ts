@@ -73,7 +73,7 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
     return [tour, app.calcCostByMatrix(d, tour)];
   }
 
-  function tspLK(D: number[][], tour: number[], length: number): [number[], number] {
+  async function tspLK(D: number[][], tour: number[], length: number): Promise<[number[], number]> {
     let succ = app.idxTourToSuccessors(tour);
     const n = tour.length;
 
@@ -134,6 +134,12 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
           c = d;
         }
 
+        const currentSucc = [...succ];
+        move(currentSucc, currentSucc[b], b, c, currentSucc[c], b);
+        app.updateCurrentTourBySuccessors(currentSucc);
+
+        await app.sleep();
+
         if (Number(ref_struct_cost.toFixed(7)) < Number(length.toFixed(7))) {
           path_modified = true;
           c = best_c;
@@ -179,17 +185,16 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
 
   app.updateBestTourByIdxTour(tour, bestCost);
 
-  while (true) {
+  for (let i = 0; i < (app.iterationsLimit || 5); i++) {
     iterations += 1;
     app.updateIteration(iterations);
 
     [tour, cost] = generateSolutionTrail(d, tour, trail);
     app.updateCurrentTourByIdxTour(tour);
     await app.sleep();
-    [tour, cost] = tspLK(d, tour, cost);
-    await app.sleep();
+    [tour, cost] = await tspLK(d, tour, cost);
 
-    if (cost < bestCost) {
+    if (Number(cost.toFixed(7)) < Number(bestCost.toFixed(7))) {
       bestCost = cost;
       bestSol = tour.slice();
       exploration = 1;
@@ -199,6 +204,8 @@ async function TSPAntSystem(app: Readonly<t.WorkerInterface>) {
       [trail, exploration] = updateTrail(tour, bestSol, exploration, exploitation, trail);
     }
   }
+
+  app.end();
 }
 
 createWorker(TSPAntSystem);

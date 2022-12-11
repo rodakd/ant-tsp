@@ -100,7 +100,7 @@ class WorkerInstance implements t.WorkerInterface {
 
   updateIteration(iteration: number) {
     this.iteration = iteration;
-    if (this.iterationsLimit && this.iteration >= this.iterationsLimit) {
+    if (this.iterationsLimit && this.iteration > this.iterationsLimit) {
       return this.end();
     }
     this.appDispatch({ type: 'updateIteration', iteration });
