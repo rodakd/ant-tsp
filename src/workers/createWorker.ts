@@ -73,6 +73,9 @@ class WorkerInstance implements t.WorkerInterface {
   bestToursHistory: HistoryEntry[] = [];
   lastGetBestTour: (() => number[]) | null = null;
 
+  lastTourUpdate = 0;
+  lastIterationUpdate = 0;
+
   getInput() {
     const d = createDistanceMatrix(this.markers);
     const tour = createRandomPermutation(this.markers.length);
@@ -103,7 +106,7 @@ class WorkerInstance implements t.WorkerInterface {
     };
     this.bestToursHistory.push(historyEntry);
 
-    if (this.performanceMode) {
+    if (!this.shouldUpdateTour()) {
       this.lastGetBestTour = getBestTour;
       return;
     }
@@ -143,7 +146,7 @@ class WorkerInstance implements t.WorkerInterface {
       return this.end();
     }
 
-    if (this.performanceMode) {
+    if (!this.shouldUpdateIteration()) {
       return;
     }
 
@@ -222,4 +225,34 @@ class WorkerInstance implements t.WorkerInterface {
       return successorsToIdxTour(succ);
     },
   };
+
+  private shouldUpdateTour() {
+    if (!this.performanceMode) {
+      return true;
+    }
+
+    const now = Date.now();
+
+    if (now - this.lastTourUpdate > 3000) {
+      this.lastTourUpdate = now;
+      return true;
+    }
+
+    return false;
+  }
+
+  private shouldUpdateIteration() {
+    if (!this.performanceMode) {
+      return true;
+    }
+
+    const now = Date.now();
+
+    if (now - this.lastIterationUpdate > 3000) {
+      this.lastIterationUpdate = now;
+      return true;
+    }
+
+    return false;
+  }
 }
