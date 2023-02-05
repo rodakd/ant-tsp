@@ -13,5 +13,6 @@ RUN mkdir /build
 WORKDIR /build
 ADD . .
 RUN npm i -g yarn
+RUN yarn
 RUN yarn build
 RUN cp -r /build/dist/* /usr/share/nginx/html
