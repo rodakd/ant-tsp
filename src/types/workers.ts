@@ -69,8 +69,7 @@ export type FromWorkerAction =
     };
 
 export type WorkerConfig = {
-  workerClass: new () => Worker;
-  worker: Worker;
+  workerUrl: URL;
   params?: Record<string, ParamConfig>;
 };
 

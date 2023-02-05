@@ -1,16 +1,8 @@
 import * as t from '~/types';
-import TSPAntSystem from './TSPAntSystem?worker';
-import TSP2optFirst from './TSP2optFirst?worker';
-import TSP2optBest from './TSP2optBest?worker';
-import TSP3optFirst from './TSP3optFirst?worker';
-import TSPNearestNeighbor from './TSPNearestNeighbor?worker';
-import TSPLinKernighan from './TSPLinKernighan?worker';
-import TSPCustom from './TSPCustom?worker';
 
 export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   'Fast Ant Meta Heuristic': {
-    workerClass: TSPAntSystem,
-    worker: new TSPAntSystem(),
+    workerUrl: new URL('./TSPAntSystem', import.meta.url),
     params: {
       exploitation: {
         label: 'exploitation',
@@ -30,33 +22,27 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   },
 
   'Lin-Kernighan': {
-    workerClass: TSPLinKernighan,
-    worker: new TSPLinKernighan(),
+    workerUrl: new URL('./TSPLinKernighan', import.meta.url),
   },
 
   '2-opt Best Improvement': {
-    workerClass: TSP2optBest,
-    worker: new TSP2optBest(),
+    workerUrl: new URL('./TSP2optBest', import.meta.url),
   },
 
   '2-opt First Improvement': {
-    workerClass: TSP2optFirst,
-    worker: new TSP2optFirst(),
+    workerUrl: new URL('./TSP2optFirst', import.meta.url),
   },
 
   '3-opt First': {
-    workerClass: TSP3optFirst,
-    worker: new TSP3optFirst(),
+    workerUrl: new URL('./TSP3optFirst', import.meta.url),
   },
 
   'Nearest Neighbor': {
-    workerClass: TSPNearestNeighbor,
-    worker: new TSPNearestNeighbor(),
+    workerUrl: new URL('./TSPNearestNeighbor', import.meta.url),
   },
 
   'Your JavaScript': {
-    workerClass: TSPCustom,
-    worker: new TSPCustom(),
+    workerUrl: new URL('./TSPNearestNeighbor', import.meta.url),
     params: {
       code: {
         label: 'code',
