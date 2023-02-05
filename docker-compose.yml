@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web:
+    image: ant-tsp-web
+    build: .
+    container_name: ant-tsp-web
+    restart: always
+    ports:
+      - '8080:80'
