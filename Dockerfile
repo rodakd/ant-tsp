@@ -12,7 +12,6 @@ RUN npm --version
 RUN mkdir /build
 WORKDIR /build
 ADD . .
-RUN npm i -g yarn
-RUN yarn install --frozen-lockfile --production
-RUN yarn build
+RUN npm i
+RUN npm run build
 RUN cp -r /build/dist/* /usr/share/nginx/html
