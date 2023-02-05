@@ -173,7 +173,3 @@ export const parseStringToMarkers = (text: string) => {
   });
   return markers;
 };
-
-export const importWorker = (workerUrl: URL) => {
-  return new Worker(workerUrl, { type: 'module' });
-};

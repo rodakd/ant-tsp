@@ -16,7 +16,6 @@ import {
 import { notification } from 'antd';
 import { DEFAULT_DATASET } from './datasets';
 import { mergeWithStorage, loadStorage } from './local-storage';
-import { importWorker } from './helpers';
 
 export const useStore = create<t.Store>((set, get) => ({
   cost: 0,
@@ -38,7 +37,7 @@ export const useStore = create<t.Store>((set, get) => ({
   iterationsLimitMode: false,
   multiRunSummaryOpen: false,
   params: DEFAULT_WORKER_PARAMS,
-  worker: importWorker(DEFAULT_WORKER.workerUrl),
+  worker: DEFAULT_WORKER.worker,
   markers: DEFAULT_DATASET.markers,
   speedPercent: DEFAULT_SPEED_PERCENT,
   selectedWorker: DEFAULT_WORKER_NAME,
@@ -101,7 +100,6 @@ export const useStore = create<t.Store>((set, get) => ({
       multiRunSummary,
       performanceMode,
       selectedWorker,
-      worker,
       workerDispatch,
       startRun,
     } = get();
@@ -118,9 +116,11 @@ export const useStore = create<t.Store>((set, get) => ({
     if (performanceMode && manual) {
       // Worker's thread might be too busy to listen for messages
       // We have to terminate it and create a new one
-      worker?.terminate();
+      const config = AVAILABLE_WORKERS[selectedWorker];
+      config.worker?.terminate();
+      config.worker = new config.workerClass();
       set({
-        worker: importWorker(AVAILABLE_WORKERS[selectedWorker].workerUrl),
+        worker: config.worker,
       });
     } else {
       workerDispatch({ type: 'stop' });
@@ -168,11 +168,9 @@ export const useStore = create<t.Store>((set, get) => ({
   },
 
   setSelectedWorker: (selectedWorker) => {
-    const { worker } = get();
     const workerConfig = AVAILABLE_WORKERS[selectedWorker];
     const defaultParams = getWorkerDefaultParams(workerConfig);
-    worker?.terminate();
-    set({ selectedWorker, params: defaultParams, worker: importWorker(workerConfig.workerUrl) });
+    set({ selectedWorker, params: defaultParams, worker: workerConfig.worker });
   },
 
   handleWorkerAction: (action) => {
