@@ -12,6 +12,7 @@ import { France } from '../src/datasets/France';
 import { Spain } from '../src/datasets/Spain';
 import { Canada } from '../src/datasets/Canada';
 import { Poland } from '../src/datasets/Poland';
+import { prepareMarkers } from '../src/helpers';
 
 const handleError = (err: any) => {
   if (err === 'Stopped') {
@@ -24,7 +25,7 @@ const jestConsole = console;
 
 describe('Poland, size 291', () => {
   let wi: WorkerInstance;
-  let markers = Poland;
+  let markers = prepareMarkers(Poland);
 
   beforeEach(() => {
     global.console = require('console');
@@ -73,7 +74,7 @@ describe('Poland, size 291', () => {
 
 describe('Canada, size 625', () => {
   let wi: WorkerInstance;
-  let markers = Canada;
+  let markers = prepareMarkers(Canada);
 
   beforeEach(() => {
     global.console = require('console');
@@ -122,7 +123,7 @@ describe('Canada, size 625', () => {
 
 describe('Spain, size 1135', () => {
   let wi: WorkerInstance;
-  let markers = Spain;
+  let markers = prepareMarkers(Spain);
 
   beforeEach(() => {
     global.console = require('console');
@@ -171,7 +172,7 @@ describe('Spain, size 1135', () => {
 
 describe('France, size 2019', () => {
   let wi: WorkerInstance;
-  let markers = France;
+  let markers = prepareMarkers(France);
 
   beforeEach(() => {
     global.console = require('console');
