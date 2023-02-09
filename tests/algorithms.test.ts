@@ -4,7 +4,6 @@ import { describe } from '@jest/globals';
 import { TSP2optFirst } from '../src/workers/Tsp2optFirst';
 import { WorkerInstance } from '../src/workers/createWorker';
 import { TSP2optBest } from '../src/workers/Tsp2optBest';
-import { TSP3optFirst } from '../src/workers/Tsp3optFirst';
 import { TSPAntSystem } from '../src/workers/TSPAntSystem';
 import { TSPCustom } from '../src/workers/TSPCustom';
 import { TSPLinKernighan } from '../src/workers/TSPLinKernighan';
@@ -47,11 +46,6 @@ describe('Poland, size 291', () => {
   it('2-opt Best', async () => {
     await TSP2optBest(wi).catch(handleError);
     console.log(`2-opt Best: ${Math.floor(wi.cost)} km`);
-  });
-
-  it('3-opt First', async () => {
-    await TSP3optFirst(wi).catch(handleError);
-    console.log(`3-opt First: ${Math.floor(wi.cost)} km`);
   });
 
   it('Ant System', async () => {
@@ -103,11 +97,6 @@ describe('Canada, size 625', () => {
     console.log(`2-opt Best: ${Math.floor(wi.cost)} km`);
   });
 
-  it('3-opt First', async () => {
-    await TSP3optFirst(wi).catch(handleError);
-    console.log(`3-opt First: ${Math.floor(wi.cost)} km`);
-  });
-
   it('Ant System', async () => {
     await TSPAntSystem(wi).catch(handleError);
     console.log(`Ant System: ${Math.floor(wi.cost)} km`);
@@ -157,11 +146,6 @@ describe('Spain, size 1135', () => {
     console.log(`2-opt Best: ${Math.floor(wi.cost)} km`);
   });
 
-  it('3-opt First', async () => {
-    await TSP3optFirst(wi).catch(handleError);
-    console.log(`3-opt First: ${Math.floor(wi.cost)} km`);
-  });
-
   it('Ant System', async () => {
     await TSPAntSystem(wi).catch(handleError);
     console.log(`Ant System: ${Math.floor(wi.cost)} km`);
@@ -209,11 +193,6 @@ describe('France, size 2019', () => {
   it('2-opt Best', async () => {
     await TSP2optBest(wi).catch(handleError);
     console.log(`2-opt Best: ${Math.floor(wi.cost)} km`);
-  });
-
-  it('3-opt First', async () => {
-    await TSP3optFirst(wi).catch(handleError);
-    console.log(`3-opt First: ${Math.floor(wi.cost)} km`);
   });
 
   it('Ant System', async () => {

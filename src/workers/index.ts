@@ -2,7 +2,6 @@ import * as t from '~/types';
 import TSPAntSystem from './TSPAntSystem?worker';
 import TSP2optFirst from './TSP2optFirst?worker';
 import TSP2optBest from './TSP2optBest?worker';
-import TSP3optFirst from './TSP3optFirst?worker';
 import TSPNearestNeighbor from './TSPNearestNeighbor?worker';
 import TSPLinKernighan from './TSPLinKernighan?worker';
 import TSPCustom from './TSPCustom?worker';
@@ -42,11 +41,6 @@ export const AVAILABLE_WORKERS: Record<string, t.WorkerConfig> = {
   '2-opt First Improvement': {
     workerClass: TSP2optFirst,
     worker: new TSP2optFirst(),
-  },
-
-  '3-opt First': {
-    workerClass: TSP3optFirst,
-    worker: new TSP3optFirst(),
   },
 
   'Nearest Neighbor': {
