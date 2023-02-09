@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Basic Lin & Kernighan improvement procedure for the TSP
-async function TSPLinKernighan(app: t.App) {
+export async function TSPLinKernighan(app: t.App) {
   const input = app.getInput();
   const D = input.d;
   const n = input.n;

@@ -1,7 +1,7 @@
 import * as t from '~/types';
 import { createWorker } from './createWorker';
 
-async function TSPCustom(app: t.App) {
+export async function TSPCustom(app: t.App) {
   const gt = globalThis as any;
   gt['app'] = app;
 

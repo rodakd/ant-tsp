@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Local search with 3-opt neighbourhood and first improvement policy
-async function TSP3optFirst(app: t.App) {
+export async function TSP3optFirst(app: t.App) {
   const { d, tour, cost } = app.getInput();
   const succ = app.helpers.tourToSuccessors(tour);
 

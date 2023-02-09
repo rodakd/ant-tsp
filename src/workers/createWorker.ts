@@ -12,7 +12,9 @@ import { HistoryEntry } from '../types';
 import * as t from '../types';
 
 export function appDispatch(action: t.FromWorkerAction) {
-  postMessage(action);
+  if (typeof postMessage === 'function') {
+    postMessage(action);
+  }
 }
 
 export const createWorker = (algorithm: (workerInterface: t.WorkerInterface) => Promise<void>) => {
@@ -58,11 +60,11 @@ export const createWorker = (algorithm: (workerInterface: t.WorkerInterface) => 
   };
 };
 
-class WorkerInstance implements t.WorkerInterface {
+export class WorkerInstance implements t.WorkerInterface {
   private bestTour: t.Marker[] = [];
 
   params = {};
-  markers = [];
+  markers: t.Marker[] = [];
   iteration = 0;
   paused = false;
   running = true;
@@ -194,16 +196,14 @@ class WorkerInstance implements t.WorkerInterface {
   }
 
   end() {
-    let lastBestTour = this.bestTour;
-
     if (this.lastGetBestTour) {
-      lastBestTour = idxTourToMarkerPath(this.lastGetBestTour(), this.markers);
+      this.bestTour = idxTourToMarkerPath(this.lastGetBestTour(), this.markers);
     }
 
     appDispatch({
       type: 'end',
       cost: this.cost,
-      bestTour: lastBestTour,
+      bestTour: this.bestTour,
       iterations: this.iteration,
       bestToursHistory: this.bestToursHistory,
     });

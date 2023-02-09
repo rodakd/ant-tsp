@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Fast Ant System for the TSP
-async function TSPAntSystem(app: t.App) {
+export async function TSPAntSystem(app: t.App) {
   function initTrail(initialVal: number, trail: number[][]) {
     const n = trail[0].length;
     for (let i = 0; i < n; i++) {
@@ -174,7 +174,7 @@ async function TSPAntSystem(app: t.App) {
   const input = app.getInput();
   const {
     d,
-    params: { exploitation, loops },
+    params: { exploitation = 1, loops = 2 },
   } = input;
   const n = d[0].length;
 

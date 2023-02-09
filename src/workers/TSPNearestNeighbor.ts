@@ -7,7 +7,7 @@ import { createWorker } from './createWorker';
 // Copyright: E. Taillard 2022 CC-BY 4.0
 
 // Nearest Neighbour greedy heuristic for the TSP
-async function TSPNearestNeighbor(app: t.App) {
+export async function TSPNearestNeighbor(app: t.App) {
   const { cost, d, tour, n } = app.getInput();
 
   let length = cost,
